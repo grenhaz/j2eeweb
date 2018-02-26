@@ -1,0 +1,9 @@
+body{font-family:'Roboto',sans-serif;}
+h1{padding-bottom:12px;margin-bottom:32px;width:100%;border-bottom:3px solid #CCC;text-transform:uppercase;}
+.navbar-fixed{position:fixed;width:100%;left:0;right:0;top:0;}
+.navbar-fixed .navbar-collapse > ul.nav.navbar-nav li{text-transform:uppercase;}
+.wrap{padding-top:80px;min-height:500px;}
+
+@media (min-width: 768px) {
+    .navbar-fixed .navbar-collapse > ul.nav.navbar-nav{float:right;}
+}
