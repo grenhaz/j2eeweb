@@ -10,14 +10,14 @@
         
         <div class="form-group">
             <label class="control-label" id="username">Username</label>
-            <input class="form-control" id="username" name="username" value="test" />
+            <input class="form-control" id="username" name="username" value="user" />
         </div>
         <div class="form-group">
             <label class="control-label" id="password">Password</label>
-            <finput type="password" class="form-control" id="password" name="password" value="test" />
+            <input type="password" class="form-control" id="password" name="password" value="password" />
         </div>
         <div class="form-group">
-            <form:button class="btn btn-primary">Submit</form:button>
+            <input type="submit" class="btn btn-primary" value="Submit" />
         </div>
     </form>
 </ui:layout>

@@ -1,6 +1,10 @@
-body{font-family:'Roboto',sans-serif;}
+html{height:100%;}
+body{min-height:100%;padding:0;margin:0;position:relative;font-family:'Roboto',sans-serif;}
+body::after{content:'';display:block;height:100px;}
+footer{position:absolute;bottom:0;width:100%;height:60px;background-color:#DDD;padding:20px 0;font-size:0.9em;}
 h1{padding-bottom:12px;margin-bottom:32px;width:100%;border-bottom:3px solid #CCC;text-transform:uppercase;}
-.navbar-fixed{position:fixed;width:100%;left:0;right:0;top:0;}
+h4{font-size:1.25rem;padding:7px 0;color:#343a4a;border-bottom:1px dotted #343a4a;margin:0 0 20px;}
+.navbar-fixed{position:fixed;width:100%;left:0;right:0;top:0;z-index:1000;}
 .navbar-fixed .navbar-collapse > ul.nav.navbar-nav li{text-transform:uppercase;}
 .wrap{padding-top:80px;min-height:500px;}
 

@@ -8,6 +8,7 @@
 <c:set var="lang" value="${(empty lang) ? 'es' : lang}" />
 <c:set var="title" value="${(empty title) ? 'No title' : title}" />
 <c:set var="base" value="${pageContext.getServletContext().getContextPath()}" />
+<c:set value="${pageContext.request.remoteUser}" var="username" />
 <!DOCTYPE html>
 <html lang="${lang}">
     <head>
@@ -27,7 +28,8 @@
             <ui:navitem title="Home" url="${base}" />
             <ui:navitem title="Blog" url="${base}/blog" />
             <ui:navitem title="Contact" url="${base}/contact" />
-            <ui:navitem title="Login" url="${base}/login" />
+            <ui:navitem title="Login" url="${base}/admin/login" />
+            <ui:navitem title="Logout [${username}]" url="${base}/admin/logout" />
         </ui:navbar>
 
         <div class="container">

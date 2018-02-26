@@ -1,8 +1,12 @@
 package org.obarcia.demo.controllers;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.obarcia.demo.models.contact.ContactForm;
-import org.obarcia.demo.models.user.LoginForm;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,33 +22,35 @@ import org.springframework.web.servlet.ModelAndView;
  * @author obarcia
  */
 // TODO: Añadir comentarios
-// TODO: Página de error
+// TODO: Página de error: No mostrar secciones y formatear el error y el tipo de error
 // TODO: I18n: Completar los JSP
 // TODO: Obtener la sección actual para marcarla en el layout
-// TODO: FOOTER
-// TODO: Security
-// TODO: Section: Home
-// TODO: Section: Blog
-// TODO: Section: Contact
-// TODO: Section: Login
-// TODO: Login y logout (Control del usuario)
-// TODO: Validators
+// TODO: FOOTER: Redes sociales y texto
+// TODO: Security: Extra parameters
+// TODO: Section: Home (Completar)
+// TODO: Section: Blog (Listado de POST's)
+// FIX: Section: Contact: No valida
+// TODO: Administración: Index
+// TODO: Administración: Post
+// TODO: BBDD
+// FIX: Validators
 // TODO: Handle errors
+// XXX: Barra de carga al cambiar de sección
+// XXX: Ajax en J2EE
 @Controller
 @RequestMapping("/")
 public class WebController {
+    /**
+     * INDEX 
+     */
     @GetMapping("/")
     public ModelAndView actionIndex()
     {
         return new ModelAndView("index");
     }
-    @RequestMapping("/login")
-    public ModelAndView actionLogin()
-    {
-        // TODO: Si está logueado se redirecciona al index
-        LoginForm model = new LoginForm();
-        return new ModelAndView("user/login", "model", model);
-    }
+    /**
+     * CONTACT 
+     */
     @GetMapping("/contact")
     public ModelAndView actionContact()
     {
@@ -60,6 +66,9 @@ public class WebController {
         // TODO: Redirect
         return new ModelAndView("section/contact/success", "model", model);
     }
+    /**
+     * BLOG
+     */
     @GetMapping("/blog")
     public ModelAndView actionBlog()
     {
