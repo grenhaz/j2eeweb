@@ -26,4 +26,9 @@
         <attribute><description>Item url</description><name>url</name><required>false</required><rtexprvalue>true</rtexprvalue></attribute>
         <attribute><description>Dropdown item</description><name>dropdown</name><required>false</required><rtexprvalue>true</rtexprvalue><type>java.util.Boolean</type></attribute>
     </tag>
+    <!-- ITEMS -->
+    <tag-file>
+        <name>article</name>
+        <path>/WEB-INF/tags/article.tag</path>
+    </tag-file>
 </taglib>

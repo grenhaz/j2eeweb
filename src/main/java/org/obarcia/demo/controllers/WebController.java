@@ -7,7 +7,8 @@ import javax.validation.Valid;
 import org.obarcia.demo.components.hibernate.HibernateConnector;
 import org.obarcia.demo.models.blog.Comment;
 import org.obarcia.demo.models.blog.CommentForm;
-import org.obarcia.demo.models.blog.Post;
+import org.obarcia.demo.models.Article;
+import org.obarcia.demo.models.ArticleManager;
 import org.obarcia.demo.models.contact.ContactForm;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -28,28 +29,48 @@ import org.springframework.web.servlet.ModelAndView;
  * @author obarcia
  */
 // TODO: Añadir comentarios
-// TODO: Página de error: No mostrar secciones y formatear el error y el tipo de error
+// TODO: Página de error: Código y fondo
 // TODO: I18n: Completar los JSP
 // TODO: Obtener la sección actual para marcarla en el layout
 // TODO: Security: Extra parameters
-// TODO: Section: Home (Completar)
-// TODO: Section: Blog (Listado de POST's)
-// FIX: Section: Contact: No valida
 // TODO: Administración: Index
-// TODO: Administración: Post
+// TODO: Administración: Articles
 // TODO: Administración: Comments
 // TODO: BBDD
+// TODO: Article: note, shortcontent, type (texto real)
+// TODO: Navbar completa
+// TODO: Login: Registro y página completa
+// TODO: Página del artículo
 // TODO: Comments
+// TODO: Footer: estilos y texto final
 // FIX: Validators
 // TODO: Handle errors
 // XXX: Ajax en J2EE
+// TODO: Buscador
+// TODO: Navegador de los artículos
 @Controller
 @RequestMapping("/")
 public class WebController {
     @GetMapping("/")
     public ModelAndView actionIndex()
     {
-        return new ModelAndView("index");
+        List destacados = ArticleManager.getInstance().getArticles();
+        List articles = ArticleManager.getInstance().getArticles();
+        List guides = ArticleManager.getInstance().getArticles();
+        List analisis = ArticleManager.getInstance().getArticles();
+        
+        return new ModelAndView("articles")
+                .addObject("destacados", destacados)
+                .addObject("articles", articles)
+                .addObject("guides", guides)
+                .addObject("analisis", analisis);
+    }
+    @GetMapping("/article/{id}")
+    public ModelAndView actionBlogPost(@PathVariable("id") int id)
+    {
+        Article model = ArticleManager.getInstance().getArticle(id);
+        return new ModelAndView("article")
+                .addObject("model", model);
     }
     @RequestMapping("/login")
     @PreAuthorize("!isAuthenticated()")
@@ -67,7 +88,7 @@ public class WebController {
         }
         return "redirect:/";
     }
-    @GetMapping("/contact")
+    /*@GetMapping("/contact")
     public ModelAndView actionContact()
     {
         ContactForm model = new ContactForm();
@@ -86,14 +107,14 @@ public class WebController {
     @GetMapping("/blog")
     public ModelAndView actionBlog()
     {
-        List posts = HibernateConnector.getInstance().getAll(Post.class);
+        List posts = HibernateConnector.getInstance().getAll(Article.class);
         return new ModelAndView("section/blog/blog", "posts", posts);
     }
     @GetMapping("/blog/{id}")
     public ModelAndView actionBlogPost(@PathVariable("id") int id)
     {
         Comment comment = new Comment();
-        Post post = (Post)HibernateConnector.getInstance().get(Post.class, id);
+        Article post = (Article)HibernateConnector.getInstance().get(Article.class, id);
         return new ModelAndView("section/blog/post")
                 .addObject("model", post)
                 .addObject("comment", comment);
@@ -101,7 +122,7 @@ public class WebController {
     @PostMapping("/blog/{id}")
     public ModelAndView actionBlogSubmit(@PathVariable("id") int id, @Valid @ModelAttribute("comment") CommentForm comment, BindingResult result)
     {
-        Post post = (Post)HibernateConnector.getInstance().get(Post.class, id);
+        Article post = (Article)HibernateConnector.getInstance().get(Article.class, id);
         
         if (post != null) {
             if (!result.hasErrors()) {
@@ -122,5 +143,5 @@ public class WebController {
         return new ModelAndView("section/blog/post")
             .addObject("model", post)
             .addObject("comment", comment);
-    }
+    }*/
 }

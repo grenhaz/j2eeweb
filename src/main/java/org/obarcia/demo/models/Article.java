@@ -1,4 +1,4 @@
-package org.obarcia.demo.models.blog;
+package org.obarcia.demo.models;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -15,14 +15,17 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author obarcia
  */
 @Entity
-@Table(name = "post")
-public class Post {
+@Table(name = "article")
+public class Article {
     private static final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     
     @Id
     @GeneratedValue
     @Column(name = "id")
     private int id;
+    @NotEmpty
+    @Column(name = "type")
+    private String type;
     @NotEmpty
     @Column(name = "title")
     private String title;
@@ -32,6 +35,9 @@ public class Post {
     @NotEmpty
     @Column(name = "publish")
     private Timestamp publish;
+    @NotEmpty
+    @Column(name = "tags")
+    private String tags;
     
     public int getId()
     {
@@ -40,6 +46,14 @@ public class Post {
     public void setId(int value)
     {
         id = value;
+    }
+    public String getType()
+    {
+        return type;
+    }
+    public void setType(String value)
+    {
+        type = value;
     }
     public String getTitle()
     {
@@ -64,6 +78,14 @@ public class Post {
     public void setPublish(Timestamp value)
     {
         publish = value;
+    }
+    public String getTags()
+    {
+        return tags;
+    }
+    public void setTags(String value)
+    {
+        tags = value;
     }
     /**
      * Devuelve la fecha de publicación formateada.

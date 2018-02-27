@@ -4,6 +4,7 @@
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@attribute name="title" required="false" type="java.lang.String" %>
 <%@attribute name="lang" required="false" type="java.lang.String" %>
+<%@attribute name="classCss" required="false" type="java.lang.String" %>
 <%@attribute name="bootstrap" required="false" type="java.lang.Boolean" %>
 <%@attribute name="fontawesome" required="false" type="java.lang.Boolean" %>
 <c:set var="lang" value="${(empty lang) ? 'es' : lang}" />
@@ -25,11 +26,9 @@
         <script src="${base}/resources/bootbox/bootbox.min.js"></script>
         <script src="${base}/resources/js/site.js"></script>
     </head>
-    <body>
+    <body class="${classCss}">
         <ui:navbar classCss="navbar-fixed">
             <ui:navitem title="Home" url="${base}" />
-            <ui:navitem title="Blog" url="${base}/blog" />
-            <ui:navitem title="Contact" url="${base}/contact" />
             <sec:authorize access="!isAuthenticated()">
                 <ui:navitem title="Login" url="${base}/login" />
             </sec:authorize>
@@ -43,12 +42,12 @@
 
         <div class="container">
             <div class="wrap">
-                <jsp:doBody />
+                <div class="wrap-container">
+                    <jsp:doBody />
+                </div>
+                    
+                <jsp:include page="/WEB-INF/jsp/static/footer.jsp" />
             </div>
         </div>
-
-        <jsp:include page="/WEB-INF/jsp/static/footer.jsp" />
-
-        </footer>
     </body>
 </html>
