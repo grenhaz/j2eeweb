@@ -7,25 +7,25 @@
                         http://www.springframework.org/schema/security
                         http://www.springframework.org/schema/security/spring-security.xsd">
 
+    <global-method-security pre-post-annotations="enabled"/>
+        
     <http auto-config="true" use-expressions="true">
         <csrf disabled="false"/>
         
         <intercept-url pattern="/resources/**" access="permitAll" />
-        <intercept-url pattern="/admin/login*" access="!isAuthenticated()" />
-        <intercept-url pattern="/admin/logout*" access="isAuthenticated()" />
-        <intercept-url pattern="/admin/**" access="hasRole('ROLE_USER')" />
         <intercept-url pattern="/**" access="permitAll" />
  
         <form-login
-            login-page='/admin/login'
-            login-processing-url='/admin/login'
-            default-target-url="/admin/index"
-            authentication-failure-url="/admin/login?error=true" />
+            login-page='/login'
+            login-processing-url='/login'
+            default-target-url="/"
+            authentication-failure-url="/login?error=true" />
  
-        <logout logout-success-url="/admin/login" />
+        <logout logout-success-url="/login" />
     </http>
 
     <user-service>
         <user name="user" password="password" authorities="ROLE_USER" />
+        <user name="admin" password="password" authorities="ROLE_ADMIN" />
     </user-service>
 </b:beans>

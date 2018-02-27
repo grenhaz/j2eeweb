@@ -1,6 +1,7 @@
 <%@tag description="Main Layout" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="ui" uri="http://www.obarcia.com/tags" %>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@attribute name="title" required="false" type="java.lang.String" %>
 <%@attribute name="lang" required="false" type="java.lang.String" %>
 <%@attribute name="bootstrap" required="false" type="java.lang.Boolean" %>
@@ -22,14 +23,22 @@
         <script src="${base}/resources/jquery/jquery.min.js"></script>
         <script src="${base}/resources/bootstrap/js/bootstrap.min.js"></script>
         <script src="${base}/resources/bootbox/bootbox.min.js"></script>
+        <script src="${base}/resources/js/site.js"></script>
     </head>
     <body>
         <ui:navbar classCss="navbar-fixed">
             <ui:navitem title="Home" url="${base}" />
             <ui:navitem title="Blog" url="${base}/blog" />
             <ui:navitem title="Contact" url="${base}/contact" />
-            <ui:navitem title="Login" url="${base}/admin/login" />
-            <ui:navitem title="Logout [${username}]" url="${base}/admin/logout" />
+            <sec:authorize access="!isAuthenticated()">
+                <ui:navitem title="Login" url="${base}/login" />
+            </sec:authorize>
+            <sec:authorize access="hasRole('ROLE_ADMIN')">
+                <ui:navitem title="Admin" url="${base}/admin/index" />
+            </sec:authorize>
+            <sec:authorize access="isAuthenticated()">
+                <ui:navitem title="Logout [${username}]" url="${base}/logout" />
+            </sec:authorize>
         </ui:navbar>
 
         <div class="container">
