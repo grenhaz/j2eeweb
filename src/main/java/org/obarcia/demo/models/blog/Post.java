@@ -65,6 +65,10 @@ public class Post {
     {
         publish = value;
     }
+    /**
+     * Devuelve la fecha de publicación formateada.
+     * @return Fecha de publicación formateada.
+     */
     public String getFormattedPublish()
     {
         if (publish != null) {
@@ -73,6 +77,10 @@ public class Post {
         
         return "";
     }
+    /**
+     * Devuelve el contenido recortado.
+     * @return Contenido recortado.
+     */
     public String getShortContent()
     {
         // Reducir el contenido
