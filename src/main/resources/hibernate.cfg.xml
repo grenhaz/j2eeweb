@@ -6,6 +6,6 @@
     <property name="hibernate.connection.username">app</property>
     <property name="hibernate.connection.url">jdbc:derby://localhost:1527/test</property>
     
-    <mapping class="org.obarcia.demo.models.Article"/>
+    <mapping class="org.obarcia.demo.models.article.Article"/>
   </session-factory>
 </hibernate-configuration>

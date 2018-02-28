@@ -1,4 +1,4 @@
-package org.obarcia.demo.models;
+package org.obarcia.demo.models.article;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -30,6 +30,9 @@ public class Article {
     @Column(name = "title")
     private String title;
     @NotEmpty
+    @Column(name = "description")
+    private String description;
+    @NotEmpty
     @Column(name = "content")
     private String content;
     @NotEmpty
@@ -39,6 +42,8 @@ public class Article {
     private String tags;
     @Column(name = "important")
     private String important;
+    @Column(name = "puntuation")
+    private Double puntuation;
     
     public int getId()
     {
@@ -63,6 +68,14 @@ public class Article {
     public void setTitle(String value)
     {
         title = value;
+    }
+    public String getDescription()
+    {
+        return description;
+    }
+    public void setDescription(String value)
+    {
+        description = value;
     }
     public String getContent()
     {
@@ -96,6 +109,19 @@ public class Article {
     {
         important = value;
     }
+    public Double getPuntuation()
+    {
+        return puntuation;
+    }
+    public void setPuntuation(Double value)
+    {
+        puntuation = value;
+    }
+    public int getComments()
+    {
+        // TODO: Contabilizar el número de comentarios del artículo
+        return 0;
+    }
     /**
      * Devuelve la fecha de publicación formateada.
      * @return Fecha de publicación formateada.
@@ -107,18 +133,5 @@ public class Article {
         }
         
         return "";
-    }
-    /**
-     * Devuelve el contenido recortado.
-     * @return Contenido recortado.
-     */
-    public String getShortContent()
-    {
-        // Reducir el contenido
-        if (content != null && content.length() > 128) {
-            return content.substring(0, 125) + "...";
-        }
-        
-        return content;
     }
 }

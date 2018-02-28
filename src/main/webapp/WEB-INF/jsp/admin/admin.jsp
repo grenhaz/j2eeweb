@@ -5,5 +5,4 @@
 <ui:layout title="${title}">
     <h1>${title}</h1>
     
-    
 </ui:layout>

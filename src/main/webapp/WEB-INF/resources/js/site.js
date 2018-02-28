@@ -1,20 +1,37 @@
+function refreshArticles(url, scroll) {
+    if (scroll) {
+        // TODO: Scroll a la posición
+        var aTag = $('#articles-top');
+        console.log("top: " + aTag.offset().top);
+        console.log("scroll: " + $(document).scrollTop());
+        $('html,body').animate({
+            scrollTop: 140//aTag.offset().top + $('.navbar').height()
+        }, 'slow');
+    }
+    
+    $.get(url, function (ret) {
+        $('.articles').html(ret);
+    });
+};
+
 $(function () {
-    // TODO: Sección inicial
+    // Sección inicial
     var anchor = window.location.hash;
     if (anchor !== '' && anchor.length > 1) {
         var link = anchor.substring(1);
-        $.get(__BASE + link.replaceAll('_', '/'), function (ret) {
-            $('.articles').html(ret);
-        });
+        refreshArticles(__BASE + '/' + link.replace(/\_/g, '/'), false);
+    } else {
+        refreshArticles(__BASE + '/articles/all', false);
     }
     
-    // TODO: Cambio de secciones
-    $(document.body).on('click', 'ul.list-sections li a', function(e) {
-        var link = $(this).attr('href');
-        console.log(link);
-        $.get(__BASE + '/articles/all', {}, function (ret) {
-            
-        });
+    // Cambio de secciones
+    $(document.body).on('click', 'a.go', function(e) {
+        var url = $(this).attr('href');
+        var index = url.indexOf('#');
+        if (index >= 0) {
+            var link = url.substring(index + 1);
+            refreshArticles(__BASE + '/' + link.replace(/\_/g, '/'), true);
+        }
         return true;
     });
     

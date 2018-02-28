@@ -7,12 +7,24 @@
 <div class="row">
     <div class="col-xs-12">
         <ul class="list-sections">
-            <li><a href="#articles_all">TODOS</a></li>
-            <li><a href="#articles_new">NOTICIAS</a></li>
-            <li><a href="#articles_review">ANÁLISIS</a></li>
-            <li><a href="#articles_guide">GUÍAS</a></li>
-            <li><a href="#articles_video" >VIDEOS</a></li>
-            <li><a href="#articles_special">ESPECIALES</a></li>
+            <li ${articles.type == "all" ? "class='active'" : "" }>
+                <a class="go" href="#articles_all"><spring:message code="articles.type.all" /></a>
+            </li>
+            <li ${articles.type == "new" ? "class='active'" : "" }>
+                <a class="go" href="#articles_new"><spring:message code="articles.type.new" /></a>
+            </li>
+            <li ${articles.type == "review" ? "class='active'" : "" }>
+                <a class="go" href="#articles_review"><spring:message code="articles.type.review" /></a>
+            </li>
+            <li ${articles.type == "guide" ? "class='active'" : "" }>
+                <a class="go" href="#articles_guide"><spring:message code="articles.type.guide" /></a>
+            </li>
+            <li ${articles.type == "video" ? "class='active'" : "" }>
+                <a class="go" href="#articles_video" ><spring:message code="articles.type.video" /></a>
+            </li>
+            <li ${articles.type == "special" ? "class='active'" : "" }>
+                <a class="go" href="#articles_special"><spring:message code="articles.type.special" /></a>
+            </li>
         </ul>
     </div>
 </div>

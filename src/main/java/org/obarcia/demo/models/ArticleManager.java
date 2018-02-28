@@ -1,4 +1,4 @@
-package org.obarcia.demo.models;
+package org.obarcia.demo.models.article;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -9,6 +9,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.obarcia.demo.components.hibernate.HibernateConnector;
+import org.obarcia.demo.models.ListPagination;
 
 /**
  *

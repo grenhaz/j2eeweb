@@ -3,8 +3,8 @@ package org.obarcia.demo.controllers;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.obarcia.demo.models.Article;
-import org.obarcia.demo.models.ArticleManager;
+import org.obarcia.demo.models.article.Article;
+import org.obarcia.demo.models.article.ArticleManager;
 import org.obarcia.demo.models.ListPagination;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -21,16 +21,18 @@ import org.springframework.web.servlet.ModelAndView;
  * 
  * @author obarcia
  */
-// TODO: Añadir comentarios
-// TODO: Página de error: Código y fondo
-// TODO: I18n: Completar los JSP
-// TODO: Obtener la sección actual para marcarla en el layout
+// FIX: Añadir comentarios
+// FIX: Página de error: Códigos de error y fondo (Parece que da un error)
+// FIX: I18n: Completar los JSP (Falta el NAVBAR)
+// TODO: Utilizar un fichero de configuración: url's
+// TODO: Security: Acceso por usuario de BBDD.
 // TODO: Security: Extra parameters
 // TODO: Administración: Index
+// TODO: Administración: Users
 // TODO: Administración: Articles
-// TODO: Administración: Comments
+// TODO: Administración: Articles: Comments
 // TODO: BBDD (Creación durante el inicio)
-// TODO: Article: note, shortcontent
+// TODO: Article: Mostrar la nota en el artículo
 // TODO: Navbar completa
 // TODO: Login: Registro y página completa
 // TODO: Página del artículo
@@ -39,12 +41,13 @@ import org.springframework.web.servlet.ModelAndView;
 // TODO: Validators
 // TODO: Handle errors
 // TODO: Buscador por texto
-// TODO: Navegador de los artículos (Falta el uso del anchor y splash de refresco)
-// TODO: Repositoria de imágenes
+// TODO: Navegador de los artículos (Falta el splash de refresco)
+// TODO: Repositorio de imágenes
 
 @Controller
 @RequestMapping("/")
-public class WebController {
+public class WebController
+{
     @GetMapping("/")
     public ModelAndView actionIndex(HttpServletRequest request)
     {
@@ -58,7 +61,7 @@ public class WebController {
         List guides = ArticleManager.getInstance().getArticlesGuides();
         List reviews = ArticleManager.getInstance().getArticlesReviews();
         
-        return new ModelAndView("articles")
+        return new ModelAndView("articles/articles")
                 .addObject("importants", importants)
                 .addObject("articles", articles)
                 .addObject("guides", guides)
@@ -71,7 +74,7 @@ public class WebController {
         articles.setType(type != null ? type : "all");
         articles.setUrlBase(request.getContextPath() + "/articles/" + articles.getType());
         
-        return new ModelAndView("articles.ajax")
+        return new ModelAndView("articles/articles.ajax")
                 .addObject("articles", articles);
     }
     @GetMapping("/articles/{type}/{page}")
@@ -81,14 +84,14 @@ public class WebController {
         articles.setType(type != null ? type : "all");
         articles.setUrlBase(request.getContextPath() + "/articles/" + articles.getType());
         
-        return new ModelAndView("articles.ajax")
+        return new ModelAndView("articles/articles.ajax")
                 .addObject("articles", articles);
     }
     @GetMapping("/article/{id}")
     public ModelAndView actionBlogPost(@PathVariable("id") int id)
     {
         Article model = ArticleManager.getInstance().getArticle(id);
-        return new ModelAndView("article")
+        return new ModelAndView("articles/article")
                 .addObject("model", model);
     }
     
@@ -112,6 +115,7 @@ public class WebController {
         }
         return "redirect:/";
     }
+    
     /*@GetMapping("/contact")
     public ModelAndView actionContact()
     {

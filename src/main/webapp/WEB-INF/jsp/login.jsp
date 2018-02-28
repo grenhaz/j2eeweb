@@ -7,18 +7,18 @@
         <h1>${title}</h1>
 
         <div class="section">
-            <div class="header">PARA INICIAR LA SESIÓN DEBES ESTAR REGISTRADO COMO USUARIO</div>
+            <div class="header"><spring:message code="title.login.info" /></div>
             <div class="row">
                 <div class="col-xs-4 left">
                     <form method="POST">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
                         <div class="form-group">
-                            <label class="control-label" id="username">Username</label>
+                            <label class="control-label" id="username"><spring:message code="label.username" /></label>
                             <input class="form-control" id="username" name="username" value="user" />
                         </div>
                         <div class="form-group">
-                            <label class="control-label" id="password">Password</label>
+                            <label class="control-label" id="password"><spring:message code="label.password" /></label>
                             <input type="password" class="form-control" id="password" name="password" value="password" />
                         </div>
                         <div class="form-group">

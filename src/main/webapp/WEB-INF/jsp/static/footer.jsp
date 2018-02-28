@@ -1,7 +1,8 @@
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <footer>
     <div class="row">
         <div class="col-sm-8">
-            COPYRIGHT
+            <spring:message code="copyright" />
         </div>
         <div class="col-sm-4 social-networks">
             <a href="#" title="Facebook" alt="Facebook"><i class="fa fa-facebook-square"></i></a>
