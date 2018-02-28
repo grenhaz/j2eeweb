@@ -19,9 +19,9 @@ $(function () {
     var anchor = window.location.hash;
     if (anchor !== '' && anchor.length > 1) {
         var link = anchor.substring(1);
-        refreshArticles(__BASE + '/' + link.replace(/\_/g, '/'), false);
+        refreshArticles(__BASE + 'ajax/' + link.replace(/\_/g, '/'), false);
     } else {
-        refreshArticles(__BASE + '/articles/all', false);
+        refreshArticles(__BASE + 'ajax/' + (__TAG !== '' && __TAG !== undefined  ? __TAG + '/' : '') + 'all', false);
     }
     
     // Cambio de secciones
@@ -30,7 +30,7 @@ $(function () {
         var index = url.indexOf('#');
         if (index >= 0) {
             var link = url.substring(index + 1);
-            refreshArticles(__BASE + '/' + link.replace(/\_/g, '/'), true);
+            refreshArticles(__BASE + 'ajax/' + link.replace(/\_/g, '/'), true);
         }
         return true;
     });

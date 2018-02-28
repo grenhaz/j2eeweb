@@ -3,14 +3,16 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@attribute name="article" required="true" type="org.obarcia.demo.models.article.Article" rtexprvalue="true" %>
 <%@attribute name="position" required="true" %>
-<c:set var="base" value="${pageContext.getServletContext().getContextPath()}" />
 <div class="article ${position}">
     <!-- IMAGE -->
     <div class="image">
         <a href="<c:url value="/article/${article.id}" />">
-            <!-- <img src="${base}/resources/images/game.jpg" /> -->
+            <img src="<c:url value="/resources/images/game.jpg" />" />
             <c:if test="${article.type == 'review'}">
-                <div class="puntuation"><c:out value="${article.puntuation}" /></div>
+                <div class="over score"><c:out value="${article.puntuation}" /></div>
+            </c:if>
+            <c:if test="${article.type != 'review'}">
+                <div class="over over-title"><c:out value="${article.title}" /></div>
             </c:if>
         </a>
     </div>

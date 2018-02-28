@@ -14,6 +14,7 @@ public class ListPagination
     private List records;
     private String urlBase;
     private String type;
+    private String tag;
     
     public Integer getOffset()
     {
@@ -62,6 +63,14 @@ public class ListPagination
     public void setType(String value)
     {
         type = value;
+    }
+    public String getTag()
+    {
+        return tag;
+    }
+    public void setTag(String value)
+    {
+        tag = value;
     }
     public Integer getCurrent()
     {

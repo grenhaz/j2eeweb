@@ -13,6 +13,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -21,28 +22,34 @@ import org.springframework.web.servlet.ModelAndView;
  * 
  * @author obarcia
  */
-// FIX: Añadir comentarios
+// FIX: !!!! Añadir comentarios
 // FIX: Página de error: Códigos de error y fondo (Parece que da un error)
 // FIX: I18n: Completar los JSP (Falta el NAVBAR)
-// TODO: Utilizar un fichero de configuración: url's
-// TODO: Security: Acceso por usuario de BBDD.
+// TODO: !!!! Utilizar un fichero de configuración: url's
+// TODO: !!!! Security: Acceso por usuario de BBDD.
 // TODO: Security: Extra parameters
 // TODO: Administración: Index
 // TODO: Administración: Users
 // TODO: Administración: Articles
 // TODO: Administración: Articles: Comments
 // TODO: BBDD (Creación durante el inicio)
-// TODO: Article: Mostrar la nota en el artículo
 // TODO: Navbar completa
 // TODO: Login: Registro y página completa
 // TODO: Página del artículo
-// TODO: Comments
+// TODO: !!!! Comments
 // TODO: Footer: estilos y texto final
+// TODO: Seciones: Estilos over y active
+// TODO: Botón de play para los videos
 // TODO: Validators
 // TODO: Handle errors
 // TODO: Buscador por texto
 // TODO: Navegador de los artículos (Falta el splash de refresco)
-// TODO: Repositorio de imágenes
+// TODO: !!!! Repositorio de imágenes
+// TODO: Breadcrumb en article
+// TODO: Menú superior (HOME, TAGS??)
+// TODO: !!!! Revisar el pagination
+// TODO: !!!! Revisar el uso de base para las url's y cambiar por c:url
+// FIX: !!!! Corregir la colocación del ul.list-sections .active
 
 @Controller
 @RequestMapping("/")
@@ -53,8 +60,7 @@ public class WebController
     {
         // Listado principal
         ListPagination articles = ArticleManager.getInstance().getArticlesAll(1, 10);
-        articles.setType("all");
-        articles.setUrlBase(request.getContextPath() + "/articles/" + articles.getType());
+        articles.setUrlBase(request.getContextPath());
         
         // Otros listados
         List importants = ArticleManager.getInstance().getArticlesImportants();
@@ -62,37 +68,65 @@ public class WebController
         List reviews = ArticleManager.getInstance().getArticlesReviews();
         
         return new ModelAndView("articles/articles")
+                .addObject("tag", "games")
                 .addObject("importants", importants)
                 .addObject("articles", articles)
                 .addObject("guides", guides)
                 .addObject("reviews", reviews);
     }
-    @GetMapping("/articles/{type}")
-    public ModelAndView actionArticles(@PathVariable("type") String type, HttpServletRequest request)
+    @GetMapping("/web/{tag}")
+    public ModelAndView actionIndexTag(@PathVariable("tag") String tag, HttpServletRequest request)
     {
-        ListPagination articles = ArticleManager.getInstance().getArticlesAll(1, 10, type);
-        articles.setType(type != null ? type : "all");
-        articles.setUrlBase(request.getContextPath() + "/articles/" + articles.getType());
+        // Listado principal
+        ListPagination articles = ArticleManager.getInstance().getArticlesAll(1, 10, "all", tag);
+        articles.setUrlBase(request.getContextPath());
         
-        return new ModelAndView("articles/articles.ajax")
-                .addObject("articles", articles);
-    }
-    @GetMapping("/articles/{type}/{page}")
-    public ModelAndView actionArticles(@PathVariable("type") String type, @PathVariable("page") int page, HttpServletRequest request)
-    {
-        ListPagination articles = ArticleManager.getInstance().getArticlesAll(page, 10, type);
-        articles.setType(type != null ? type : "all");
-        articles.setUrlBase(request.getContextPath() + "/articles/" + articles.getType());
+        // Otros listados
+        List importants = ArticleManager.getInstance().getArticlesImportants(tag);
+        List guides = ArticleManager.getInstance().getArticlesGuides(tag);
+        List reviews = ArticleManager.getInstance().getArticlesReviews(tag);
         
-        return new ModelAndView("articles/articles.ajax")
-                .addObject("articles", articles);
+        return new ModelAndView("articles/articles")
+                .addObject("tag", tag)
+                .addObject("importants", importants)
+                .addObject("articles", articles)
+                .addObject("guides", guides)
+                .addObject("reviews", reviews);
     }
     @GetMapping("/article/{id}")
-    public ModelAndView actionBlogPost(@PathVariable("id") int id)
+    public ModelAndView actionArticle(@PathVariable("id") int id)
     {
         Article model = ArticleManager.getInstance().getArticle(id);
         return new ModelAndView("articles/article")
                 .addObject("model", model);
+    }
+    @GetMapping("/ajax/{tag}/{type}")
+    public ModelAndView actionArticlesTag(@PathVariable("tag") String tag, @PathVariable("type") String type, HttpServletRequest request)
+    {
+        ListPagination articles = ArticleManager.getInstance().getArticlesAll(1, 10, type, tag);
+        articles.setUrlBase(request.getContextPath());
+        
+        return new ModelAndView("articles/articles.ajax")
+                .addObject("tag", tag)
+                .addObject("articles", articles);
+    }
+    @GetMapping("/ajax/{tag}/article/{id}")
+    public ModelAndView actionArticle(@PathVariable("tag") String tag, @PathVariable("id") int id)
+    {
+        Article model = ArticleManager.getInstance().getArticle(id);
+        return new ModelAndView("articles/article")
+                .addObject("tag", tag)
+                .addObject("model", model);
+    }
+    @GetMapping("/ajax/{tag}/{type}/{page}")
+    public ModelAndView actionArticlesTag(@PathVariable("tag") String tag, @PathVariable("type") String type, @PathVariable("page") int page, HttpServletRequest request)
+    {
+        ListPagination articles = ArticleManager.getInstance().getArticlesAll(page, 10, type, tag);
+        articles.setUrlBase(request.getContextPath());
+        
+        return new ModelAndView("articles/articles.ajax")
+                .addObject("tag", tag)
+                .addObject("articles", articles);
     }
     
     

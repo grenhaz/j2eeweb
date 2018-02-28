@@ -39,17 +39,26 @@ public class ArticleManager
     }
     public ListPagination getArticlesAll(int page, int perPage)
     {
-        return getArticlesAll(page, perPage, null);
+        return getArticlesAll(page, perPage, null, null);
     }
     public ListPagination getArticlesAll(int page, int perPage, String type)
     {
+        return getArticlesAll(page, perPage, type, null);
+    }
+    public ListPagination getArticlesAll(int page, int perPage, String type, String tag)
+    {
         ListPagination list = new ListPagination();
+        list.setType(type != null ? type : "all");
+        list.setTag(tag != null ? tag : "games");
         list.setOffset((page - 1) * perPage);
         list.setLimit(perPage);
         
         Criteria criteria = getCriteria();
         if (type != null && !type.equals("all")) {
             criteria.add(Restrictions.eq("type", type));
+        }
+        if (tag != null && !tag.equals("games")) {
+            criteria.add(Restrictions.like("tags", "%" + tag + "%"));
         }
         
         // Total
@@ -72,24 +81,45 @@ public class ArticleManager
     }
     public List getArticlesImportants()
     {
+        return getArticlesImportants(null);
+    }
+    public List getArticlesImportants(String tag)
+    {
         Criteria criteria = getCriteria();
         criteria.add(Restrictions.eq("important", "S"));
+        if (tag != null) {
+            criteria.add(Restrictions.like("tags", "%" + tag + "%"));
+        }
         criteria.addOrder(Order.desc("publish"));
         criteria.setMaxResults(3);
         return getArticles(criteria);
     }
     public List getArticlesGuides()
     {
+        return getArticlesGuides(null);
+    }
+    public List getArticlesGuides(String tag)
+    {
         Criteria criteria = getCriteria();
         criteria.add(Restrictions.eq("type", "guide"));
+        if (tag != null) {
+            criteria.add(Restrictions.like("tags", "%" + tag + "%"));
+        }
         criteria.addOrder(Order.desc("publish"));
         criteria.setMaxResults(3);
         return getArticles(criteria);
     }
     public List getArticlesReviews()
     {
+        return getArticlesReviews(null);
+    }
+    public List getArticlesReviews(String tag)
+    {
         Criteria criteria = getCriteria();
         criteria.add(Restrictions.eq("type", "review"));
+        if (tag != null) {
+            criteria.add(Restrictions.like("tags", "%" + tag + "%"));
+        }
         criteria.addOrder(Order.desc("publish"));
         criteria.setMaxResults(4);
         return getArticles(criteria);
