@@ -21,6 +21,7 @@
         <link href="${base}/resources/fontawesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="${base}/resources/css/site.css" rel="stylesheet" type="text/css">
         
+        <script>var __BASE = '${base}';</script>
         <script src="${base}/resources/jquery/jquery.min.js"></script>
         <script src="${base}/resources/bootstrap/js/bootstrap.min.js"></script>
         <script src="${base}/resources/bootbox/bootbox.min.js"></script>

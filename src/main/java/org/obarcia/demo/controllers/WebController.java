@@ -29,18 +29,19 @@ import org.springframework.web.servlet.ModelAndView;
 // TODO: Administración: Index
 // TODO: Administración: Articles
 // TODO: Administración: Comments
-// TODO: BBDD
-// TODO: Article: note, shortcontent, type (texto real)
+// TODO: BBDD (Creación durante el inicio)
+// TODO: Article: note, shortcontent
 // TODO: Navbar completa
 // TODO: Login: Registro y página completa
 // TODO: Página del artículo
 // TODO: Comments
 // TODO: Footer: estilos y texto final
-// FIX: Validators
+// TODO: Validators
 // TODO: Handle errors
-// XXX: Ajax en J2EE
 // TODO: Buscador por texto
-// TODO: Navegador de los artículos
+// TODO: Navegador de los artículos (Falta el uso del anchor y splash de refresco)
+// TODO: Repositoria de imágenes
+
 @Controller
 @RequestMapping("/")
 public class WebController {

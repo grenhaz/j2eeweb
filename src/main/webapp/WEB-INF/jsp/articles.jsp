@@ -21,7 +21,7 @@
                 
                 <div class="header">LO ÚLTIMO EN VIDEOJUEGOS</div>
                 <div class="articles">
-                    <ui:articles base="${base}" articles="${articles}" />
+                    <ui:articles articles="${articles}" />
                 </div>
             </div>
         </div>

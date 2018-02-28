@@ -17,12 +17,24 @@ footer .social-networks a{margin-left:8px;color:#555;}
 /* WEB */
 body{background:#000 url(../images/bg_0.png) repeat-y center;}
 body.error .wrap{background:#000 url(../images/error.jpg) right top no-repeat;}
+body.error .wrap-container{background-color:transparent;}
 .header{font-family:'Roboto Condensed',Arial;font-weight:bold;background:linear-gradient(#000,#131313,#1c1c1c 50%,#040404 50%,#000);border-radius:4px;box-shadow:0 0 1px rgba(0,0,0,0.4);text-transform:uppercase;color:#FFF;height:29px;padding:4px 8px;margin-bottom:8px;}
 
 /* SECCIONES */
 .section{background-color:#FFF;padding:4px;background-color:#FFF;border-radius:4px;margin:16px 0;}
 .login{margin:8px 32px;}
 .login .right{border-left:1px solid #CCC;}
+ul.list-sections{padding: 1px 0 0 0;
+    margin: 0;
+    list-style: none;
+    white-space: nowrap;
+    float: left;
+    clear: left;}
+ul.list-sections li{float:left;display:inline;margin:0 0 0 1px;height:30px;}
+ul.list-sections li a{cursor: pointer;
+    font: 13px "Roboto",Arial;
+    color: #000;
+    text-shadow: 1px 1px 0 #fff;padding:6px 8px 0 8px;}
 
 /* ARTÍCULOS */
 .articles-empty{padding:12px 4px;color:#777;}
