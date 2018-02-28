@@ -35,9 +35,10 @@ public class Article {
     @NotEmpty
     @Column(name = "publish")
     private Timestamp publish;
-    @NotEmpty
     @Column(name = "tags")
     private String tags;
+    @Column(name = "important")
+    private String important;
     
     public int getId()
     {
@@ -86,6 +87,14 @@ public class Article {
     public void setTags(String value)
     {
         tags = value;
+    }
+    public String getImportant()
+    {
+        return important;
+    }
+    public void setImportant(String value)
+    {
+        important = value;
     }
     /**
      * Devuelve la fecha de publicación formateada.

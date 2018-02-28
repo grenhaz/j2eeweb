@@ -3,23 +3,16 @@ package org.obarcia.demo.controllers;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import org.obarcia.demo.components.hibernate.HibernateConnector;
-import org.obarcia.demo.models.blog.Comment;
-import org.obarcia.demo.models.blog.CommentForm;
 import org.obarcia.demo.models.Article;
 import org.obarcia.demo.models.ArticleManager;
-import org.obarcia.demo.models.contact.ContactForm;
+import org.obarcia.demo.models.ListPagination;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -46,24 +39,49 @@ import org.springframework.web.servlet.ModelAndView;
 // FIX: Validators
 // TODO: Handle errors
 // XXX: Ajax en J2EE
-// TODO: Buscador
+// TODO: Buscador por texto
 // TODO: Navegador de los artículos
 @Controller
 @RequestMapping("/")
 public class WebController {
     @GetMapping("/")
-    public ModelAndView actionIndex()
+    public ModelAndView actionIndex(HttpServletRequest request)
     {
-        List destacados = ArticleManager.getInstance().getArticles();
-        List articles = ArticleManager.getInstance().getArticles();
-        List guides = ArticleManager.getInstance().getArticles();
-        List analisis = ArticleManager.getInstance().getArticles();
+        // Listado principal
+        ListPagination articles = ArticleManager.getInstance().getArticlesAll(1, 10);
+        articles.setType("all");
+        articles.setUrlBase(request.getContextPath() + "/articles/" + articles.getType());
+        
+        // Otros listados
+        List importants = ArticleManager.getInstance().getArticlesImportants();
+        List guides = ArticleManager.getInstance().getArticlesGuides();
+        List reviews = ArticleManager.getInstance().getArticlesReviews();
         
         return new ModelAndView("articles")
-                .addObject("destacados", destacados)
+                .addObject("importants", importants)
                 .addObject("articles", articles)
                 .addObject("guides", guides)
-                .addObject("analisis", analisis);
+                .addObject("reviews", reviews);
+    }
+    @GetMapping("/articles/{type}")
+    public ModelAndView actionArticles(@PathVariable("type") String type, HttpServletRequest request)
+    {
+        ListPagination articles = ArticleManager.getInstance().getArticlesAll(1, 10, type);
+        articles.setType(type != null ? type : "all");
+        articles.setUrlBase(request.getContextPath() + "/articles/" + articles.getType());
+        
+        return new ModelAndView("articles.ajax")
+                .addObject("articles", articles);
+    }
+    @GetMapping("/articles/{type}/{page}")
+    public ModelAndView actionArticles(@PathVariable("type") String type, @PathVariable("page") int page, HttpServletRequest request)
+    {
+        ListPagination articles = ArticleManager.getInstance().getArticlesAll(page, 10, type);
+        articles.setType(type != null ? type : "all");
+        articles.setUrlBase(request.getContextPath() + "/articles/" + articles.getType());
+        
+        return new ModelAndView("articles.ajax")
+                .addObject("articles", articles);
     }
     @GetMapping("/article/{id}")
     public ModelAndView actionBlogPost(@PathVariable("id") int id)
@@ -72,6 +90,11 @@ public class WebController {
         return new ModelAndView("article")
                 .addObject("model", model);
     }
+    
+    
+    
+    
+    
     @RequestMapping("/login")
     @PreAuthorize("!isAuthenticated()")
     public String actionLogin()

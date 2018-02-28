@@ -1,3 +1,11 @@
+function getArticles(url, data) {
+    $.get(url, data, function (ret) {
+        $('.articles').html(ret);
+        
+        // TODO: Change anchor
+    });
+};
+
 $(function () {
     // Slider de cambio de página
     $(window).on('beforeunload', function () {

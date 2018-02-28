@@ -3,14 +3,15 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@taglib prefix="ui" uri="http://www.obarcia.com/tags" %>
 <spring:message code="title" var="title" />
+<c:set var="base" value="${pageContext.getServletContext().getContextPath()}" />
 <ui:layout title="${title}">
     <div class="row">
         <div class="col-sm-8">
             <div class="section">
-                <c:if test="${not empty destacados}">
+                <c:if test="${not empty importants}">
                     <div class="header">DESTACADO</div>
                     <div class="row">
-                        <c:forEach var="article" items="${destacados}">
+                        <c:forEach var="article" items="${importants}">
                             <div class="col-sm-4">
                                 <ui:article position="top" article="${article}" />
                             </div>
@@ -18,12 +19,10 @@
                     </div>
                 </c:if>
                 
-                <c:if test="${not empty articles}">
-                    <div class="header">LO ÚLTIMO EN VIDEOJUEGOS</div>
-                    <c:forEach var="article" items="${articles}">
-                        <ui:article position="left" article="${article}" />
-                    </c:forEach>
-                </c:if>
+                <div class="header">LO ÚLTIMO EN VIDEOJUEGOS</div>
+                <div class="articles">
+                    <ui:articles base="${base}" articles="${articles}" />
+                </div>
             </div>
         </div>
         <div class="col-sm-4">
@@ -40,10 +39,10 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="section">
-                <c:if test="${not empty analisis}">
+                <c:if test="${not empty reviews}">
                     <div class="header">LOS ÚLTIMOS ANÁLISIS</div>
                     <div class="row">
-                        <c:forEach var="article" items="${analisis}">
+                        <c:forEach var="article" items="${reviews}">
                             <div class="col-sm-3">
                                 <ui:article position="top.analisis" article="${article}" />
                             </div>

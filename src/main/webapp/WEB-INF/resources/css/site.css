@@ -22,6 +22,7 @@ body.error .wrap{background:#000 url(../images/error.jpg) right top no-repeat;}
 .section{background-color:#FFF;padding:4px;background-color:#FFF;border-radius:4px;margin:16px 0;}
 .login{margin:8px 32px;}
 .login .right{border-left:1px solid #CCC;}
+.articles-empty{padding:12px 4px;color:#777;}
 
 .article{margin:16px 0;padding:8px 0;border-bottom:1px solid #CCC;position:relative;}
 .article .image img{width:100%;border-radius:4px;margin-bottom:4px;}

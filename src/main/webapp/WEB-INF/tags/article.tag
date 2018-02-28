@@ -8,7 +8,7 @@
     <!-- IMAGE -->
     <div class="image">
         <a href="<c:url value="/article/${article.id}" />">
-            <img src="${base}/resources/images/game.jpg" />
+            <!-- <img src="${base}/resources/images/game.jpg" /> -->
         </a>
     </div>
     <!-- TEXT -->
