@@ -12,7 +12,6 @@ public class ListPagination
     private Integer limit;
     private Integer total;
     private List records;
-    private String urlBase;
     private String type;
     private String tag;
     
@@ -47,14 +46,6 @@ public class ListPagination
     public void setRecords(List value)
     {
         records = value;
-    }
-    public String getUrlBase()
-    {
-        return urlBase;
-    }
-    public void setUrlBase(String value)
-    {
-        urlBase = value;
     }
     public String getType()
     {

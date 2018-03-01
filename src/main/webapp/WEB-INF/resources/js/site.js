@@ -1,4 +1,4 @@
-function refreshArticles(url, scroll) {
+function refreshBlock(destination, url, scroll) {
     if (scroll) {
         // TODO: Scroll a la posición
         var aTag = $('#articles-top');
@@ -10,18 +10,20 @@ function refreshArticles(url, scroll) {
     }
     
     $.get(url, function (ret) {
-        $('.articles').html(ret);
+        $(destination).html(ret);
     });
 };
 
 $(function () {
-    // Sección inicial
-    var anchor = window.location.hash;
-    if (anchor !== '' && anchor.length > 1) {
-        var link = anchor.substring(1);
-        refreshArticles(__BASE + 'ajax/' + link.replace(/\_/g, '/'), false);
-    } else {
-        refreshArticles(__BASE + 'ajax/' + (__TAG !== '' && __TAG !== undefined  ? __TAG + '/' : '') + 'all', false);
+    if (typeof __TAG !== 'undefined') {
+        // Sección inicial
+        var anchor = window.location.hash;
+        if (anchor !== '' && anchor.length > 1) {
+            var link = anchor.substring(1);
+            refreshBlock('.articles', __BASE + 'ajax/' + link.replace(/\_/g, '/'), false);
+        } else {
+            refreshBlock('.articles', __BASE + 'ajax/' + (__TAG !== '' && __TAG !== undefined  ? __TAG + '/' : '') + 'all', false);
+        }
     }
     
     // Cambio de secciones
@@ -30,7 +32,11 @@ $(function () {
         var index = url.indexOf('#');
         if (index >= 0) {
             var link = url.substring(index + 1);
-            refreshArticles(__BASE + 'ajax/' + link.replace(/\_/g, '/'), true);
+            var destination = $(this).data('destination');
+            if (destination === undefined) {
+                destination = '.articles';
+            }
+            refreshBlock(destination, __BASE + 'ajax/' + link.replace(/\_/g, '/'), true);
         }
         return true;
     });

@@ -2,21 +2,28 @@ package org.obarcia.demo.models.article;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- * Blog Post.
+ * Article entity.
  * 
  * @author obarcia
  */
 @Entity
 @Table(name = "article")
-public class Article {
+public class Article
+{
     private static final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     
     @Id
@@ -24,12 +31,15 @@ public class Article {
     @Column(name = "id")
     private int id;
     @NotEmpty
+    @Size(max = 12)
     @Column(name = "type")
     private String type;
     @NotEmpty
+    @Size(max = 250)
     @Column(name = "title")
     private String title;
     @NotEmpty
+    @Size(max = 250)
     @Column(name = "description")
     private String description;
     @NotEmpty
@@ -38,12 +48,19 @@ public class Article {
     @NotEmpty
     @Column(name = "publish")
     private Timestamp publish;
+    @NotEmpty
+    @Size(max = 128)
     @Column(name = "tags")
     private String tags;
+    @NotEmpty
+    @Size(max = 1)
     @Column(name = "important")
     private String important;
     @Column(name = "puntuation")
     private Double puntuation;
+    
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "article")
+    private Set<Comment> comments = new HashSet<>();
     
     public int getId()
     {
@@ -117,10 +134,28 @@ public class Article {
     {
         puntuation = value;
     }
-    public int getComments()
+    public Set<Comment> getComments()
     {
-        // TODO: Contabilizar el número de comentarios del artículo
-        return 0;
+        return comments;
+    }
+    public int getCommentsCount()
+    {
+        return comments.size();
+    }
+    /**
+     * Devuelve las etiquetas formateadas para visualización.
+     * @return Etiquetas formateadas para visualización.
+     */
+    public String getFormattedTags()
+    {
+        if (tags != null) {
+            return tags
+                .replaceAll("\\]\\[", " ")
+                .replaceAll("\\[", "")
+                .replaceAll("\\]", "");
+        }
+        
+        return "";
     }
     /**
      * Devuelve la fecha de publicación formateada.

@@ -5,7 +5,10 @@
     <property name="hibernate.connection.driver_class">org.apache.derby.jdbc.ClientDriver</property>
     <property name="hibernate.connection.username">app</property>
     <property name="hibernate.connection.url">jdbc:derby://localhost:1527/test</property>
+    <property name="hibernate.hbm2ddl.auto">update</property>
     
-    <mapping class="org.obarcia.demo.models.article.Article"/>
+    <mapping class="org.obarcia.demo.models.user.User" />
+    <mapping class="org.obarcia.demo.models.article.Article" />
+    <mapping class="org.obarcia.demo.models.article.Comment" />
   </session-factory>
 </hibernate-configuration>

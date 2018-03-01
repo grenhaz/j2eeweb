@@ -8,7 +8,8 @@
                         http://www.springframework.org/schema/security/spring-security.xsd">
 
     <global-method-security pre-post-annotations="enabled"/>
-        
+    
+    <!-- HTTP ACCESS -->
     <http auto-config="true" use-expressions="true">
         <csrf disabled="false"/>
         
@@ -16,16 +17,19 @@
         <intercept-url pattern="/**" access="permitAll" />
  
         <form-login
-            login-page='/login'
-            login-processing-url='/login'
+            login-page='/user/login'
+            login-processing-url='/user/login'
             default-target-url="/"
-            authentication-failure-url="/login?error=true" />
+            authentication-failure-url="/user/login?error=true" />
  
-        <logout logout-success-url="/login" />
+        <logout logout-success-url="/user/login" />
     </http>
-
-    <user-service>
-        <user name="user" password="password" authorities="ROLE_USER" />
-        <user name="admin" password="password" authorities="ROLE_ADMIN" />
-    </user-service>
+    
+    <!-- AUTHENTIFICATION -->
+    <authentication-manager>
+        <authentication-provider user-service-ref="UserAccessService" >
+            <password-encoder hash="bcrypt" />
+        </authentication-provider>
+    </authentication-manager>
+    <b:bean id="UserAccessService" class="org.obarcia.demo.services.UserAccessService" />
 </b:beans>

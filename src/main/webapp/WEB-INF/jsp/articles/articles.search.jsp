@@ -16,7 +16,7 @@
                             </div>
                         </c:forEach>
 
-                        <ui:pagination base="search" type="${results.type}" current="${results.current}" pages="${results.pages}" />
+                        <ui:pagination tag="${articles.tag}" type="${results.type}" current="${results.current}" pages="${results.pages}" />
                     </c:if>
                     <c:if test="${empty results.records}">
                         <div class="articles-empty"><spring:message code="articles.empty" /></div>

@@ -3,11 +3,11 @@ package org.obarcia.demo.models.user;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- * Login form.
+ * Register form.
  * 
  * @author obarcia
  */
-public class LoginForm
+public class RegisterForm
 {
     @NotEmpty
     private String username;

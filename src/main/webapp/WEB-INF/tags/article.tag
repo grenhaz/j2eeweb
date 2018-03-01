@@ -7,7 +7,7 @@
     <!-- IMAGE -->
     <div class="image">
         <a href="<c:url value="/article/${article.id}" />">
-            <img src="<c:url value="/resources/images/game.jpg" />" />
+            <!--<img src="<c:url value="/resources/images/game.jpg" />" />-->
             <c:if test="${article.type == 'review'}">
                 <div class="over score"><c:out value="${article.puntuation}" /></div>
             </c:if>
@@ -29,6 +29,6 @@
         <div class="content">
             <c:out value="${article.description}" />
         </div>
-        <div class="info"><i class="fa fa-comment"></i><c:out value="${article.comments}" /> | <c:out value="${article.formattedPublish}" /> | <c:out value="${article.tags}" /></div>
+        <div class="info"><i class="fa fa-comment"></i><c:out value="${article.commentsCount}" /> | <c:out value="${article.formattedPublish}" /> | <c:out value="${article.formattedTags}" /></div>
     </div>
 </div>

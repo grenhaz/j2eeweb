@@ -8,45 +8,62 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <!-- LOGO -->
-                <!-- BUSCADOR -->
+                <!-- TODO: LOGO -->
+                <!-- TODO: BUSCADOR -->
                 <!-- USER -->
                 <div class="user">
                     <sec:authorize access="!isAuthenticated()">
                         <div class="avatar">
-                            <a href="<c:url value="/login" />"><img src="<c:url value="/resources/images/anonymous.png" />" /></a>
+                            <a href="<c:url value="/user/login" />"><img src="<c:url value="/resources/images/anonymous.png" />" /></a>
                         </div>
                         <div class="text">
-                            <div class="username"><a href="<c:url value="/login" />"><spring:message code="label.user.anonymous" /></a></div>
-                            <div class="actions"><a href="<c:url value="/login" />"><spring:message code="label.user.login" /></a> | <a href="<c:url value="/register" />"><spring:message code="label.user.register" /></a></div>
+                            <div class="username"><a href="<c:url value="/user/login" />"><spring:message code="label.user.anonymous" /></a></div>
+                            <div class="actions"><a href="<c:url value="/user/login" />"><spring:message code="label.user.login" /></a> | <a href="<c:url value="/user/register" />"><spring:message code="label.user.register" /></a></div>
                         </div>
                     </sec:authorize>
                     <sec:authorize access="isAuthenticated()">
                         <div class="avatar">
-                            <a href="<c:url value="/profile" />"><img src="<c:url value="/resources/images/anonymous.png" />" /></a>
+                            <a href="<c:url value="/user/profile" />"><img src="<c:url value="/resources/images/anonymous.png" />" /></a>
                         </div>
                         <div class="text">
-                            <div class="username"><a href="<c:url value="/profile" />"><c:out value="${username}" /></a></div>
+                            <div class="username"><a href="<c:url value="/user/profile" />"><c:out value="${username}" /></a></div>
                             <div class="actions">
                                 <sec:authorize access="hasRole('ROLE_ADMIN')">
                                     <a href="<c:url value="/admin/index" />"><spring:message code="label.user.admin" /></a> | 
                                 </sec:authorize>
-                                <a href="<c:url value="/logout" />"><spring:message code="label.user.logout" /></a>
+                                <a href="<c:url value="/user/logout" />"><spring:message code="label.user.logout" /></a>
                             </div>
                         </div>
                     </sec:authorize>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="sections">
+        <div class="menu">
+            <div class="row">
+                <div class="col-xs-12">
                     <ul class="list-sections">
                         <li ${tag == "games" ? "class='active'" : "" }>
-                            <a href="<c:url value="/" />">Inicio</a>
+                            <a href="<c:url value="/" />"><spring:message code="label.section.home" /></a>
                         </li>
                         <li ${tag == "pc" ? "class='active'" : "" }>
-                            <a href="<c:url value="/web/pc" />">PC</a>
+                            <a href="<c:url value="/web/pc" />"><spring:message code="label.section.pc" /></a>
+                        </li>
+                        <li ${tag == "ps4" ? "class='active'" : "" }>
+                            <a href="<c:url value="/web/ps4" />"><spring:message code="label.section.ps4" /></a>
+                        </li>
+                        <li ${tag == "xbox" ? "class='active'" : "" }>
+                            <a href="<c:url value="/web/xbox" />"><spring:message code="label.section.xbox" /></a>
+                        </li>
+                        <li ${tag == "wii" ? "class='active'" : "" }>
+                            <a href="<c:url value="/web/wii" />"><spring:message code="label.section.wii" /></a>
+                        </li>
+                        <li ${tag == "user" ? "class='active'" : "" }>
+                            <sec:authorize access="!isAuthenticated()">
+                                <a href="<c:url value="/user/login" />"><spring:message code="label.section.community" /></a>
+                            </sec:authorize>
+                            <sec:authorize access="isAuthenticated()">
+                                <a href="<c:url value="/user/profile" />"><spring:message code="label.section.community" /></a>
+                            </sec:authorize>
                         </li>
                     </ul>
                 </div>

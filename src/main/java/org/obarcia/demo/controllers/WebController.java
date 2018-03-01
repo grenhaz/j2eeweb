@@ -3,9 +3,11 @@ package org.obarcia.demo.controllers;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.obarcia.demo.exceptions.ArticleNotFoundException;
 import org.obarcia.demo.models.article.Article;
 import org.obarcia.demo.models.article.ArticleManager;
 import org.obarcia.demo.models.ListPagination;
+import org.obarcia.demo.models.article.Comment;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,54 +15,50 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
 /**
  * Web controller.
  * 
  * @author obarcia
  */
-// FIX: !!!! Añadir comentarios
-// FIX: Página de error: Códigos de error y fondo (Parece que da un error)
-// FIX: I18n: Completar los JSP (Falta el NAVBAR)
-// TODO: !!!! Utilizar un fichero de configuración: url's
-// TODO: !!!! Security: Acceso por usuario de BBDD.
-// TODO: Security: Extra parameters
+// FIX: Página de error: Mejoras gráficas
 // TODO: Administración: Index
 // TODO: Administración: Users
 // TODO: Administración: Articles
 // TODO: Administración: Articles: Comments
-// TODO: BBDD (Creación durante el inicio)
-// TODO: Navbar completa
-// TODO: Login: Registro y página completa
-// TODO: Página del artículo
-// TODO: !!!! Comments
-// TODO: Footer: estilos y texto final
-// TODO: Seciones: Estilos over y active
-// TODO: Botón de play para los videos
+// TODO: Administración: Tinymce
+// TODO: Usuario: Registro
+// TODO: Usuario: Forgot password
 // TODO: Validators
-// TODO: Handle errors
 // TODO: Buscador por texto
-// TODO: Navegador de los artículos (Falta el splash de refresco)
 // TODO: !!!! Repositorio de imágenes
 // TODO: Breadcrumb en article
-// TODO: Menú superior (HOME, TAGS??)
-// TODO: !!!! Revisar el pagination
-// TODO: !!!! Revisar el uso de base para las url's y cambiar por c:url
-// FIX: !!!! Corregir la colocación del ul.list-sections .active
+// TODO: Obtener los artículos más vistos / comentados.
+// XXX: !!!! Añadir comentarios
+// XXX: !!!! Listado de comentarios
+
+// XXX: Security: Extra parameters
+// XXX: Header: Logo
+// XXX: Header: Buscador
+// XXX: Footer: estilos y texto final
+// XXX: Header: Secciones: Estilos over y active
+// XXX: Botón de play para los videos
+// XXX: Navegador de los artículos: Splash de refresco
+// XXX: Navegador de los artículos: Reposicionar la página
 
 @Controller
 @RequestMapping("/")
 public class WebController
 {
+    // ****************************************
+    // WEB
+    // ****************************************
     @GetMapping("/")
-    public ModelAndView actionIndex(HttpServletRequest request)
+    public ModelAndView actionIndex()
     {
         // Listado principal
         ListPagination articles = ArticleManager.getInstance().getArticlesAll(1, 10);
-        articles.setUrlBase(request.getContextPath());
         
         // Otros listados
         List importants = ArticleManager.getInstance().getArticlesImportants();
@@ -75,11 +73,10 @@ public class WebController
                 .addObject("reviews", reviews);
     }
     @GetMapping("/web/{tag}")
-    public ModelAndView actionIndexTag(@PathVariable("tag") String tag, HttpServletRequest request)
+    public ModelAndView actionIndexTag(@PathVariable("tag") String tag)
     {
         // Listado principal
         ListPagination articles = ArticleManager.getInstance().getArticlesAll(1, 10, "all", tag);
-        articles.setUrlBase(request.getContextPath());
         
         // Otros listados
         List importants = ArticleManager.getInstance().getArticlesImportants(tag);
@@ -95,51 +92,65 @@ public class WebController
     }
     @GetMapping("/article/{id}")
     public ModelAndView actionArticle(@PathVariable("id") int id)
+            throws ArticleNotFoundException
     {
+        Comment comment = new Comment();
         Article model = ArticleManager.getInstance().getArticle(id);
-        return new ModelAndView("articles/article")
-                .addObject("model", model);
+        if (model != null) {
+            return new ModelAndView("articles/article")
+                    .addObject("comment", comment)
+                    .addObject("model", model);
+        } else {
+            throw new ArticleNotFoundException();
+        }
+    }
+    // ****************************************
+    // AJAX
+    // ****************************************
+    @GetMapping("/ajax/comments/{id}")
+    public ModelAndView actionArticlesTag(@PathVariable("id") int id)
+    {
+        ListPagination comments = ArticleManager.getInstance().getComments(id, 1, 10);
+        
+        return new ModelAndView("articles/comments.ajax")
+                .addObject("comments", comments);
+    }
+    @GetMapping("/ajax/comments/{id}/{page}")
+    public ModelAndView actionArticlesTag(@PathVariable("id") int id, @PathVariable("page") int page)
+    {
+        ListPagination comments = ArticleManager.getInstance().getComments(id, page, 10);
+        
+        return new ModelAndView("articles/comments.ajax")
+                .addObject("comments", comments);
     }
     @GetMapping("/ajax/{tag}/{type}")
-    public ModelAndView actionArticlesTag(@PathVariable("tag") String tag, @PathVariable("type") String type, HttpServletRequest request)
+    public ModelAndView actionArticlesTag(@PathVariable("tag") String tag, @PathVariable("type") String type)
     {
         ListPagination articles = ArticleManager.getInstance().getArticlesAll(1, 10, type, tag);
-        articles.setUrlBase(request.getContextPath());
         
         return new ModelAndView("articles/articles.ajax")
                 .addObject("tag", tag)
                 .addObject("articles", articles);
-    }
-    @GetMapping("/ajax/{tag}/article/{id}")
-    public ModelAndView actionArticle(@PathVariable("tag") String tag, @PathVariable("id") int id)
-    {
-        Article model = ArticleManager.getInstance().getArticle(id);
-        return new ModelAndView("articles/article")
-                .addObject("tag", tag)
-                .addObject("model", model);
     }
     @GetMapping("/ajax/{tag}/{type}/{page}")
-    public ModelAndView actionArticlesTag(@PathVariable("tag") String tag, @PathVariable("type") String type, @PathVariable("page") int page, HttpServletRequest request)
+    public ModelAndView actionArticlesTag(@PathVariable("tag") String tag, @PathVariable("type") String type, @PathVariable("page") int page)
     {
         ListPagination articles = ArticleManager.getInstance().getArticlesAll(page, 10, type, tag);
-        articles.setUrlBase(request.getContextPath());
         
         return new ModelAndView("articles/articles.ajax")
                 .addObject("tag", tag)
                 .addObject("articles", articles);
     }
-    
-    
-    
-    
-    
-    @RequestMapping("/login")
+    // ****************************************
+    // USER
+    // ****************************************
+    @RequestMapping("/user/login")
     @PreAuthorize("!isAuthenticated()")
     public String actionLogin()
     {
-        return "login";
+        return "user/login";
     }
-    @GetMapping("/logout")
+    @GetMapping("/user/logout")
     @PreAuthorize("isAuthenticated()")
     public String actionLogout (HttpServletRequest request, HttpServletResponse response)
     {
@@ -149,61 +160,22 @@ public class WebController
         }
         return "redirect:/";
     }
-    
-    /*@GetMapping("/contact")
-    public ModelAndView actionContact()
+    @RequestMapping("/user/register")
+    @PreAuthorize("!isAuthenticated()")
+    public String actionRegister()
     {
-        ContactForm model = new ContactForm();
-        return new ModelAndView("section/contact/contact", "model", model);
+        return "user/register";
     }
-    @PostMapping("/contact")
-    public ModelAndView actionContactSubmit(@Valid @ModelAttribute("model") ContactForm model, BindingResult result)
+    @RequestMapping("/user/forgot")
+    @PreAuthorize("!isAuthenticated()")
+    public String actionForgotPassword()
     {
-        if (!result.hasErrors()) {
-            // TODO: Save
-        }
-        
-        // TODO: Redirect
-        return new ModelAndView("section/contact/success", "model", model);
+        return "user/forgot";
     }
-    @GetMapping("/blog")
-    public ModelAndView actionBlog()
+    @RequestMapping("/user/profile")
+    @PreAuthorize("isAuthenticated()")
+    public String actionProfile()
     {
-        List posts = HibernateConnector.getInstance().getAll(Article.class);
-        return new ModelAndView("section/blog/blog", "posts", posts);
+        return "user/profile";
     }
-    @GetMapping("/blog/{id}")
-    public ModelAndView actionBlogPost(@PathVariable("id") int id)
-    {
-        Comment comment = new Comment();
-        Article post = (Article)HibernateConnector.getInstance().get(Article.class, id);
-        return new ModelAndView("section/blog/post")
-                .addObject("model", post)
-                .addObject("comment", comment);
-    }
-    @PostMapping("/blog/{id}")
-    public ModelAndView actionBlogSubmit(@PathVariable("id") int id, @Valid @ModelAttribute("comment") CommentForm comment, BindingResult result)
-    {
-        Article post = (Article)HibernateConnector.getInstance().get(Article.class, id);
-        
-        if (post != null) {
-            if (!result.hasErrors()) {
-                // TODO: Save
-                Comment c = new Comment();
-                // TODO: Incluir el id del usuario
-                c.setIdPost(post.getId());
-                c.setContent(comment.getContent());
-                if (!HibernateConnector.getInstance().save(c)) {
-                    // TODO: Se produjo un error al guardar el comentario
-                }
-            }
-        } else {
-            // TODO: El POST no existe
-        }
-        
-        // TODO: Redirect
-        return new ModelAndView("section/blog/post")
-            .addObject("model", post)
-            .addObject("comment", comment);
-    }*/
 }
