@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.obarcia.demo.models.article.Comment;
 
 /**
@@ -25,10 +27,14 @@ public class User
     @GeneratedValue
     @Column(name = "id")
     private int id;
+    @NotEmpty
+    @Email
     @Column(name = "username")
     private String username;
+    @NotEmpty
     @Column(name = "password")
     private String password;
+    @NotEmpty
     @Column(name = "user_role")
     private String user_role;
     

@@ -23,13 +23,15 @@ import org.springframework.web.servlet.ModelAndView;
  * @author obarcia
  */
 // FIX: Página de error: Mejoras gráficas
+// FIX: Login: No devolver null en el service
 // TODO: Administración: Index
 // TODO: Administración: Users
 // TODO: Administración: Articles
 // TODO: Administración: Articles: Comments
 // TODO: Administración: Tinymce
-// TODO: Usuario: Registro
-// TODO: Usuario: Forgot password
+// TODO: !!!! Usuario: Registro
+// TODO: !!!! Usuario: Forgot password
+// TODO: Modelos: ENUMS, TEXT
 // TODO: Validators
 // TODO: Buscador por texto
 // TODO: !!!! Repositorio de imágenes
@@ -37,7 +39,6 @@ import org.springframework.web.servlet.ModelAndView;
 // TODO: Obtener los artículos más vistos / comentados.
 // XXX: !!!! Añadir comentarios
 // XXX: !!!! Listado de comentarios
-
 // XXX: Security: Extra parameters
 // XXX: Header: Logo
 // XXX: Header: Buscador
@@ -46,6 +47,8 @@ import org.springframework.web.servlet.ModelAndView;
 // XXX: Botón de play para los videos
 // XXX: Navegador de los artículos: Splash de refresco
 // XXX: Navegador de los artículos: Reposicionar la página
+// XXX: Crear datos de demo incialmente (COMO??)
+// XXX: Varios idiomas
 
 @Controller
 @RequestMapping("/")
