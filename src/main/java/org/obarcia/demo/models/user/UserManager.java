@@ -6,6 +6,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.obarcia.demo.components.hibernate.HibernateConnector;
+import org.obarcia.demo.models.article.Article;
 
 /**
  *
@@ -43,12 +44,12 @@ public class UserManager
             user = (User)criteria.uniqueResult();
         } catch (Exception sqlException) {
             LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
-        } finally {
-            if (session != null) {
-                //session.close();
-            }
         }
         
         return user;
+    }
+    public boolean save(User user)
+    {
+        return HibernateConnector.getInstance().save(user);
     }
 }

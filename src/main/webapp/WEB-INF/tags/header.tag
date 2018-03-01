@@ -28,9 +28,7 @@
                         <div class="text">
                             <div class="username"><a href="<c:url value="/user/profile" />"><c:out value="${username}" /></a></div>
                             <div class="actions">
-                                <sec:authorize access="hasRole('ROLE_ADMIN')">
-                                    <a href="<c:url value="/admin/index" />"><spring:message code="label.user.admin" /></a> | 
-                                </sec:authorize>
+                                <a href="<c:url value="/user/profile" />"><spring:message code="label.user.profile" /></a> |
                                 <a href="<c:url value="/user/logout" />"><spring:message code="label.user.logout" /></a>
                             </div>
                         </div>
@@ -38,35 +36,60 @@
                 </div>
             </div>
         </div>
-        <div class="menu">
-            <div class="row">
-                <div class="col-xs-12">
-                    <ul class="list-sections">
-                        <li ${tag == "games" ? "class='active'" : "" }>
-                            <a href="<c:url value="/" />"><spring:message code="label.section.home" /></a>
+    </div>
+</header>
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <ul class="list-tags">
+                    <li ${tag == "games" ? "class='active'" : "" }>
+                        <a href="<c:url value="/" />"><spring:message code="label.section.home" /></a>
+                    </li>
+                    <spring:eval expression="@configProperties.getProperty('sections.tags')" var="tags" />
+                    <c:forEach items="${tags}" var="t">
+                        <li ${tag == t.toLowerCase() ? "class='active'" : "" }>
+                            <a href="<c:url value="/web/${t.toLowerCase()}" />"><c:out value="${t}" /></a>
                         </li>
-                        <li ${tag == "pc" ? "class='active'" : "" }>
-                            <a href="<c:url value="/web/pc" />"><spring:message code="label.section.pc" /></a>
+                    </c:forEach>
+                    <li ${tag == "user" ? "class='active'" : "" }>
+                        <sec:authorize access="!isAuthenticated()">
+                            <a href="<c:url value="/user/login" />"><spring:message code="label.section.community" /></a>
+                        </sec:authorize>
+                        <sec:authorize access="isAuthenticated()">
+                            <a href="<c:url value="/user/profile" />"><spring:message code="label.section.community" /></a>
+                        </sec:authorize>
+                    </li>
+                    <sec:authorize access="hasRole('ROLE_ADMIN')">
+                        <li ${tag == 'admin' ? "class='active'" : "" }>
+                            <a href="<c:url value="/admin/index" />"><spring:message code="label.section.admin" /></a>
                         </li>
-                        <li ${tag == "ps4" ? "class='active'" : "" }>
-                            <a href="<c:url value="/web/ps4" />"><spring:message code="label.section.ps4" /></a>
-                        </li>
-                        <li ${tag == "xbox" ? "class='active'" : "" }>
-                            <a href="<c:url value="/web/xbox" />"><spring:message code="label.section.xbox" /></a>
-                        </li>
-                        <li ${tag == "wii" ? "class='active'" : "" }>
-                            <a href="<c:url value="/web/wii" />"><spring:message code="label.section.wii" /></a>
-                        </li>
-                        <li ${tag == "user" ? "class='active'" : "" }>
-                            <sec:authorize access="!isAuthenticated()">
-                                <a href="<c:url value="/user/login" />"><spring:message code="label.section.community" /></a>
-                            </sec:authorize>
-                            <sec:authorize access="isAuthenticated()">
-                                <a href="<c:url value="/user/profile" />"><spring:message code="label.section.community" /></a>
-                            </sec:authorize>
-                        </li>
-                    </ul>
-                </div>
+                    </sec:authorize>
+                </ul>
+                <ul class="list-stags">
+                    <c:if test="${tag == 'user'}">
+                        <sec:authorize access="!isAuthenticated()">
+                            <li><a href="<c:url value="/user/login" />"><spring:message code="label.user.login" /></a></li>
+                            <li><a href="<c:url value="/user/register" />"><spring:message code="label.user.register" /></a></li>
+                        </sec:authorize>
+                        <sec:authorize access="isAuthenticated()">
+                            <li><a href="<c:url value="/user/profile" />"><spring:message code="label.user.profile" /></a></li>
+                        </sec:authorize>
+                    </c:if>
+                    <c:if test="${tag == 'admin'}">
+                        <sec:authorize access="hasRole('ROLE_ADMIN')">
+                            <li><a href="<c:url value="/admin/users" />"><spring:message code="label.admin.users" /></a></li>
+                            <li><a href="<c:url value="/admin/articles" />"><spring:message code="label.admin.articles" /></a></li>
+                        </sec:authorize>
+                    </c:if>
+                    <c:if test="${tag != 'user' and tag != 'admin'}">
+                        <li><a class="go" href="<c:url value="#${tag}_all" />"><spring:message code="articles.type.home" /></a></li>
+                        <spring:eval expression="@configProperties.getProperty('sections.types')" var="types" />
+                        <c:forEach items="${types}" var="t">
+                            <li><a class="go" href="<c:url value="#${tag}_${t}" />"><spring:message code="articles.type.${t}" /></a></li>
+                        </c:forEach>
+                    </c:if>
+                </ul>
             </div>
         </div>
     </div>

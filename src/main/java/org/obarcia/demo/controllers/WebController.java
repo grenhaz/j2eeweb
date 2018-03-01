@@ -28,15 +28,16 @@ import org.springframework.web.servlet.ModelAndView;
  * 
  * @author obarcia
  */
-// FIX: Página de error: Mejoras gráficas (Textos)
 // FIX: Revisar los managers, los session.close y no poder leer y guardar una entidad
 // FIX: Validators: register, forgot
+// FIX: Navegador de los artículos: Reposicionar la página
+// FIX: Paginación con N páginas
 // TODO: !!!! Añadir comentarios
 // TODO: !!!! Usuario: Registro
 // TODO: !!!! Usuario: Forgot password
 // TODO: !!!! Repositorio de imágenes
-// TODO: !!!! Listado de comentarios: estilos de cada comentario
-// TODO: Administración: Index
+// TODO: Usuario: Avatar
+// TODO: Administración: Index (Estadísticas)
 // TODO: Administración: Users
 // TODO: Administración: Articles
 // TODO: Administración: Articles: Comments
@@ -44,16 +45,17 @@ import org.springframework.web.servlet.ModelAndView;
 // TODO: Buscador por texto
 // TODO: Breadcrumb en article
 // TODO: Obtener los artículos más vistos / comentados.
+// GFX: !!!! Listado de comentarios: estilos de cada comentario
+// GFX: Header: Logo
+// GFX: Footer: estilos y texto final
 // XXX: Security: Extra parameters
-// XXX: Header: Logo
 // XXX: Header: Buscador
-// XXX: Footer: estilos y texto final
-// XXX: Header: Secciones: Estilos over y active
 // XXX: Botón de play para los videos
 // XXX: Navegador de los artículos: Splash de refresco
-// XXX: Navegador de los artículos: Reposicionar la página
-// XXX: Crear datos de demo incialmente
-// XXX: Varios idiomas
+// XXX: Crear datos de demo inicialmente
+// XXX: !!!! Varios idiomas
+// XXX: Diferentes estilos por tag
+// XXX: Estilos y aumento de fuente del score
 
 @Controller
 @RequestMapping("/")
@@ -74,23 +76,15 @@ public class WebController
         return getIndex(tag);
     }
     private ModelAndView getIndex(String tag)
-    {
-        // Listado principal
-        ListPagination articles = ArticleManager.getInstance().getArticlesAll(1, 10, "all", tag);
-        
-        // Otros listados
-        List importants = ArticleManager.getInstance().getArticlesImportants(tag);
-        List guides = ArticleManager.getInstance().getArticlesGuides(tag);
-        List reviews = ArticleManager.getInstance().getArticlesReviews(tag);
-        List moreComments = ArticleManager.getInstance().getArticlesMoreComments(tag);
-        
+    {   
         return new ModelAndView("articles/articles")
                 .addObject("tag", tag)
-                .addObject("importants", importants)
-                .addObject("articles", articles)
-                .addObject("guides", guides)
-                .addObject("reviews", reviews)
-                .addObject("moreComments", moreComments);
+                .addObject("importants",    ArticleManager.getInstance().getArticlesImportants(tag))
+                .addObject("articles",      ArticleManager.getInstance().getArticlesAll(1, 10, "all", tag))
+                .addObject("guides",        ArticleManager.getInstance().getArticlesByType(tag, "guide", 3))
+                .addObject("reviews",       ArticleManager.getInstance().getArticlesByType(tag, "review", 4))
+                .addObject("specials",      ArticleManager.getInstance().getArticlesByType(tag, "special", 3))
+                .addObject("moreComments",  ArticleManager.getInstance().getArticlesMoreComments(tag));
     }
     @GetMapping("/article/{id}")
     public ModelAndView actionArticle(

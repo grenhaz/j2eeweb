@@ -23,6 +23,7 @@ public class ExceptionHandlingController
     {
         return new ModelAndView("error")
             .addObject("message", "error.article_not_found")
+            .addObject("submessage", "")
             .addObject("exception", ex);
     }
     @ExceptionHandler(NoHandlerFoundException.class)
@@ -31,6 +32,7 @@ public class ExceptionHandlingController
     {
         return new ModelAndView("error")
             .addObject("message", "error.404")
+            .addObject("submessage", "")
             .addObject("exception", ex);
     }
     @ExceptionHandler(AccessDeniedException.class)
@@ -39,6 +41,7 @@ public class ExceptionHandlingController
     {
         return new ModelAndView("error")
             .addObject("message", "error.404")
+            .addObject("submessage", "")
             .addObject("exception", ex);
     }
     // TODO: Reactivar para producción

@@ -10,21 +10,12 @@
             <li ${articles.type == "all" ? "class='active'" : "" }>
                 <a class="go" href="#${articles.tag}_all"><spring:message code="articles.type.all" /></a>
             </li>
-            <li ${articles.type == "new" ? "class='active'" : "" }>
-                <a class="go" href="#${articles.tag}_new"><spring:message code="articles.type.new" /></a>
-            </li>
-            <li ${articles.type == "review" ? "class='active'" : "" }>
-                <a class="go" href="#${articles.tag}_review"><spring:message code="articles.type.review" /></a>
-            </li>
-            <li ${articles.type == "guide" ? "class='active'" : "" }>
-                <a class="go" href="#${articles.tag}_guide"><spring:message code="articles.type.guide" /></a>
-            </li>
-            <li ${articles.type == "video" ? "class='active'" : "" }>
-                <a class="go" href="#${articles.tag}_video" ><spring:message code="articles.type.video" /></a>
-            </li>
-            <li ${articles.type == "special" ? "class='active'" : "" }>
-                <a class="go" href="#${articles.tag}_special"><spring:message code="articles.type.special" /></a>
-            </li>
+            <spring:eval expression="@configProperties.getProperty('sections.types')" var="types" />
+            <c:forEach items="${types}" var="t">
+                <li ${articles.type == t ? "class='active'" : "" }>
+                    <a class="go" href="#${articles.tag}_${t}"><spring:message code="articles.type.${t}" /></a>
+                </li>
+            </c:forEach>
         </ul>
     </div>
 </div>

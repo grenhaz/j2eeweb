@@ -41,7 +41,6 @@ public class Article
     @Size(max = 250)
     @Column(name = "title")
     private String title;
-    @NotEmpty
     @Size(max = 250)
     @Column(name = "description")
     private String description;

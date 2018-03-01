@@ -10,6 +10,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.obarcia.demo.components.hibernate.HibernateConnector;
 import org.obarcia.demo.models.ListPagination;
+import org.obarcia.demo.models.user.User;
 
 /**
  * Manager de los artículos.
@@ -97,21 +98,9 @@ public class ArticleManager
             list.setRecords(criteria.list());
         } catch (Exception sqlException) {
             LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
-        } finally {
-            if (session != null) {
-                //session.close();
-            }
         }
         
         return list;
-    }
-    /**
-     * Obtener los últimos destacados.
-     * @return Últimos destacados.
-     */
-    public List getArticlesImportants()
-    {
-        return getArticlesImportants(null);
     }
     /**
      * Obtener los últimos destacados.
@@ -133,70 +122,24 @@ public class ArticleManager
             models = criteria.list();
         } catch (Exception sqlException) {
             LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
-        } finally {
-            if (session != null) {
-                //session.close();
-            }
         }
         
         return models;
     }
     /**
-     * Obtener los últimas guías.
-     * @return Últimas guías.
+     * Devuelve un listado de los últimos articulos por tag y tipo.
+     * @param tag Tag.
+     * @param type Tipo de artículo.
+     * @param count Límite de artículos.
+     * @return 
      */
-    public List getArticlesGuides()
-    {
-        return getArticlesGuides(null);
-    }
-    /**
-     * Obtener los últimas guías.
-     * @param tag Etiqueta de filtrado.
-     * @return Últimas guías.
-     */
-    public List getArticlesGuides(String tag)
+    public List getArticlesByType(String tag, String type, int count)
     {
         Session session = HibernateConnector.getInstance().getSession();
         List models = null;
         try {
             Criteria criteria = session.createCriteria(Article.class);
-            criteria.add(Restrictions.eq("type", "guide"));
-            if (tag != null && !tag.equals("games")) {
-                criteria.add(Restrictions.like("tags", "%[" + tag.toUpperCase() + "]%"));
-            }
-            criteria.addOrder(Order.desc("publish"));
-            criteria.setMaxResults(3);
-            models = criteria.list();
-        } catch (Exception sqlException) {
-            LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
-        } finally {
-            if (session != null) {
-                //session.close();
-            }
-        }
-        
-        return models;
-    }
-    /**
-     * Obtener los últimos reviews.
-     * @return Últimos reviews.
-     */
-    public List getArticlesReviews()
-    {
-        return getArticlesReviews(null);
-    }
-    /**
-     * Obtener los últimos reviews.
-     * @param tag Etiqueta de filtrado.
-     * @return Últimos reviews.
-     */
-    public List getArticlesReviews(String tag)
-    {
-        Session session = HibernateConnector.getInstance().getSession();
-        List models = null;
-        try {
-            Criteria criteria = session.createCriteria(Article.class);
-            criteria.add(Restrictions.eq("type", "review"));
+            criteria.add(Restrictions.eq("type", type));
             if (tag != null && !tag.equals("games")) {
                 criteria.add(Restrictions.like("tags", "%[" + tag.toUpperCase() + "]%"));
             }
@@ -205,21 +148,9 @@ public class ArticleManager
             models = criteria.list();
         } catch (Exception sqlException) {
             LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
-        } finally {
-            if (session != null) {
-                //session.close();
-            }
         }
         
         return models;
-    }
-    /**
-     * Obtener los últimos más comentados.
-     * @return Últimos más comentados.
-     */
-    public List getArticlesMoreComments()
-    {
-        return getArticlesMoreComments(null);
     }
     /**
      * Obtener los últimos más comentados.
@@ -243,10 +174,6 @@ public class ArticleManager
             models = criteria.list();
         } catch (Exception sqlException) {
             LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
-        } finally {
-            if (session != null) {
-                //session.close();
-            }
         }
         
         return models;
@@ -295,12 +222,16 @@ public class ArticleManager
             list.setRecords(criteria.list());
         } catch (Exception sqlException) {
             LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
-        } finally {
-            if (session != null) {
-                //session.close();
-            }
         }
         
         return list;
+    }
+    public boolean save(Article article)
+    {
+        return HibernateConnector.getInstance().save(article);
+    }
+    public boolean save(Comment comment)
+    {
+        return HibernateConnector.getInstance().save(comment);
     }
 }

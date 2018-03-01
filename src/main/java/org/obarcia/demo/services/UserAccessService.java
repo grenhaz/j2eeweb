@@ -26,7 +26,7 @@ public class UserAccessService implements UserDetailsService
             Set<GrantedAuthority> auths = new HashSet<>();
             auths.add(new SimpleGrantedAuthority(user.getUserRole()));
 
-            return new User(user.getUsername(), user.getPassword(),
+            return new User(user.getName(), user.getPassword(),
                             true, true, true, true,
                             auths);
         } else {

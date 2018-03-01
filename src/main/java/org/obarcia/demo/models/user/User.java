@@ -35,6 +35,9 @@ public class User
     @Column(name = "password")
     private String password;
     @NotEmpty
+    @Column(name = "name")
+    private String name;
+    @NotEmpty
     @Column(name = "user_role")
     private String user_role;
     @Column(name = "active")
@@ -66,6 +69,14 @@ public class User
     public void setPassword(String value)
     {
         password = value;
+    }
+    public String getName()
+    {
+        return name;
+    }
+    public void setName(String value)
+    {
+        name = value;
     }
     public String getUserRole()
     {

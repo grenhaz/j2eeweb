@@ -87,10 +87,6 @@ public class HibernateConnector
             model = session.get(cls, id);
         } catch(Exception sqlException) {
             LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
-        } finally {
-            if(session != null) {
-                ///session.close();
-            }
         }
 
         return model;
@@ -112,10 +108,6 @@ public class HibernateConnector
                 .list();
         } catch(Exception sqlException) {
             LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
-        } finally {
-            if(session != null) {
-                //session.close();
-            }
         }
 
         return models;
@@ -142,10 +134,6 @@ public class HibernateConnector
                 transaction.rollback();
             }
             LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
-        } finally {
-            if (session != null) {
-                //session.close();
-            }
         }
         
         return ret;
@@ -172,10 +160,6 @@ public class HibernateConnector
                 transaction.rollback();
             }
             LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
-        } finally {
-            if (session != null) {
-                //session.close();
-            }
         }
         
         return ret;

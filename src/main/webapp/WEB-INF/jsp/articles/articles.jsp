@@ -25,42 +25,54 @@
             </div>
         </div>
         <div class="col-sm-4">
-            <div class="section">
-                <c:if test="${not empty guides}">
+            <c:if test="${not empty specials}">
+                <div class="section">
+                    <div class="header"><spring:message code="title.specials" /></div>
+                    <c:forEach var="article" items="${specials}">
+                        <ui:article position="top" article="${article}" />
+                    </c:forEach>
+                </div>
+            </c:if>
+            <c:if test="${not empty guides}">
+                <div class="section">
                     <div class="header"><spring:message code="title.guides" /></div>
                     <c:forEach var="article" items="${guides}">
                         <ui:article position="top" article="${article}" />
                     </c:forEach>
-                </c:if>
-            </div>
+                </div>
+            </c:if>
         </div>
     </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="section">
-                <c:if test="${not empty reviews}">
+    <c:if test="${not empty reviews}">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="section">
                     <div class="header"><spring:message code="title.last_reviews" /></div>
                     <div class="row">
                         <c:forEach var="article" items="${reviews}">
                             <div class="col-sm-3">
-                                <ui:article position="top.analisis" article="${article}" />
+                                <ui:article position="top analisis" article="${article}" />
                             </div>
                         </c:forEach>
                     </div>
-                </c:if>
-
-                <div class="header"><spring:message code="title.more_views" /></div>
-                <c:if test="${not empty moreComments}">
-                    <div class="header"><spring:message code="title.last_reviews" /></div>
-                    <div class="row">
-                        <c:forEach var="article" items="${moreComments}">
-                            <div class="col-sm-3">
-                                <ui:article position="left.mini" article="${article}" />
-                            </div>
-                        </c:forEach>
-                    </div>
-                </c:if>
+                </div>
             </div>
         </div>
-    </div>
+    </c:if>
+    <c:if test="${not empty moreComments}">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="section">
+                    <div class="header"><spring:message code="title.more_views" /></div>
+                    <div class="row">
+                        <c:forEach var="article" items="${moreComments}">
+                            <div class="col-xs-12">
+                                <ui:article position="left mini" article="${article}" />
+                            </div>
+                        </c:forEach>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:if>
 </ui:layout>
