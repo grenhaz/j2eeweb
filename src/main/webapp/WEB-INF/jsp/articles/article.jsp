@@ -37,6 +37,7 @@
             </form:form>
         </sec:authorize>
         <!-- COMMENTS -->
+        <a id="return-top"></a>
         <div class="comments"></div>
     </div>
     <script>

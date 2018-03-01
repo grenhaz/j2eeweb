@@ -1,12 +1,14 @@
 function refreshBlock(destination, url, scroll) {
     if (scroll) {
         // TODO: Scroll a la posición
-        var aTag = $('#articles-top');
-        console.log("top: " + aTag.offset().top);
-        console.log("scroll: " + $(document).scrollTop());
-        $('html,body').animate({
-            scrollTop: 140//aTag.offset().top + $('.navbar').height()
-        }, 'slow');
+        var aTag = $('#return-top');
+        if (aTag.length > 0) {
+            //console.log("top: " + aTag.offset().top);
+            //console.log("scroll: " + $(document).scrollTop());
+            $('html,body').animate({
+                scrollTop: 140//aTag.offset().top + $('.navbar').height()
+            }, 'slow');
+        }
     }
     
     $.get(url, function (ret) {

@@ -19,7 +19,7 @@
                     </div>
                 </c:if>
                 
-                <a id="articles-top"></a>
+                <a id="return-top"></a>
                 <div class="header"><spring:message code="title.news" /></div>
                 <div class="articles"></div>
             </div>
@@ -50,6 +50,16 @@
                 </c:if>
 
                 <div class="header"><spring:message code="title.more_views" /></div>
+                <c:if test="${not empty moreComments}">
+                    <div class="header"><spring:message code="title.last_reviews" /></div>
+                    <div class="row">
+                        <c:forEach var="article" items="${moreComments}">
+                            <div class="col-sm-3">
+                                <ui:article position="left.mini" article="${article}" />
+                            </div>
+                        </c:forEach>
+                    </div>
+                </c:if>
             </div>
         </div>
     </div>

@@ -1,5 +1,6 @@
 package org.obarcia.demo.models.user;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -10,9 +11,12 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class RegisterForm
 {
     @NotEmpty
+    @Email
     private String username;
     @NotEmpty
     private String password;
+    @NotEmpty
+    private String repeatPassword;
     
     public String getUsername()
     {
@@ -29,5 +33,13 @@ public class RegisterForm
     public void setPassword(String value)
     {
         password = value;
+    }
+    public String getRepeatPassword()
+    {
+        return repeatPassword;
+    }
+    public void setRepeatPassword(String value)
+    {
+        repeatPassword = value;
     }
 }

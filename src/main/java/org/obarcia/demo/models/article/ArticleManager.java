@@ -34,15 +34,6 @@ public class ArticleManager
         return SINGLETON;
     }
     /**
-     * Crear una instancia para criterios de búsqueda.
-     * @return Instancia de los criterios.
-     */
-    private Criteria getCriteria()
-    {
-        Session session = HibernateConnector.getInstance().getSession();
-        return session.createCriteria(Article.class);
-    }
-    /**
      * Devuelve el listado de artículos.
      * @param page Número de página.
      * @param perPage Registros por página.
@@ -78,30 +69,39 @@ public class ArticleManager
         list.setTag(tag != null ? tag : "games");
         list.setOffset((page - 1) * perPage);
         list.setLimit(perPage);
-        
-        Criteria criteria = getCriteria();
-        if (type != null && !type.equals("all")) {
-            criteria.add(Restrictions.eq("type", type));
+
+        Session session = HibernateConnector.getInstance().getSession();
+        try {        
+            Criteria criteria = session.createCriteria(Article.class);
+            if (type != null && !type.equals("all")) {
+                criteria.add(Restrictions.eq("type", type));
+            }
+            if (tag != null && !tag.equals("games")) {
+                criteria.add(Restrictions.like("tags", "%[" + tag.toUpperCase() + "]%"));
+            }
+
+            // Total
+            criteria.setProjection(Projections.rowCount());
+            List rowCount = criteria.list();
+            if (rowCount != null) {
+                list.setTotal(((Long)rowCount.get(0)).intValue());
+            } else {
+                list.setTotal(0);
+            }
+
+            // Records
+            criteria.addOrder(Order.desc("publish"));
+            criteria.setProjection(null);
+            criteria.setFirstResult(list.getOffset());
+            criteria.setMaxResults(list.getLimit());
+            list.setRecords(criteria.list());
+        } catch (Exception sqlException) {
+            LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
+        } finally {
+            if (session != null) {
+                //session.close();
+            }
         }
-        if (tag != null && !tag.equals("games")) {
-            criteria.add(Restrictions.like("tags", "%[" + tag.toUpperCase() + "]%"));
-        }
-        
-        // Total
-        criteria.setProjection(Projections.rowCount());
-        List rowCount = getArticles(criteria);
-        if (rowCount != null) {
-            list.setTotal(((Long)rowCount.get(0)).intValue());
-        } else {
-            list.setTotal(0);
-        }
-        
-        // Records
-        criteria.addOrder(Order.desc("publish"));
-        criteria.setProjection(null);
-        criteria.setFirstResult(list.getOffset());
-        criteria.setMaxResults(list.getLimit());
-        list.setRecords(getArticles(criteria));
         
         return list;
     }
@@ -120,14 +120,26 @@ public class ArticleManager
      */
     public List getArticlesImportants(String tag)
     {
-        Criteria criteria = getCriteria();
-        criteria.add(Restrictions.eq("important", "S"));
-        if (tag != null) {
-            criteria.add(Restrictions.like("tags", "%[" + tag.toUpperCase() + "]%"));
+        Session session = HibernateConnector.getInstance().getSession();
+        List models = null;
+        try {
+            Criteria criteria = session.createCriteria(Article.class);
+            criteria.add(Restrictions.eq("important", true));
+            if (tag != null && !tag.equals("games")) {
+                criteria.add(Restrictions.like("tags", "%[" + tag.toUpperCase() + "]%"));
+            }
+            criteria.addOrder(Order.desc("publish"));
+            criteria.setMaxResults(3);
+            models = criteria.list();
+        } catch (Exception sqlException) {
+            LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
+        } finally {
+            if (session != null) {
+                //session.close();
+            }
         }
-        criteria.addOrder(Order.desc("publish"));
-        criteria.setMaxResults(3);
-        return getArticles(criteria);
+        
+        return models;
     }
     /**
      * Obtener los últimas guías.
@@ -144,14 +156,26 @@ public class ArticleManager
      */
     public List getArticlesGuides(String tag)
     {
-        Criteria criteria = getCriteria();
-        criteria.add(Restrictions.eq("type", "guide"));
-        if (tag != null) {
-            criteria.add(Restrictions.like("tags", "%[" + tag.toUpperCase() + "]%"));
+        Session session = HibernateConnector.getInstance().getSession();
+        List models = null;
+        try {
+            Criteria criteria = session.createCriteria(Article.class);
+            criteria.add(Restrictions.eq("type", "guide"));
+            if (tag != null && !tag.equals("games")) {
+                criteria.add(Restrictions.like("tags", "%[" + tag.toUpperCase() + "]%"));
+            }
+            criteria.addOrder(Order.desc("publish"));
+            criteria.setMaxResults(3);
+            models = criteria.list();
+        } catch (Exception sqlException) {
+            LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
+        } finally {
+            if (session != null) {
+                //session.close();
+            }
         }
-        criteria.addOrder(Order.desc("publish"));
-        criteria.setMaxResults(3);
-        return getArticles(criteria);
+        
+        return models;
     }
     /**
      * Obtener los últimos reviews.
@@ -168,36 +192,63 @@ public class ArticleManager
      */
     public List getArticlesReviews(String tag)
     {
-        Criteria criteria = getCriteria();
-        criteria.add(Restrictions.eq("type", "review"));
-        if (tag != null) {
-            criteria.add(Restrictions.like("tags", "%[" + tag.toUpperCase() + "]%"));
-        }
-        criteria.addOrder(Order.desc("publish"));
-        criteria.setMaxResults(4);
-        return getArticles(criteria);
-    }
-    /**
-     * Obtiene el listado de artículos en función a un criterio.
-     * @param criteria Instancia con los criterios.
-     * @return Listado encontrado.
-     */
-    public List getArticles(Criteria criteria)
-    {
+        Session session = HibernateConnector.getInstance().getSession();
         List models = null;
-        Session session = null;
-        
         try {
-            session = HibernateConnector.getInstance().getSession();
+            Criteria criteria = session.createCriteria(Article.class);
+            criteria.add(Restrictions.eq("type", "review"));
+            if (tag != null && !tag.equals("games")) {
+                criteria.add(Restrictions.like("tags", "%[" + tag.toUpperCase() + "]%"));
+            }
+            criteria.addOrder(Order.desc("publish"));
+            criteria.setMaxResults(4);
             models = criteria.list();
-        } catch(Exception sqlException) {
+        } catch (Exception sqlException) {
             LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
         } finally {
-            if(session != null) {
+            if (session != null) {
                 //session.close();
             }
         }
+        
+        return models;
+    }
+    /**
+     * Obtener los últimos más comentados.
+     * @return Últimos más comentados.
+     */
+    public List getArticlesMoreComments()
+    {
+        return getArticlesMoreComments(null);
+    }
+    /**
+     * Obtener los últimos más comentados.
+     * @param tag Etiqueta de filtrado.
+     * @return Últimos más comentados.
+     */
+    public List getArticlesMoreComments(String tag)
+    {
+        Session session = HibernateConnector.getInstance().getSession();
+        List models = null;
+        try {
+            // TODO: Obtener los más vistos
+            Criteria criteria = session.createCriteria(Article.class);
+            if (tag != null && !tag.equals("games")) {
+                criteria.add(Restrictions.like("tags", "%[" + tag.toUpperCase() + "]%"));
+            }
+            criteria.addOrder(Order.desc("publish"));
+            criteria.setMaxResults(5);
 
+            session = HibernateConnector.getInstance().getSession();
+            models = criteria.list();
+        } catch (Exception sqlException) {
+            LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
+        } finally {
+            if (session != null) {
+                //session.close();
+            }
+        }
+        
         return models;
     }
     /**
@@ -222,7 +273,33 @@ public class ArticleManager
         list.setOffset((page - 1) * perPage);
         list.setLimit(perPage);
         
-        // TODO: Obtener los registros
+        Session session = HibernateConnector.getInstance().getSession();
+        try {
+            Criteria criteria = session.createCriteria(Comment.class);
+            criteria.add(Restrictions.eq("article.id", id));
+            
+            // Total
+            criteria.setProjection(Projections.rowCount());
+            List rowCount = criteria.list();
+            if (rowCount != null) {
+                list.setTotal(((Long)rowCount.get(0)).intValue());
+            } else {
+                list.setTotal(0);
+            }
+        
+            // Records
+            criteria.addOrder(Order.desc("publish"));
+            criteria.setProjection(null);
+            criteria.setFirstResult(list.getOffset());
+            criteria.setMaxResults(list.getLimit());
+            list.setRecords(criteria.list());
+        } catch (Exception sqlException) {
+            LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
+        } finally {
+            if (session != null) {
+                //session.close();
+            }
+        }
         
         return list;
     }

@@ -2,6 +2,7 @@ package org.obarcia.demo.models.article;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -12,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -43,21 +46,20 @@ public class Article
     @Column(name = "description")
     private String description;
     @NotEmpty
+    @Size(max = 9000)
     @Column(name = "content")
     private String content;
-    @NotEmpty
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "publish")
-    private Timestamp publish;
+    private Date publish;
     @NotEmpty
     @Size(max = 128)
     @Column(name = "tags")
     private String tags;
-    @NotEmpty
-    @Size(max = 1)
     @Column(name = "important")
-    private String important;
-    @Column(name = "puntuation")
-    private Double puntuation;
+    private Boolean important;
+    @Column(name = "score")
+    private Double score;
     
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "article")
     private Set<Comment> comments = new HashSet<>();
@@ -102,11 +104,11 @@ public class Article
     {
         content = value;
     }
-    public Timestamp getPublish()
+    public Date getPublish()
     {
         return publish;
     }
-    public void setPublish(Timestamp value)
+    public void setPublish(Date value)
     {
         publish = value;
     }
@@ -118,21 +120,21 @@ public class Article
     {
         tags = value;
     }
-    public String getImportant()
+    public Boolean getImportant()
     {
         return important;
     }
-    public void setImportant(String value)
+    public void setImportant(Boolean value)
     {
         important = value;
     }
-    public Double getPuntuation()
+    public Double getScore()
     {
-        return puntuation;
+        return score;
     }
-    public void setPuntuation(Double value)
+    public void setScore(Double value)
     {
-        puntuation = value;
+        score = value;
     }
     public Set<Comment> getComments()
     {

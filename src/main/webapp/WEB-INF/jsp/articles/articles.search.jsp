@@ -3,7 +3,7 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@taglib prefix="ui" uri="http://www.obarcia.com/tags" %>
 <spring:message code="title" var="title" />
-<ui:layout title="${title}">
+<ui:layout title="${title}" tag="${tag}">
     <div class="row">
         <div class="col-sm-12">
             <div class="section">
@@ -16,7 +16,7 @@
                             </div>
                         </c:forEach>
 
-                        <ui:pagination tag="${articles.tag}" type="${results.type}" current="${results.current}" pages="${results.pages}" />
+                        <ui:pagination destination=".articles" pre="${articles.tag}_${results.type}" current="${results.current}" pages="${results.pages}" />
                     </c:if>
                     <c:if test="${empty results.records}">
                         <div class="articles-empty"><spring:message code="articles.empty" /></div>

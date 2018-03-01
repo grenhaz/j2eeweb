@@ -9,7 +9,7 @@
         <a href="<c:url value="/article/${article.id}" />">
             <!--<img src="<c:url value="/resources/images/game.jpg" />" />-->
             <c:if test="${article.type == 'review'}">
-                <div class="over score"><c:out value="${article.puntuation}" /></div>
+                <div class="over score"><c:out value="${article.score}" /></div>
             </c:if>
             <c:if test="${article.type != 'review'}">
                 <div class="over over-title"><c:out value="${article.title}" /></div>

@@ -89,7 +89,7 @@ public class HibernateConnector
             LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
         } finally {
             if(session != null) {
-                session.close();
+                ///session.close();
             }
         }
 
@@ -114,7 +114,7 @@ public class HibernateConnector
             LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
         } finally {
             if(session != null) {
-                session.close();
+                //session.close();
             }
         }
 
@@ -144,7 +144,7 @@ public class HibernateConnector
             LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
         } finally {
             if (session != null) {
-                session.close();
+                //session.close();
             }
         }
         
@@ -174,7 +174,7 @@ public class HibernateConnector
             LOGGER.log(Level.SEVERE, sqlException.toString(), sqlException);
         } finally {
             if (session != null) {
-                session.close();
+                //session.close();
             }
         }
         

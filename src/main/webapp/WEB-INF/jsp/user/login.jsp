@@ -14,9 +14,14 @@
                     <form method="POST">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
+                        <c:if test="${not empty error and error == 'true'}">
+                            <div class="alert alert-danger">
+                                <spring:message code="error.login" />
+                            </div>
+                        </c:if>
                         <div class="form-group">
                             <label class="control-label" id="username"><spring:message code="label.username" /></label>
-                            <input class="form-control" id="username" name="username" value="user" />
+                            <input class="form-control" id="username" name="username" value="user@test.com" />
                         </div>
                         <div class="form-group">
                             <label class="control-label" id="password"><spring:message code="label.password" /></label>

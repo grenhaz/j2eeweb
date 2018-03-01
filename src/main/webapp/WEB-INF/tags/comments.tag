@@ -6,11 +6,14 @@
 <%@attribute name="comments" required="true" type="org.obarcia.demo.models.ListPagination" rtexprvalue="true" %>
 <div class="header"><spring:message code="title.comments" /></div>
 <c:if test="${not empty comments.records}">
-    <c:forEach var="article" items="${comments.records}">
+    <c:forEach var="comment" items="${comments.records}">
         <ui:comment comment="${comment}" />
     </c:forEach>
     
-    <!-- TODO: PAGINATION -->
+    <ui:pagination destination=".comments" 
+                   pre="comments_${id}" 
+                   current="${comments.current}" 
+                   pages="${comments.pages}" />
 </c:if>
 <c:if test="${empty comments.records}">
     <div class="articles-empty"><spring:message code="comments.empty" /></div>

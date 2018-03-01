@@ -37,6 +37,8 @@ public class User
     @NotEmpty
     @Column(name = "user_role")
     private String user_role;
+    @Column(name = "active")
+    private Boolean active;
     
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private Set<Comment> comments = new HashSet<>();
@@ -72,6 +74,14 @@ public class User
     public void setUserRole(String value)
     {
         user_role = value;
+    }
+    public Boolean getActive()
+    {
+        return active;
+    }
+    public void setActive(Boolean value)
+    {
+        active = value;
     }
     public Set<Comment> getComments()
     {

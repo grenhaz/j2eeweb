@@ -1,5 +1,6 @@
 package org.obarcia.demo.models.user;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -10,6 +11,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class ForgotForm
 {
     @NotEmpty
+    @Email
     private String username;
     
     public String getUsername()
