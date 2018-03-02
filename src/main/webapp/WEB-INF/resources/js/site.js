@@ -6,7 +6,7 @@ function refreshBlock(destination, url, scroll) {
             //console.log("top: " + aTag.offset().top);
             //console.log("scroll: " + $(document).scrollTop());
             $('html,body').animate({
-                scrollTop: 140//aTag.offset().top + $('.navbar').height()
+                scrollTop: aTag.offset().top + $(document).scrollTop()
             }, 'slow');
         }
     }

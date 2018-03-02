@@ -2,7 +2,8 @@ package org.obarcia.demo.services;
 
 import java.util.HashSet;
 import java.util.Set;
-import org.obarcia.demo.models.user.UserManager;
+import org.obarcia.demo.dao.UserDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -18,10 +19,13 @@ import org.springframework.stereotype.Service;
 @Service("UserAccessService")
 public class UserAccessService implements UserDetailsService
 {
+    @Autowired
+    private UserDao userDao;
+    
     @Override
     public UserDetails loadUserByUsername(String string) throws UsernameNotFoundException
     {
-        org.obarcia.demo.models.user.User user = UserManager.getInstance().getUserByName(string);
+        org.obarcia.demo.models.user.User user = userDao.getUserByName(string);
         if (user != null && user.getActive() == Boolean.TRUE) {
             Set<GrantedAuthority> auths = new HashSet<>();
             auths.add(new SimpleGrantedAuthority(user.getUserRole()));

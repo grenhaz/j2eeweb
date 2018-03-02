@@ -16,6 +16,7 @@
     <mvc:annotation-driven />
     <!-- Component scan folders: Controllers, Entities -->
     <context:component-scan base-package="org.obarcia.demo.controllers" />
+    <context:component-scan base-package="org.obarcia.demo.dao" />
     <context:component-scan base-package="org.obarcia.demo.services" />
     <!-- Resources: jQuery, Bootstrap,... -->
     <mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" />

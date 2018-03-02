@@ -2,10 +2,11 @@ package org.obarcia.demo.controllers;
 
 import java.util.Date;
 import org.obarcia.demo.models.article.Article;
-import org.obarcia.demo.models.article.ArticleManager;
 import org.obarcia.demo.models.article.Comment;
 import org.obarcia.demo.models.user.User;
-import org.obarcia.demo.models.user.UserManager;
+import org.obarcia.demo.services.ArticleService;
+import org.obarcia.demo.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/demo")
 public class DemoController
 {
+    @Autowired
+    private UserService userService;
+    
+    @Autowired
+    private ArticleService articleService;
+    
     @GetMapping("/create")
     public String createDemo()
     {
@@ -56,25 +63,25 @@ public class DemoController
         article.setScore(puntuation);
         article.setImportant(important);
         article.setPublish(new Date());
-        if (!ArticleManager.getInstance().save(article)) {
+        if (!articleService.save(article)) {
             throw new RuntimeException("Article creation error.");
         }
         
-        User user = UserManager.getInstance().getUserByName("user@test.com");
+        User user = userService.getUserByName("user@test.com");
         for (int i = 0; i < comments; i ++) {
             Comment c = new Comment();
             c.setArticle(article);
             c.setUser(user);
             c.setContent("Hello World!!!!");
             c.setPublish(new Date());
-            ArticleManager.getInstance().save(c);
+            articleService.save(c);
         }
         
         return article;
     }
     private User createUser(String name, String username, String password, String userRole)
     {
-        User search = UserManager.getInstance().getUserByName(username);
+        User search = userService.getUserByName(username);
         User user = new User();
         if (search != null) {
             user.setId(search.getId());
@@ -84,7 +91,7 @@ public class DemoController
         user.setName(name);
         user.setUserRole(userRole);
         user.setActive(Boolean.TRUE);
-        if (!UserManager.getInstance().save(user)) {
+        if (!userService.save(user)) {
             throw new RuntimeException("User creation error.");
         }
         

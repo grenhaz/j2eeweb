@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.obarcia.demo.models.article.Comment;
@@ -42,6 +43,9 @@ public class User
     private String user_role;
     @Column(name = "active")
     private Boolean active;
+    @Size(max = 65)
+    @Column(name = "avatar")
+    private String avatar;
     
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private Set<Comment> comments = new HashSet<>();
@@ -93,6 +97,14 @@ public class User
     public void setActive(Boolean value)
     {
         active = value;
+    }
+    public String getAvatar()
+    {
+        return avatar;
+    }
+    public void setAvatar(String value)
+    {
+        avatar = value;
     }
     public Set<Comment> getComments()
     {

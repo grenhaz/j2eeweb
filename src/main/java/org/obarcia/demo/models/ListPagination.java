@@ -6,7 +6,7 @@ import java.util.List;
  *
  * @author obarcia
  */
-public class ListPagination
+public class ListPagination<T>
 {
     private Integer offset;
     private Integer limit;
@@ -39,11 +39,11 @@ public class ListPagination
     {
         total = value;
     }
-    public List getRecords()
+    public List<T> getRecords()
     {
         return records;
     }
-    public void setRecords(List value)
+    public void setRecords(List<T> value)
     {
         records = value;
     }
