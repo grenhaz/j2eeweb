@@ -3,30 +3,38 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@attribute name="tag" required="true" rtexprvalue="true" %>
-<%@attribute name="username" rtexprvalue="true" %>
-<header>
+<%@attribute name="user" type="org.obarcia.demo.models.user.AccountDetails" rtexprvalue="true" %>
+<header class="top">
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
                 <!-- TODO: LOGO -->
                 <!-- TODO: BUSCADOR -->
+                <div class="searcher">
+                    <form method="GET" action="<c:url value="/web/${tag}/search" />">
+                        <div class="input-group  input-group-sm">
+                            <input name="t" class="form-control" />
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        </div>
+                    </form>
+                </div>
                 <!-- USER -->
                 <div class="user">
                     <sec:authorize access="!isAuthenticated()">
                         <div class="avatar">
-                            <a href="<c:url value="/user/login" />"><img src="<c:url value="/resources/images/anonymous.png" />" /></a>
+                            <a href="<c:url value="/user/login" />"><img src="<c:url value="/data/avatars/anonymous.png" />" /></a>
                         </div>
                         <div class="text">
-                            <div class="username"><a href="<c:url value="/user/login" />"><spring:message code="label.user.anonymous" /></a></div>
+                            <div class="nickname"><a href="<c:url value="/user/login" />"><spring:message code="label.user.anonymous" /></a></div>
                             <div class="actions"><a href="<c:url value="/user/login" />"><spring:message code="label.user.login" /></a> | <a href="<c:url value="/user/register" />"><spring:message code="label.user.register" /></a></div>
                         </div>
                     </sec:authorize>
                     <sec:authorize access="isAuthenticated()">
                         <div class="avatar">
-                            <a href="<c:url value="/user/profile" />"><img src="<c:url value="/resources/images/anonymous.png" />" /></a>
+                            <a href="<c:url value="/user/profile" />"><img src="<c:url value="/data/avatars/${user.avatar}" />" /></a>
                         </div>
                         <div class="text">
-                            <div class="username"><a href="<c:url value="/user/profile" />"><c:out value="${username}" /></a></div>
+                            <div class="nickname"><a href="<c:url value="/user/profile" />"><c:out value="${user}" /></a></div>
                             <div class="actions">
                                 <a href="<c:url value="/user/profile" />"><spring:message code="label.user.profile" /></a> |
                                 <a href="<c:url value="/user/logout" />"><spring:message code="label.user.logout" /></a>
@@ -38,7 +46,7 @@
         </div>
     </div>
 </header>
-<header>
+<header class="bottom">
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
@@ -83,10 +91,10 @@
                         </sec:authorize>
                     </c:if>
                     <c:if test="${tag != 'user' and tag != 'admin'}">
-                        <li><a class="go" href="<c:url value="#${tag}_all" />"><spring:message code="articles.type.home" /></a></li>
+                        <li><a class="go" href="<c:url value="/web/${tag}" />"><spring:message code="articles.type.home" /></a></li>
                         <spring:eval expression="@configProperties.getProperty('sections.types')" var="types" />
                         <c:forEach items="${types}" var="t">
-                            <li><a class="go" href="<c:url value="#${tag}_${t}" />"><spring:message code="articles.type.${t}" /></a></li>
+                            <li><a class="go" href="<c:url value="/web/${tag}/${t}" />"><spring:message code="articles.type.${t}" /></a></li>
                         </c:forEach>
                     </c:if>
                 </ul>

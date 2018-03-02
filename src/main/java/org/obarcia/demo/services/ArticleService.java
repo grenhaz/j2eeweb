@@ -13,8 +13,9 @@ public interface ArticleService
 {
     public ListPagination<Article> getArticlesAll(int page, int perPage);
     public ListPagination<Article> getArticlesAll(int page, int perPage, String type);
-    public ListPagination<Article> getArticlesAll(int page, int perPage, String type, String tag);
+    public ListPagination<Article> getArticlesAll(int page, int perPage, String tag, String type);
     public List getArticlesImportants(String tag);
+    public List getArticlesImportants(String tag, String type);
     public List getArticlesByType(String tag, String type, int count);
     public List getArticlesMoreComments(String tag);
     public ListPagination<Comment> getComments(int id, int page, int perPage);

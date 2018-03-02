@@ -5,13 +5,16 @@
 <ui:layout title="${model.title}" tag="games">
     <div class="section">
         <div class="header"><c:out value="${model.formattedTags}" /></div>
-        <div class="row">
-            <div class="col-sm-8">
-                <h2><c:out value="${model.title}" /></h2>
-                <h3><c:out value="${model.description}" /></h3>
-                <div><c:out value="${model.content}" /></div>
-            </div>
-            <div class="col-sm-4">
+        <div class="article-section">
+            <div class="row">
+                <div class="col-sm-8">
+                    <h6 class="header-type"><spring:message code="article.type.${model.type}" /></h6>
+                    <h2><c:out value="${model.title}" /></h2>
+                    <h3><c:out value="${model.description}" /></h3>
+                    <div><c:out value="${model.content}" /></div>
+                </div>
+                <div class="col-sm-4">
+                </div>
             </div>
         </div>
         
@@ -42,7 +45,7 @@
     </div>
     <script>
         $(function() {
-            refreshBlock('.comments', __BASE + 'ajax/comments/${model.id}');
+            refreshBlock('.comments', '<c:url value="/ajax" />/comments/${model.id}');
         });
     </script>
 </ui:layout>

@@ -20,14 +20,38 @@
         <link href="<c:url value="/resources/fontawesome/css/font-awesome.min.css" />" rel="stylesheet" type="text/css">
         <link href="<c:url value="/resources/css/site.css" />" rel="stylesheet" type="text/css">
         
-        <script>var __BASE = '<c:url value="/" />';</script>
         <script src="<c:url value="/resources/jquery/jquery.min.js" />"></script>
         <script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
         <script src="<c:url value="/resources/bootbox/bootbox.min.js" />"></script>
         <script src="<c:url value="/resources/js/site.js" />"></script>
+        <script>
+            $(function () {
+                // Cambio de secciones
+                $(document.body).on('click', 'a.go', function(e) {
+                    var url = $(this).attr('href');
+                    var index = url.indexOf('#');
+                    if (index >= 0) {
+                        var link = url.substring(index + 1);
+                        var destination = $(this).data('destination');
+                        if (destination === undefined) {
+                            destination = '.articles';
+                        }
+                        var data = {};
+                        var menu = $(this).data('menu');
+                        console.log(menu);
+                        if (menu === true || menu === false) {
+                            data['m'] = menu;
+                        }
+                        refreshBlock(destination, '<c:url value="/ajax" />/' + link.replace(/\_/g, '/'), data, true);
+                    }
+                    return true;
+                });
+            });
+        </script>
     </head>
     <body class="${classCss}">
-        <ui:header tag="${tag}" username="${pageContext.request.remoteUser}" />
+        [${SecurityContextHolder.getContext()}]
+        <ui:header tag="${tag}" user="${SecurityContextHolder.getContext().getAuthentication().getPrincipal()}" />
 
         <div class="container">
             <div class="wrap">

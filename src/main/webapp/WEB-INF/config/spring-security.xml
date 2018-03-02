@@ -14,6 +14,7 @@
         <csrf disabled="false"/>
         
         <intercept-url pattern="/resources/**" access="permitAll" />
+        <intercept-url pattern="/data/**" access="permitAll" />
         <intercept-url pattern="/**" access="permitAll" />
  
         <form-login

@@ -26,29 +26,32 @@ public class ArticleServiceImpl implements ArticleService
     @Override
     public ListPagination<Article> getArticlesAll(int page, int perPage, String type)
     {
-        return articleDao.getArticles(page, perPage, type, null);
+        return articleDao.getArticles(page, perPage, null, type);
     }
     @Override
-    public ListPagination<Article> getArticlesAll(int page, int perPage, String type, String tag)
+    public ListPagination<Article> getArticlesAll(int page, int perPage, String tag, String type)
     {
-        return articleDao.getArticles(page, perPage, type, tag);
+        return articleDao.getArticles(page, perPage, tag, type);
     }
     @Override
     public List getArticlesImportants(String tag)
     {
-        // TODO: Implement
-        return null;
+        return articleDao.getArticlesImportant(tag, null, 3);
+    }
+    @Override
+    public List getArticlesImportants(String tag, String type)
+    {
+        return articleDao.getArticlesImportant(tag, type, 3);
     }
     @Override
     public List getArticlesByType(String tag, String type, int count)
     {
-        return articleDao.getArticles(0, count, type, null).getRecords();
+        return articleDao.getArticles(0, count, tag, type).getRecords();
     }
     @Override
     public List getArticlesMoreComments(String tag)
     {
-        // TODO: Implement
-        return null;
+        return articleDao.getArticlesMoreComments(tag, 5);
     }
     @Override
     public ListPagination<Comment> getComments(int id, int page, int perPage)

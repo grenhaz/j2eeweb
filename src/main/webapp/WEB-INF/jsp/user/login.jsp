@@ -20,7 +20,7 @@
                             </div>
                         </c:if>
                         <div class="form-group">
-                            <label class="control-label" id="username"><spring:message code="label.username" /></label>
+                            <label class="control-label" id="username"><spring:message code="label.email" /></label>
                             <input class="form-control" id="username" name="username" value="user@test.com" />
                         </div>
                         <div class="form-group">

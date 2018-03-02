@@ -1,6 +1,5 @@
 package org.obarcia.demo.models.article;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -45,6 +44,10 @@ public class Article
     @Column(name = "description")
     private String description;
     @NotEmpty
+    @Size(max = 250)
+    @Column(name = "image")
+    private String image;
+    @NotEmpty
     @Size(max = 9000)
     @Column(name = "content")
     private String content;
@@ -60,7 +63,7 @@ public class Article
     @Column(name = "score")
     private Double score;
     
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "article")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "article")
     private Set<Comment> comments = new HashSet<>();
     
     public int getId()
@@ -94,6 +97,14 @@ public class Article
     public void setDescription(String value)
     {
         description = value;
+    }
+    public String getImage()
+    {
+        return image;
+    }
+    public void setImage(String value)
+    {
+        image = value;
     }
     public String getContent()
     {

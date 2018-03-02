@@ -12,34 +12,35 @@ public class RegisterForm
 {
     @NotEmpty
     @Email
-    private String username;
+    private String email;
     @NotEmpty
-    private String password;
+    @Email
+    private String emailRepeat;
     @NotEmpty
-    private String repeatPassword;
+    private String nickname;
     
-    public String getUsername()
+    public String getEmail()
     {
-        return username;
+        return email;
     }
-    public void setUsername(String value)
+    public void setEmail(String value)
     {
-        username = value;
+        email = value;
     }
-    public String getPassword()
+    public String getEmailRepeat()
     {
-        return password;
+        return emailRepeat;
     }
-    public void setPassword(String value)
+    public void setEmailRepeat(String value)
     {
-        password = value;
+        emailRepeat = value;
     }
-    public String getRepeatPassword()
+    public String getNickname()
     {
-        return repeatPassword;
+        return nickname;
     }
-    public void setRepeatPassword(String value)
+    public void setNickname(String value)
     {
-        repeatPassword = value;
+        nickname = value;
     }
 }

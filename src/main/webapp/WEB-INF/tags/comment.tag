@@ -3,7 +3,10 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@attribute name="comment" required="true" type="org.obarcia.demo.models.article.Comment" rtexprvalue="true" %>
 <div class="comment">
-    <div class="username"><c:out value="${comment.user.username}" /></div>
+    <div class="comment-header">
+        <div class="image"><img src="<c:url value="/data/avatars/${not empty comment.user.avatar ? comment.user.avatar : 'anonymous.png'}" />" /></div>
+        <div class="nickname"><c:out value="${comment.user.nickname}" /></div>
+        <div class="publish"><c:out value="${comment.formattedPublish}" /></div>
+    </div>
     <div class="content"><c:out value="${comment.content}" /></div>
-    <div class="publich"><c:out value="${comment.formattedPublish}" /></div>
 </div>

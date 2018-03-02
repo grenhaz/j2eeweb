@@ -8,6 +8,6 @@ import org.obarcia.demo.models.user.User;
  */
 public interface UserService
 {
-    public User getUserByName(String username);
+    public User getUserByEmail(String email);
     public boolean save(User user);
 }

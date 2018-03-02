@@ -30,14 +30,14 @@ public class User
     private int id;
     @NotEmpty
     @Email
-    @Column(name = "username")
-    private String username;
+    @Column(name = "email")
+    private String email;
     @NotEmpty
     @Column(name = "password")
     private String password;
     @NotEmpty
-    @Column(name = "name")
-    private String name;
+    @Column(name = "nickname")
+    private String nickname;
     @NotEmpty
     @Column(name = "user_role")
     private String user_role;
@@ -58,13 +58,13 @@ public class User
     {
         id = value;
     }
-    public String getUsername()
+    public String getEmail()
     {
-        return username;
+        return email;
     }
-    public void setUsername(String value)
+    public void setEmail(String value)
     {
-        username = value;
+        email = value;
     }
     public String getPassword()
     {
@@ -74,13 +74,13 @@ public class User
     {
         password = value;
     }
-    public String getName()
+    public String getNickname()
     {
-        return name;
+        return nickname;
     }
-    public void setName(String value)
+    public void setNickname(String value)
     {
-        name = value;
+        nickname = value;
     }
     public String getUserRole()
     {

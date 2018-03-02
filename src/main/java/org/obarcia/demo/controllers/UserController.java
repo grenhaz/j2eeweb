@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -48,21 +49,44 @@ public class UserController
         }
         return "redirect:/";
     }
-    @RequestMapping("/register")
+    @GetMapping("/register")
+    @PreAuthorize("!isAuthenticated()")
+    public ModelAndView actionRegister()
+    {
+        return new ModelAndView("user/register")
+            .addObject("model", new RegisterForm());
+    }
+    @PostMapping("/register")
     @PreAuthorize("!isAuthenticated()")
     public ModelAndView actionRegister(
             @Valid @ModelAttribute("model") RegisterForm form,
             BindingResult result)
     {
+        if (!result.hasErrors()) {
+            // TODO: REGISTRO
+        }
+        
         return new ModelAndView("user/register")
             .addObject("model", form);
     }
-    @RequestMapping("/forgot")
+    @GetMapping("/forgot")
+    @PreAuthorize("!isAuthenticated()")
+    public ModelAndView actionForgotPassword()
+    {
+        return new ModelAndView("user/forgot")
+            .addObject("model", new ForgotForm());
+    }
+    
+    @PostMapping("/forgot")
     @PreAuthorize("!isAuthenticated()")
     public ModelAndView actionForgotPassword(
             @Valid @ModelAttribute("model") ForgotForm form,
             BindingResult result)
     {
+        if (!result.hasErrors()) {
+            // TODO: RECUPERAR CONTRASEÑA
+        }
+        
         return new ModelAndView("user/forgot")
             .addObject("model", form);
     }

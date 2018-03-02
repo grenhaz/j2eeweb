@@ -10,23 +10,23 @@
 <footer>
     <div class="row">
         <div class="col-sm-8">
-            <spring:message code="copyright" />
+            <spring:message code="footer.copyright" />
         </div>
         <div class="col-sm-4 social-networks">
             <c:if test="${not empty facebook}">
-                <a href="${facebook}" title="Facebook" alt="Facebook"><i class="fa fa-facebook-square"></i></a>
+                <a href="${facebook}" data-toggle="tooltip" data-placement="top" title="Facebook" alt="Facebook"><i class="fa fa-facebook-square"></i></a>
             </c:if>
             <c:if test="${not empty google}">
-                <a href="${google}" title="Google+" alt="Google+"><i class="fa fa-google-plus"></i></a>
+                <a href="${google}" data-toggle="tooltip" data-placement="top" title="Google+" alt="Google+"><i class="fa fa-google-plus"></i></a>
             </c:if>
             <c:if test="${not empty twitter}">
-                <a href="${twitter}" title="Twitter" alt="Twitter"><i class="fa fa-twitter-square"></i></a>
+                <a href="${twitter}" data-toggle="tooltip" data-placement="top" title="Twitter" alt="Twitter"><i class="fa fa-twitter-square"></i></a>
             </c:if>
             <c:if test="${not empty skype}">
-                <a href="${skype}" title="Skype" alt="Skype"><i class="fa fa-skype"></i></a>
+                <a href="${skype}" data-toggle="tooltip" data-placement="top" title="Skype" alt="Skype"><i class="fa fa-skype"></i></a>
             </c:if>
             <c:if test="${not empty instagram}">
-                <a href="${instagram}" title="Instagram" alt="Instagram"><i class="fa fa-instagram"></i></a>
+                <a href="${instagram}" data-toggle="tooltip" data-placement="top" title="Instagram" alt="Instagram"><i class="fa fa-instagram"></i></a>
             </c:if>
         </div>
     </div>

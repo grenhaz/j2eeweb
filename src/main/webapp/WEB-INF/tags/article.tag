@@ -7,9 +7,15 @@
     <!-- IMAGE -->
     <div class="image">
         <a href="<c:url value="/article/${article.id}" />">
-            <!-- <img src="<c:url value="/resources/images/game.jpg" />" /> -->
+            <img src="<c:url value="/data/articles/${article.image}" />" />
             <c:if test="${article.type == 'review'}">
-                <div class="over score"><c:out value="${article.score}" /></div>
+                <div class="over score">
+                    <div class="line"></div>
+                    <div class="number"><c:out value="${article.score}" /></div>
+                </div>
+            </c:if>
+            <c:if test="${article.type == 'video'}">
+                <div class="over over-play"><i class="fa fa-play-circle-o"></i></div>
             </c:if>
             <c:if test="${article.type != 'review'}">
                 <div class="over over-title"><c:out value="${article.title}" /></div>

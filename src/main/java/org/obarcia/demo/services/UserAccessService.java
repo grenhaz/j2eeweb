@@ -3,10 +3,10 @@ package org.obarcia.demo.services;
 import java.util.HashSet;
 import java.util.Set;
 import org.obarcia.demo.dao.UserDao;
+import org.obarcia.demo.models.user.AccountDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,14 +25,14 @@ public class UserAccessService implements UserDetailsService
     @Override
     public UserDetails loadUserByUsername(String string) throws UsernameNotFoundException
     {
-        org.obarcia.demo.models.user.User user = userDao.getUserByName(string);
+        org.obarcia.demo.models.user.User user = userDao.getUserByEmail(string);
         if (user != null && user.getActive() == Boolean.TRUE) {
             Set<GrantedAuthority> auths = new HashSet<>();
             auths.add(new SimpleGrantedAuthority(user.getUserRole()));
 
-            return new User(user.getName(), user.getPassword(),
+            return new AccountDetails(user.getNickname(), user.getPassword(),
                             true, true, true, true,
-                            auths);
+                            auths, user.getAvatar());
         } else {
             throw new UsernameNotFoundException("User '" + string + "' not found.");
         }

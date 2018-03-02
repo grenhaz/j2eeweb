@@ -14,7 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>4.3.7.RELEASE</spring.version>
         <spring.hibernate.version>5.2.13.Final</spring.hibernate.version>
-        <spring.hibernate.validator.version>6.0.7.Final</spring.hibernate.validator.version>
+        <spring.hibernate.validator.version>5.4.1.Final</spring.hibernate.validator.version>
         <spring.hibernate.annotations.version>3.5.6-Final</spring.hibernate.annotations.version>
         <spring.security.version>5.0.0.RELEASE</spring.security.version>
     </properties>
@@ -47,12 +47,12 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.2.10.Final</version>
+            <version>${spring.hibernate.version}</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-c3p0</artifactId>
-            <version>5.2.10.Final</version>
+            <version>${spring.hibernate.version}</version>
         </dependency>
         <dependency>
             <groupId>com.mchange</groupId>
@@ -62,13 +62,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>5.4.1.Final</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>bean-validator</artifactId>
-                    <groupId>org.glassfish.hk2.external</groupId>
-                </exclusion>
-            </exclusions>
+            <version>${spring.hibernate.validator.version}</version>
         </dependency>
         <!-- DATABASE -->
         <dependency>

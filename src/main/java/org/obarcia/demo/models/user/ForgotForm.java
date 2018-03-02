@@ -12,14 +12,14 @@ public class ForgotForm
 {
     @NotEmpty
     @Email
-    private String username;
+    private String email;
     
-    public String getUsername()
+    public String getEmail()
     {
-        return username;
+        return email;
     }
-    public void setUsername(String value)
+    public void setEmail(String value)
     {
-        username = value;
+        email = value;
     }
 }
