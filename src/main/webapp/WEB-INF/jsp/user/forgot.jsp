@@ -18,7 +18,7 @@
                             <form:errors path="email" cssClass="help-block help-error" />
                         </div>
                         <div class="form-group">
-                            <form:button class="btn btn-primary"><spring:message code="button.forgot" /></form:button>
+                            <form:button class="btn btn-primary btn-full"><spring:message code="button.forgot" /></form:button>
                         </div>
                     </form:form>
                 </div>

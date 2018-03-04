@@ -29,22 +29,25 @@ public class DemoController
     @GetMapping("/create")
     public String createDemo()
     {
+        String content = "<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu</p><p>In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus.</p><p>Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,</p>";
         // Usuarios
-        createUser("administrador", "admin@test.com", "password", "ROLE_ADMIN");
-        createUser("obarcia", "user@test.com", "password", "ROLE_USER");
+        createUser("administrador", null, "admin@test.com", "password", "ROLE_ADMIN");
+        createUser("obarcia", "avatar1.jpg", "user@test.com", "password", "ROLE_USER");
+        createUser("Heck", "avatar2.jpg", "yo@test.com", "password", "ROLE_USER");
+        createUser("Tester", "avatar3.jpg", "yo2@test.com", "password", "ROLE_USER");
         // Artículos
-        createArticle("new", "game.jpg", "Mañana es el cierre de servidores de Demon's Souls", "El clásico de PlayStation 3 cortará a partir de mañana sus posibilidades on-line definitivamente.", "Content", "[PC]", null, true, 3);
-        createArticle("new", "game.jpg", "El rodaje de la serie televisiva de Halo comenzaría a finales de 2018", "El afamado director Steven Spielberg continuaría vinculado al proyecto.", "Content", "[PC][PS4]", null, true, 5);
-        createArticle("guide", "game.jpg", "Guía de Mario Kart 8 Deluxe", "", "Content", "[SWITCH]", null, true, 1);
-        createArticle("video", "game.jpg", "Turok Remastered", "Turok y Turok 2 tendrán remasterización en Xbox One el 2 de marzo", "Content", "[PS4]", null, true, 0);
-        createArticle("review", "game.jpg", "Análisis de Into the Breach", "Estrategia implacable de los creadores de FTL", "Content", "[PC][PS4]", 8.5, true, 3);
-        createArticle("new", "game.jpg", "¿Filtrado Plants vs. Zombies: Garden Warfare 3? Un cómic lo desvela", "El tebeo narrará los acontecimientos entre la segunda y la tercera parte del juego.", "Content", "[PC][PS4]", null, true, 3);
-        createArticle("video", "game.jpg", "Devil May Cry HD Collection llega a la nueva generación. Tráiler", "Capcom estrena el 13 de marzo Devil May Cry HD Collection en PS4 y Xbox One. Supone traer de vuelta a los tiempos actuales", "Content", "[PS4]", null, true, 6);
-        createArticle("new", "game.jpg", "GT Sport se actualiza y suma nuevos coches y dos nuevos circuitos", "La actualización incluye doce coches y tres eventos de la GT League.", "Content", "[PS4]", null, true, 12);
-        createArticle("new", "game.jpg", "Las ventas de PS4 en Japón mejoran todos los años desde su estreno", "Cerró su cuarto año en el mercado nipón con 2.083.974 unidades vendidas.", "Content", "[PS4]", null, true, 32);
-        createArticle("new", "game.jpg", "Habrá cambios en la cúpula directiva de Sony Interactive Entertainment", "Se efectuarán a partir del próximo 1 de abril y están implicados distintos empresarios.", "Content", "[PS4]", null, true, 9);
-        createArticle("special", "game.jpg", "Reportaje: Juegos olvidados", "", "Content", "[PC]", null, true, 4);
-        //createArticle("new", "game.jpg", "qwe", "qwe", "Content", "[PC]", null, true, 3);
+        createArticle("new", "game.jpg", "Mañana es el cierre de servidores de Demon's Souls", "El clásico de PlayStation 3 cortará a partir de mañana sus posibilidades on-line definitivamente.", content, "[PC]", null, true, 3);
+        createArticle("new", "game1.jpg", "El rodaje de la serie televisiva de Halo comenzaría a finales de 2018", "El afamado director Steven Spielberg continuaría vinculado al proyecto.", content, "[PC][PS4]", null, true, 5);
+        createArticle("guide", "game2.jpg", "Guía de Mario Kart 8 Deluxe", "", content, "[SWITCH]", null, true, 1);
+        createArticle("video", "game3.jpg", "Turok Remastered", "Turok y Turok 2 tendrán remasterización en Xbox One el 2 de marzo", content, "[PS4]", null, true, 0);
+        createArticle("review", "game4.jpg", "Análisis de Into the Breach", "Estrategia implacable de los creadores de FTL", content, "[PC][PS4]", 8.5, true, 3);
+        createArticle("new", "game5.jpg", "¿Filtrado Plants vs. Zombies: Garden Warfare 3? Un cómic lo desvela", "El tebeo narrará los acontecimientos entre la segunda y la tercera parte del juego.", content, "[PC][PS4]", null, true, 3);
+        createArticle("video", "game6.jpg", "Devil May Cry HD Collection llega a la nueva generación. Tráiler", "Capcom estrena el 13 de marzo Devil May Cry HD Collection en PS4 y Xbox One. Supone traer de vuelta a los tiempos actuales", content, "[PS4]", null, true, 6);
+        createArticle("new", "game7.jpg", "GT Sport se actualiza y suma nuevos coches y dos nuevos circuitos", "La actualización incluye doce coches y tres eventos de la GT League.", content, "[PS4]", null, true, 12);
+        createArticle("new", "game8.jpg", "Las ventas de PS4 en Japón mejoran todos los años desde su estreno", "Cerró su cuarto año en el mercado nipón con 2.083.974 unidades vendidas.", content, "[PS4]", null, true, 32);
+        createArticle("new", "game9.jpg", "Habrá cambios en la cúpula directiva de Sony Interactive Entertainment", "Se efectuarán a partir del próximo 1 de abril y están implicados distintos empresarios.", content, "[PS4]", null, true, 9);
+        createArticle("special", "game10.jpg", "Reportaje: Juegos olvidados", "", content, "[PC]", null, true, 4);
+        //createArticle(12, "new", "game.jpg", "qwe", "qwe", content, "[PC]", null, true, 3);
         
         return "redirect:/";
     }
@@ -54,7 +57,12 @@ public class DemoController
         String tags, Double puntuation,
         boolean important, int comments)
     {
-        Article article = new Article();
+        Article article = articleService.getArticleByTitle(title);
+        boolean isNewRecord = false;
+        if (article == null) {
+            article = new Article();
+            isNewRecord = true;
+        }
         article.setType(type);
         article.setImage(image);
         article.setTitle(title);
@@ -64,31 +72,43 @@ public class DemoController
         article.setScore(puntuation);
         article.setImportant(important);
         article.setPublish(new Date());
+        article.setActive(true);
         if (!articleService.save(article)) {
             throw new RuntimeException("Article creation error.");
         }
         
-        User user = userService.getUserByEmail("user@test.com");
-        for (int i = 0; i < comments; i ++) {
-            Comment c = new Comment();
-            c.setArticle(article);
-            c.setUser(user);
-            c.setContent("Hello World!!!!");
-            c.setPublish(new Date());
-            articleService.save(c);
+        if (isNewRecord) {
+            String[] messages = {
+                "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+                "Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.",
+                "In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a,"
+            };
+
+            User[] users = {
+                userService.getUserByEmail("user@test.com"),
+                userService.getUserByEmail("yo@test.com"),
+                userService.getUserByEmail("yo2@test.com"),
+            };
+            for (int i = 0; i < comments; i ++) {
+                Comment c = new Comment();
+                c.setArticle(article);
+                c.setUser(users[(int)(Math.random() * 3)]);
+                c.setContent(messages[(int)(Math.random() * 3)]);
+                c.setPublish(new Date());
+                articleService.save(c);
+            }
         }
         
         return article;
     }
-    private User createUser(String nickname, String email, String password, String userRole)
+    private User createUser(String nickname, String avatar, String email, String password, String userRole)
     {
         User user = userService.getUserByEmail(email);
-        /*User user = new User();
-        if (search != null) {
-            user.setId(search.getId());
-        }*/
-        if (user == null) user = new User();
+        if (user == null) {
+            user = new User();
+        }
         user.setNickname(nickname);
+        user.setAvatar(avatar);
         user.setEmail(email);
         user.setPassword(new BCryptPasswordEncoder().encode(password));
         user.setUserRole(userRole);

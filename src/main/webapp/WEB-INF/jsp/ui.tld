@@ -55,4 +55,8 @@
         <name>comment</name>
         <path>/WEB-INF/tags/comment.tag</path>
     </tag-file>
+    <tag-file>
+        <name>mcomment</name>
+        <path>/WEB-INF/tags/comment.mini.tag</path>
+    </tag-file>
 </taglib>

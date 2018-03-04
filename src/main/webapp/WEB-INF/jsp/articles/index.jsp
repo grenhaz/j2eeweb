@@ -70,9 +70,9 @@
             </div>
         </div>
     </c:if>
-    <c:if test="${not empty moreComments}">
-        <div class="row">
-            <div class="col-xs-12">
+    <div class="row">
+        <c:if test="${not empty moreComments}">
+            <div class="col-sm-6">
                 <div class="section">
                     <div class="header"><spring:message code="title.more_views" /></div>
                     <div class="row">
@@ -84,6 +84,20 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </c:if>
+        </c:if>
+        <c:if test="${not empty lastComments}">
+            <div class="col-sm-6">
+                <div class="section">
+                    <div class="header"><spring:message code="title.last_comments" /></div>
+                    <div class="row">
+                        <c:forEach var="comment" items="${lastComments}">
+                            <div class="col-xs-12">
+                                <ui:mcomment comment="${comment}" />
+                            </div>
+                        </c:forEach>
+                    </div>
+                </div>
+            </div>
+        </c:if>
+    </div>
 </ui:layout>

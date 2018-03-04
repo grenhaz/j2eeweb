@@ -30,7 +30,7 @@ public class Comment
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private int id;
+    private Integer id;
     @NotEmpty
     @Size(max = 512)
     @Column(name = "content")
@@ -47,11 +47,11 @@ public class Comment
     @JoinColumn(name = "id_user", nullable = false)
     private User user;
     
-    public int getId()
+    public Integer getId()
     {
         return id;
     }
-    public void setId(int value)
+    public void setId(Integer value)
     {
         id = value;
     }
@@ -86,6 +86,14 @@ public class Comment
     public void setUser(User value)
     {
         user = value;
+    }
+    public String getShortContent()
+    {
+        if (content.length() > 83) {
+            return content.substring(0, 80) + "...";
+        }
+        
+        return content;
     }
     /**
      * Devuelve la fecha de publicación formateada.

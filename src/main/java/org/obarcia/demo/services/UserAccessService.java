@@ -26,13 +26,13 @@ public class UserAccessService implements UserDetailsService
     public UserDetails loadUserByUsername(String string) throws UsernameNotFoundException
     {
         org.obarcia.demo.models.user.User user = userDao.getUserByEmail(string);
-        if (user != null && user.getActive() == Boolean.TRUE) {
+        if (user != null && user.getActive().equals(Boolean.TRUE)) {
             Set<GrantedAuthority> auths = new HashSet<>();
             auths.add(new SimpleGrantedAuthority(user.getUserRole()));
 
-            return new AccountDetails(user.getNickname(), user.getPassword(),
+            return new AccountDetails(user.getEmail(), user.getPassword(),
                             true, true, true, true,
-                            auths, user.getAvatar());
+                            auths, user.getNickname(), user.getAvatar(), user.getId());
         } else {
             throw new UsernameNotFoundException("User '" + string + "' not found.");
         }

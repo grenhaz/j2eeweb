@@ -1,9 +1,12 @@
 package org.obarcia.demo.services;
 
 import java.util.List;
+import org.obarcia.demo.components.datatables.DataTablesResponse;
+import org.obarcia.demo.components.datatables.DataTablesRequest;
 import org.obarcia.demo.dao.ArticleDao;
 import org.obarcia.demo.models.ListPagination;
 import org.obarcia.demo.models.article.Article;
+import org.obarcia.demo.models.article.ArticleLite;
 import org.obarcia.demo.models.article.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,11 @@ public class ArticleServiceImpl implements ArticleService
     @Autowired
     private ArticleDao articleDao;
     
+    @Override
+    public DataTablesResponse<ArticleLite> getArticlesLite(DataTablesRequest req)
+    {
+        return articleDao.getArticlesLite(req);
+    }
     @Override
     public ListPagination<Article> getArticlesAll(int page, int perPage)
     {
@@ -49,9 +57,9 @@ public class ArticleServiceImpl implements ArticleService
         return articleDao.getArticles(0, count, tag, type).getRecords();
     }
     @Override
-    public List getArticlesMoreComments(String tag)
+    public List getArticlesMoreComments(String tag, int count)
     {
-        return articleDao.getArticlesMoreComments(tag, 5);
+        return articleDao.getArticlesMoreComments(tag, count);
     }
     @Override
     public ListPagination<Comment> getComments(int id, int page, int perPage)
@@ -59,9 +67,19 @@ public class ArticleServiceImpl implements ArticleService
         return articleDao.getComments(id, page, perPage);
     }
     @Override
+    public List<Comment> getLastComments(String tag, int count)
+    {
+        return articleDao.getLastComments(tag, count);
+    }
+    @Override
     public Article getArticle(int id)
     {
         return articleDao.getArticle(id);
+    }
+    @Override
+    public Article getArticleByTitle(String title)
+    {
+        return articleDao.getArticleByTitle(title);
     }
     @Override
     public boolean save(Article article)

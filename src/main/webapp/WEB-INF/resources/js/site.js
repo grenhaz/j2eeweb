@@ -12,6 +12,19 @@ function refreshBlock(destination, url, data, scroll) {
         $(destination).html(ret);
     });
 };
+function openWindow(url, data, extra) {
+    var options = $.extend({
+        'title': '&nbsp;',
+        'message': '<div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div></div>'
+    }, extra);
+    var dialog = bootbox.dialog(options);
+    
+    $.get(url, data, function (ret) {
+        $(dialog).find('.bootbox-body').html(ret);
+    });
+    
+    return dialog;
+}
 
 $(function () {
     // Tooltips

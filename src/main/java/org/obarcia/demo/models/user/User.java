@@ -1,5 +1,6 @@
 package org.obarcia.demo.models.user;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -10,6 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -24,37 +28,50 @@ import org.obarcia.demo.models.article.Comment;
 @Table(name = "usuario")
 public class User
 {
+    public static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+    
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private int id;
+    private Integer id;
     @NotEmpty
     @Email
+    @Size(max = 128)
     @Column(name = "email")
     private String email;
     @NotEmpty
     @Column(name = "password")
     private String password;
     @NotEmpty
+    @Size(max = 32)
+    @Pattern(regexp = "^[A-Za-z0-9]+$")
     @Column(name = "nickname")
     private String nickname;
     @NotEmpty
+    @Size(max = 16)
     @Column(name = "user_role")
     private String user_role;
     @Column(name = "active")
     private Boolean active;
-    @Size(max = 65)
+    @Size(max = 64)
     @Column(name = "avatar")
     private String avatar;
+    @Size(max = 64)
+    @Column(name = "ukey")
+    private String ukey;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created")
+    private Date created;
     
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private Set<Comment> comments = new HashSet<>();
     
-    public int getId()
+    public Integer getId()
     {
         return id;
     }
-    public void setId(int value)
+    public void setId(Integer value)
     {
         id = value;
     }
@@ -105,6 +122,22 @@ public class User
     public void setAvatar(String value)
     {
         avatar = value;
+    }
+    public String getUkey()
+    {
+        return ukey;
+    }
+    public void setUkey(String value)
+    {
+        ukey = value;
+    }
+    public Date getCreated()
+    {
+        return created;
+    }
+    public void setCreated(Date value)
+    {
+        created = value;
     }
     public Set<Comment> getComments()
     {

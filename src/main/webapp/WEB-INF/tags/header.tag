@@ -3,21 +3,12 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@attribute name="tag" required="true" rtexprvalue="true" %>
-<%@attribute name="user" type="org.obarcia.demo.models.user.AccountDetails" rtexprvalue="true" %>
+<c:url value="" var="urlBack" />
 <header class="top">
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
                 <!-- TODO: LOGO -->
-                <!-- TODO: BUSCADOR -->
-                <div class="searcher">
-                    <form method="GET" action="<c:url value="/web/${tag}/search" />">
-                        <div class="input-group  input-group-sm">
-                            <input name="t" class="form-control" />
-                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                        </div>
-                    </form>
-                </div>
                 <!-- USER -->
                 <div class="user">
                     <sec:authorize access="!isAuthenticated()">
@@ -26,30 +17,52 @@
                         </div>
                         <div class="text">
                             <div class="nickname"><a href="<c:url value="/user/login" />"><spring:message code="label.user.anonymous" /></a></div>
-                            <div class="actions"><a href="<c:url value="/user/login" />"><spring:message code="label.user.login" /></a> | <a href="<c:url value="/user/register" />"><spring:message code="label.user.register" /></a></div>
+                            <div class="actions">
+                                <a href="<c:url value="/user/login?u=${urlBack}" />"><spring:message code="label.user.login" /></a>
+                                <span class="separator">|</span>
+                                <a href="<c:url value="/user/register" />"><spring:message code="label.user.register" /></a>
+                            </div>
                         </div>
                     </sec:authorize>
                     <sec:authorize access="isAuthenticated()">
                         <div class="avatar">
-                            <a href="<c:url value="/user/profile" />"><img src="<c:url value="/data/avatars/${user.avatar}" />" /></a>
+                            <sec:authentication property="principal.avatar" var="avatar" />
+                            <a href="<c:url value="/user/profile" />"><img src="<c:url value="/data/avatars/${avatar}" />" /></a>
                         </div>
                         <div class="text">
-                            <div class="nickname"><a href="<c:url value="/user/profile" />"><c:out value="${user}" /></a></div>
+                            <div class="nickname"><a href="<c:url value="/user/profile" />"><sec:authentication property="principal.nickname" /></a></div>
                             <div class="actions">
-                                <a href="<c:url value="/user/profile" />"><spring:message code="label.user.profile" /></a> |
+                                <a href="<c:url value="/user/profile" />"><spring:message code="label.user.profile" /></a>
+                                <span class="separator">|</span>
                                 <a href="<c:url value="/user/logout" />"><spring:message code="label.user.logout" /></a>
                             </div>
                         </div>
                     </sec:authorize>
                 </div>
+                <!-- TOOGLE -->
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#__menu" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
             </div>
         </div>
     </div>
 </header>
-<header class="bottom">
+<header class="bottom collapse" id="__menu">
     <div class="container">
+        <!-- BUSCADOR -->
+        <div class="searcher">
+            <form method="GET" action="<c:url value="/web/${tag}/search" />">
+                <div class="input-group  input-group-sm">
+                    <input name="t" class="form-control" />
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                </div>
+            </form>
+        </div>
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-6 col-sm-12">
                 <ul class="list-tags">
                     <li ${tag == "games" ? "class='active'" : "" }>
                         <a href="<c:url value="/" />"><spring:message code="label.section.home" /></a>
@@ -74,6 +87,8 @@
                         </li>
                     </sec:authorize>
                 </ul>
+            </div>
+            <div class="col-xs-6 col-sm-12">
                 <ul class="list-stags">
                     <c:if test="${tag == 'user'}">
                         <sec:authorize access="!isAuthenticated()">
@@ -86,6 +101,7 @@
                     </c:if>
                     <c:if test="${tag == 'admin'}">
                         <sec:authorize access="hasRole('ROLE_ADMIN')">
+                            <li><a href="<c:url value="/admin/index" />"><spring:message code="label.admin.index" /></a></li>
                             <li><a href="<c:url value="/admin/users" />"><spring:message code="label.admin.users" /></a></li>
                             <li><a href="<c:url value="/admin/articles" />"><spring:message code="label.admin.articles" /></a></li>
                         </sec:authorize>

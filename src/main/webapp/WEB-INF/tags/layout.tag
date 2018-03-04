@@ -19,11 +19,13 @@
         <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet" type="text/css">
         <link href="<c:url value="/resources/fontawesome/css/font-awesome.min.css" />" rel="stylesheet" type="text/css">
         <link href="<c:url value="/resources/css/site.css" />" rel="stylesheet" type="text/css">
-        
+        <link href="<c:url value="/resources/datatables/datatables.min.css" />" rel="stylesheet" type="text/css" />
+ 
         <script src="<c:url value="/resources/jquery/jquery.min.js" />"></script>
         <script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
         <script src="<c:url value="/resources/bootbox/bootbox.min.js" />"></script>
         <script src="<c:url value="/resources/js/site.js" />"></script>
+        <script src="<c:url value="/resources/datatables/datatables.min.js" />"></script>
         <script>
             $(function () {
                 // Cambio de secciones
@@ -50,8 +52,7 @@
         </script>
     </head>
     <body class="${classCss}">
-        [${SecurityContextHolder.getContext()}]
-        <ui:header tag="${tag}" user="${SecurityContextHolder.getContext().getAuthentication().getPrincipal()}" />
+        <ui:header tag="${tag}" />
 
         <div class="container">
             <div class="wrap">

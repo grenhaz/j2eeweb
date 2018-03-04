@@ -31,7 +31,7 @@ public class Article
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private int id;
+    private Integer id;
     @NotEmpty
     @Size(max = 12)
     @Column(name = "type")
@@ -62,15 +62,17 @@ public class Article
     private Boolean important;
     @Column(name = "score")
     private Double score;
+    @Column(name = "active")
+    private Boolean active;
     
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "article")
     private Set<Comment> comments = new HashSet<>();
     
-    public int getId()
+    public Integer getId()
     {
         return id;
     }
-    public void setId(int value)
+    public void setId(Integer value)
     {
         id = value;
     }
@@ -153,6 +155,14 @@ public class Article
     public int getCommentsCount()
     {
         return comments.size();
+    }
+    public Boolean getActive()
+    {
+        return active;
+    }
+    public void setActive(Boolean value)
+    {
+        active = value;
     }
     /**
      * Devuelve las etiquetas formateadas para visualización.

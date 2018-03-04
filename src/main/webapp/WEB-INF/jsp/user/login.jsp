@@ -21,16 +21,16 @@
                         </c:if>
                         <div class="form-group">
                             <label class="control-label" id="username"><spring:message code="label.email" /></label>
-                            <input class="form-control" id="username" name="username" value="user@test.com" />
+                            <input class="form-control" id="username" name="username" />
                         </div>
                         <div class="form-group">
                             <label class="control-label" id="password"><spring:message code="label.password" /></label>
-                            <input type="password" class="form-control" id="password" name="password" value="password" />
+                            <input type="password" class="form-control" id="password" name="password" />
                         </div>
                         <div><a class="small" href="<c:url value="/user/forgot" />"><spring:message code="label.user.forgot" /></a></div>
                         <br />
                         <div class="form-group">
-                            <input type="submit" class="btn btn-primary" value="<spring:message code="button.login" />" />
+                            <input type="submit" class="btn btn-primary btn-full" value="<spring:message code="button.login" />" />
                         </div>
                     </form>
                 </div>
