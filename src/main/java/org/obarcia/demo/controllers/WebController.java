@@ -27,7 +27,8 @@ import org.springframework.web.servlet.ModelAndView;
 // TODO: Paginación con N páginas => TEST
 // TODO: Buscador por texto (Resultados y paginación)
 // TODO: Documento README Completo: Con el FIX del JBOSS
-// TODO: Navegador de los artículos: Splash de refresco => TEST
+// TODO: !!!! Navegador de los artículos: Splash de refresco => (Bajar en los estilos)
+// TODO: !!!! Color acorde de la progressbar
 // TODO: Header: Logo
 // XXX: Off: Url back en el login
 // XXX: Artículo: Utilizar ajax para el proceso de añadir un artículo

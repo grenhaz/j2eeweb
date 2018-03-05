@@ -53,8 +53,8 @@ public class UserController
     /**
      * Instancia del manager de autentificación
      */
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    //@Autowired
+    //private AuthenticationManager authenticationManager;
     /**
      * Instancia del servicio i18n
      */
@@ -169,7 +169,7 @@ public class UserController
         Locale locale,
         RedirectAttributes flash) throws PageNotFoundException
     {
-        // TODO: Probar a validar un usuario => TEST
+        // TODO: Probar a activar un usuario => TEST
         // Buscar el usuario por la clave (No debe estar activado ya)
         User user = userService.getUserByUkey(ukey);
         if (user != null) {
@@ -178,12 +178,12 @@ public class UserController
             user.setUkey("");
             if (userService.save(user)) {
                 // TODO: Off: Auto loguear al usuario => TEST
-                UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
+                /*UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, user.getPassword(), userDetails.getAuthorities());
                 authenticationManager.authenticate(auth);
                 if (auth.isAuthenticated()) {
                     SecurityContextHolder.getContext().setAuthentication(auth);
-                }
+                }*/
                 
                 // Añadir mensaje flash (I18N)
                 flash.addFlashAttribute("flash", messageSource.getMessage("message.user.activate.ok", null, locale));
@@ -221,12 +221,12 @@ public class UserController
             user.setUkey("");
             if (userService.save(user)) {
                 // TODO: Auto loguear al usuario => TEST
-                UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
+                /*UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, user.getPassword(), userDetails.getAuthorities());
                 authenticationManager.authenticate(auth);
                 if (auth.isAuthenticated()) {
                     SecurityContextHolder.getContext().setAuthentication(auth);
-                }
+                }*/
                 
                 // Añadir mensaje flash (I18N)
                 flash.addFlashAttribute("flash", messageSource.getMessage("message.user.recovery.ok", null, locale));
@@ -365,7 +365,7 @@ public class UserController
      * @return Vista resultante.
      * @throws SaveException 
      */
-    @PostMapping("/profile")
+    @PostMapping("/profile/password")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView actionProfilePassword(
             @Valid @ModelAttribute("model") PasswordForm form,
@@ -412,7 +412,7 @@ public class UserController
         List<String> avatars = new ArrayList<>();
         avatars.add("anonymous.png");
         
-        // TODO: Leer los posibles avatares => TEST
+        // TODO: Leer los posibles avatares => nO SALE NINGUNO, revisar path
         File file = new File("/WEB-INF/data/avatars");
         if (file.isDirectory()) {
             File[] files = file.listFiles();

@@ -28,9 +28,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+// TODO: !!!! Administración: no salen los últimos comentarios.
 // TODO: Administración: Estadísticas: Artículos
 // TODO: Administración: Estadísticas: Comentarios
-// TODO: Administración: Estadísticas: Ultimos comentarios => TEST
 // TODO: Administración: Estadísticas: Mas comentado
 // TODO: Administración: Formularios: User: Completar y pruebas
 // TODO: Administración: Formularios: Artículo: Completar y pruebas
@@ -123,7 +123,7 @@ public class AdminController
         User form = userService.getUserById(id);
         if (form != null) {
             return new ModelAndView("admin/user")
-                    .addObject("model", form);
+                    .addObject("form", form);
         } else {
             throw new UserNotFoundException();
         }
@@ -159,7 +159,7 @@ public class AdminController
         }
         
         return new ModelAndView("admin/user")
-                    .addObject("model", form);
+                    .addObject("form", form);
     }
     /**
      * Formulario de un artículo.
@@ -174,7 +174,7 @@ public class AdminController
         Article form = articleService.getArticle(id);
         if (form != null) {
             return new ModelAndView("admin/article")
-                    .addObject("model", form);
+                    .addObject("form", form);
         } else {
             throw new ArticleNotFoundException();
         }
@@ -210,6 +210,6 @@ public class AdminController
         }
         
         return new ModelAndView("admin/article")
-                    .addObject("model", form);
+                    .addObject("form", form);
     }
 }

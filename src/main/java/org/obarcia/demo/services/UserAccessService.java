@@ -30,7 +30,6 @@ public class UserAccessService implements UserDetailsService
     public UserDetails loadUserByUsername(String string) throws UsernameNotFoundException
     {
         // Obtener el usuario por su email
-        // TODO: Probar a acceder con una contraseña incorrecta
         org.obarcia.demo.models.user.User user = userDao.getUserByEmail(string);
         if (user != null && user.getActive().equals(Boolean.TRUE)) {
             Set<GrantedAuthority> auths = new HashSet<>();

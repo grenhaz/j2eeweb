@@ -64,7 +64,7 @@
                         "orderable": false,
                         "searchable": false,
                         "render": function ( data, type, row, meta ) {
-                            return "<a href='<c:url value="/admin/articles/" />" + row.id + "'><i class='fa fa-pencil'></i></a>";
+                            return "<a href='<c:url value="/admin/article/" />" + row.id + "'><i class='fa fa-pencil'></i></a>";
                         }
                     }
                 ]
