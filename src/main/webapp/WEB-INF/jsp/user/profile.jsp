@@ -4,7 +4,7 @@
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@taglib prefix="ui" uri="http://www.obarcia.com/tags" %>
 <spring:message code="title" var="title" />
-<ui:layout title="${title}" tag="user">
+<ui:layout title="${title}" tag="user" flash="${flash}">
     <div class="section profile">
         <div class="header"><spring:message code="label.user.profile" /></div>
         <div class="row">

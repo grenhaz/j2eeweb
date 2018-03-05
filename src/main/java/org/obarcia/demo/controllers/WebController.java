@@ -24,14 +24,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-// TODO: Paginación con N páginas
+// TODO: Paginación con N páginas => TEST
 // TODO: Buscador por texto (Resultados y paginación)
 // TODO: Documento README Completo: Con el FIX del JBOSS
-// TODO: Off: Security: Extra parameters
-// TODO: Off: Url back en el login
-// GFX: !!!! Navegador de los artículos: Splash de refresco
-// GFX: Header: Logo
-// GFX: !!!! favicon.ico
+// TODO: Navegador de los artículos: Splash de refresco => TEST
+// TODO: Header: Logo
+// XXX: Off: Url back en el login
 // XXX: Artículo: Utilizar ajax para el proceso de añadir un artículo
 // XXX: Crear datos de demo inicialmente (Incluir más)
 // XXX: Uso de varios idiomas

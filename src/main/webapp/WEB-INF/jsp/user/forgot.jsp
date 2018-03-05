@@ -3,7 +3,7 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@taglib prefix="ui" uri="http://www.obarcia.com/tags" %>
 <spring:message code="title.forgot" var="title" />
-<ui:layout title="${title}" tag="user">
+<ui:layout title="${title}" tag="user" flash="${flash}">
     <div class="login">
         <h1>${title}</h1>
 

@@ -44,8 +44,7 @@ public class FieldEqualConstraintValidator implements ConstraintValidator<FieldE
             } else {
                 cvc.disableDefaultConstraintViolation();
                 cvc.buildConstraintViolationWithTemplate(message)
-                        // TODO: Deprecated
-                        .addNode(firstFieldName)
+                        .addPropertyNode(firstFieldName)
                         .addConstraintViolation();
 
                 return false;

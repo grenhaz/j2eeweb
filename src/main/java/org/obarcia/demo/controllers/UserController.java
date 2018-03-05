@@ -1,13 +1,16 @@
 package org.obarcia.demo.controllers;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.obarcia.demo.components.Utilities;
 import org.obarcia.demo.components.mail.MailSenderImpl;
+import org.obarcia.demo.exceptions.PageNotFoundException;
 import org.obarcia.demo.exceptions.SaveException;
 import org.obarcia.demo.models.user.AccountDetails;
 import org.obarcia.demo.models.user.ForgotForm;
@@ -15,12 +18,17 @@ import org.obarcia.demo.models.user.PasswordForm;
 import org.obarcia.demo.models.user.ProfileForm;
 import org.obarcia.demo.models.user.RegisterForm;
 import org.obarcia.demo.models.user.User;
+import org.obarcia.demo.services.UserAccessService;
 import org.obarcia.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -31,9 +39,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-// TODO: Usuario: Cambiar contraseña por URL
-// TODO: Usuario: Perfil (Cambiar contraseña) => TEST
 /**
  * Controlador para el Usuario.
  * 
@@ -44,6 +51,16 @@ import org.springframework.web.servlet.ModelAndView;
 public class UserController
 {
     /**
+     * Instancia del manager de autentificación
+     */
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    /**
+     * Instancia del servicio i18n
+     */
+    @Autowired
+    private MessageSource messageSource;
+    /**
      * Instancia del servicio de usuarios.
      */
     @Autowired
@@ -53,6 +70,8 @@ public class UserController
      */
     @Autowired
     private MailSenderImpl mailSender;
+    @Autowired
+    private UserAccessService userDetailsService;
     
     /**
      * Proceso de login.
@@ -138,14 +157,19 @@ public class UserController
     }
     /**
      * Proceso de activación de un usuario tras registrarse.
-     * @param ukey Clave del usaurio.
+     * @param ukey Clave del usuario.
+     * @param locale Localización para el i18n
+     * @param flash Flash variables.
      * @return Vista resultante.
      */
     @GetMapping("/activate")
     @PreAuthorize("!isAuthenticated()")
     public ModelAndView actionActivateAccount(
-        @RequestParam(value = "k", required = true) String ukey)
+        @RequestParam(value = "k", required = true) String ukey,
+        Locale locale,
+        RedirectAttributes flash) throws PageNotFoundException
     {
+        // TODO: Probar a validar un usuario => TEST
         // Buscar el usuario por la clave (No debe estar activado ya)
         User user = userService.getUserByUkey(ukey);
         if (user != null) {
@@ -153,11 +177,66 @@ public class UserController
             user.setActive(Boolean.TRUE);
             user.setUkey("");
             if (userService.save(user)) {
-                // TODO: Off: Auto loguear al usuario???
+                // TODO: Off: Auto loguear al usuario => TEST
+                UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, user.getPassword(), userDetails.getAuthorities());
+                authenticationManager.authenticate(auth);
+                if (auth.isAuthenticated()) {
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                }
+                
+                // Añadir mensaje flash (I18N)
+                flash.addFlashAttribute("flash", messageSource.getMessage("message.user.activate.ok", null, locale));
+                
+                // Redireccionar con mensaje
+                return new ModelAndView("redirect:/");
             }
         }
-        return new ModelAndView("user/register")
-            .addObject("model", new RegisterForm());
+        
+        throw new PageNotFoundException();
+    }
+    /**
+     * Recuperar la contraseña de un usuario.
+     * @param ukey Clave del usuario.
+     * @param password Contraseña nueva.
+     * @param locale Localización para el i18n.
+     * @param flash Flash variables.
+     * @return Vista resultante.
+     * @throws PageNotFoundException
+     */
+    @GetMapping("/recover")
+    @PreAuthorize("!isAuthenticated()")
+    public ModelAndView actionRecoverAccount(
+        @RequestParam(value = "k", required = true) String ukey,
+        @RequestParam(value = "password", required = true) String password,
+        Locale locale,
+        RedirectAttributes flash) throws PageNotFoundException
+    {
+        // TODO: Usuario: Cambiar contraseña por URL => TEST
+        // Buscar el usuario por la clave (No debe estar activado ya)
+        User user = userService.getUserByUkey(ukey);
+        if (user != null) {
+            // Activar y borrar el ukey
+            user.setPassword(new BCryptPasswordEncoder().encode(password));
+            user.setUkey("");
+            if (userService.save(user)) {
+                // TODO: Auto loguear al usuario => TEST
+                UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, user.getPassword(), userDetails.getAuthorities());
+                authenticationManager.authenticate(auth);
+                if (auth.isAuthenticated()) {
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                }
+                
+                // Añadir mensaje flash (I18N)
+                flash.addFlashAttribute("flash", messageSource.getMessage("message.user.recovery.ok", null, locale));
+                
+                // Redireccionar con mensaje
+                return new ModelAndView("redirect:/");
+            }
+        }
+        
+        throw new PageNotFoundException();
     }
     /**
      * Formulario de recuperación de contraseña.
@@ -174,13 +253,17 @@ public class UserController
      * Procesamiento del formulario de recuperación de contraseña.
      * @param form Instancia del formulario.
      * @param result Rsultado de la validación.
+     * @param locale Localización para el i18n
+     * @param flash Flash variables.
      * @return Vista resultante.
      */
     @PostMapping("/forgot")
     @PreAuthorize("!isAuthenticated()")
     public ModelAndView actionForgotPassword(
             @Valid @ModelAttribute("model") ForgotForm form,
-            BindingResult result)
+            BindingResult result,
+            Locale locale,
+            RedirectAttributes flash)
     {
         if (!result.hasErrors()) {
             User user = userService.getUserByEmail(form.getEmail());
@@ -196,7 +279,11 @@ public class UserController
                     emailObj.setText("QWE");
                     mailSender.send(emailObj);
                     
-                    // TODO; Redirect with message
+                    // Añadir mensaje flash (I18N)
+                    flash.addFlashAttribute("flash", messageSource.getMessage("message.user.forgot.ok", null, locale));
+                    
+                    // Redireccionar
+                    return new ModelAndView("redirect:/");
                 } else {
                     result.rejectValue("email", "error.sendmail", "Se produjo un error durante el envío del email.");
                 }
@@ -256,6 +343,7 @@ public class UserController
                         user.setNickname(form.getNickname());
                         user.setAvatar(form.getAvatar());
                         if (userService.save(user)) {
+                            // Redirect
                             return new ModelAndView("redirect:/user/profile");
                         }
                     }
@@ -272,6 +360,8 @@ public class UserController
      * Procesamiento del formulario de cambio de contraseña del usuario.
      * @param form Instancia del formulario.
      * @param result Resultado de la validación.
+     * @param locale Localización para el i18n
+     * @param flash Flash variables.
      * @return Vista resultante.
      * @throws SaveException 
      */
@@ -279,8 +369,11 @@ public class UserController
     @PreAuthorize("isAuthenticated()")
     public ModelAndView actionProfilePassword(
             @Valid @ModelAttribute("model") PasswordForm form,
-            BindingResult result) throws SaveException
+            BindingResult result,
+            Locale locale,
+            RedirectAttributes flash) throws SaveException
     {
+        // TODO: Usuario: Perfil (Cambiar contraseña) => TEST
         if (!result.hasErrors()) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (auth != null){
@@ -290,6 +383,10 @@ public class UserController
                     if (user != null) {
                         user.setPassword(new BCryptPasswordEncoder().encode(form.getPassword()));
                         if (userService.save(user)) {
+                            // Añadir mensaje flash (I18N)
+                            flash.addFlashAttribute("flash", messageSource.getMessage("message.profile.password.ok", null, locale));
+                            
+                            // Redirect
                             return new ModelAndView("redirect:/user/profile");
                         }
                     }
@@ -314,10 +411,17 @@ public class UserController
     {
         List<String> avatars = new ArrayList<>();
         avatars.add("anonymous.png");
-        // TODO: Leer los posibles avatares
-        avatars.add("avatar1.jpg");
-        avatars.add("avatar2.jpg");
-        avatars.add("avatar3.jpg");
+        
+        // TODO: Leer los posibles avatares => TEST
+        File file = new File("/WEB-INF/data/avatars");
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            for (File f: files) {
+                if (f.isFile()) {
+                    avatars.add("avatar1.jpg");
+                }
+            }
+        }
         
         return new ModelAndView("user/avatars")
             .addObject("field", field)

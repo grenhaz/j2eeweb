@@ -3,7 +3,7 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@taglib prefix="ui" uri="http://www.obarcia.com/tags" %>
 <spring:message code="title.error" var="title" />
-<ui:layout title="${title}" classCss="error" tag="games">
+<ui:layout title="${title}" classCss="error" tag="games" flash="${flash}">
     <div class="title"><spring:message code="${message}" /></div>
     <c:if test="${not empty submessage}">
         <div class="message"><spring:message code="${submessage}" /></div>

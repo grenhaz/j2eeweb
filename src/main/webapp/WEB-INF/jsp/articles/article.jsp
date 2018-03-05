@@ -3,7 +3,7 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@taglib prefix="ui" uri="http://www.obarcia.com/tags" %>
-<ui:layout title="${model.title}" tag="games">
+<ui:layout title="${model.title}" tag="games" flash="${flash}">
     <div class="section">
         <div class="header"><c:out value="${model.formattedTags}" /></div>
         <div class="article-section">

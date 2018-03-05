@@ -1,4 +1,10 @@
+function getLoader() {
+    return '<div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div></div>';
+}
 function refreshBlock(destination, url, data, scroll) {
+    $(destination).css('position', 'relative');
+    $('<div />').addClass('loading-splash').html(getLoader()).appendTo(destination);
+    
     if (scroll) {
         var aTag = $('#return-top');
         if (aTag.length > 0) {
@@ -15,7 +21,7 @@ function refreshBlock(destination, url, data, scroll) {
 function openWindow(url, data, extra) {
     var options = $.extend({
         'title': '&nbsp;',
-        'message': '<div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div></div>'
+        'message': getLoader()
     }, extra);
     var dialog = bootbox.dialog(options);
     

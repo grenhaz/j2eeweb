@@ -1,6 +1,7 @@
 package org.obarcia.demo.controllers;
 
 import org.obarcia.demo.exceptions.ArticleNotFoundException;
+import org.obarcia.demo.exceptions.PageNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -36,7 +37,7 @@ public class ExceptionHandlingController
      * @param ex Instancia de la excepción.
      * @return Vista resultante.
      */
-    @ExceptionHandler(NoHandlerFoundException.class)
+    @ExceptionHandler({PageNotFoundException.class,NoHandlerFoundException.class})
     @ResponseStatus(value=HttpStatus.NOT_FOUND)
     public ModelAndView actionNoHandler(Exception ex)
     {

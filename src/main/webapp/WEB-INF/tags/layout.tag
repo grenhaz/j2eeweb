@@ -5,16 +5,16 @@
 <%@attribute name="title" required="false" type="java.lang.String" %>
 <%@attribute name="lang" required="false" type="java.lang.String" %>
 <%@attribute name="classCss" required="false" type="java.lang.String" %>
-<%@attribute name="bootstrap" required="false" type="java.lang.Boolean" %>
-<%@attribute name="fontawesome" required="false" type="java.lang.Boolean" %>
 <%@attribute name="tag" required="true" rtexprvalue="true" %>
+<%@attribute name="flash" required="false" rtexprvalue="true" %>
 <c:set var="lang" value="${(empty lang) ? 'es' : lang}" />
 <c:set var="title" value="${(empty title) ? 'No title' : title}" />
 <!DOCTYPE html>
 <html lang="${lang}">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>${title}</title>
+        <title><c:out value="${title}" /></title>
+        <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/resources/favicon.ico" />" />
         <link href="https://fonts.googleapis.com/css?family=Roboto:700,700italic,500italic,500,400,400italic,300|Oxygen:400,700|Roboto+Condensed:400,700" rel="stylesheet" type="text/css">
         <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet" type="text/css">
         <link href="<c:url value="/resources/fontawesome/css/font-awesome.min.css" />" rel="stylesheet" type="text/css">
@@ -48,10 +48,13 @@
                     }
                     return true;
                 });
+                <c:if test="${not empty flash}">
+                    alert('<c:out value="${flash}" />');
+                </c:if>
             });
         </script>
     </head>
-    <body class="${classCss}">
+    <body class="<c:out value="${classCss}" />">
         <ui:header tag="${tag}" />
 
         <div class="container">

@@ -3,7 +3,7 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@taglib prefix="ui" uri="http://www.obarcia.com/tags" %>
 <spring:message code="title.admin" var="title" />
-<ui:layout title="${title}" tag="admin">
+<ui:layout title="${title}" tag="admin" flash="${flash}">
     <div class="section">
         <div class="header"><spring:message code="label.admin.articles" /></div>
         <table id="records" class="table table-striped table-bordered" cellspacing="0">
@@ -64,7 +64,7 @@
                         "orderable": false,
                         "searchable": false,
                         "render": function ( data, type, row, meta ) {
-                            return "<a target='_blank' href='<c:url value="/admin/articles/" />" + row.id + "'><i class='fa fa-pencil'></i></a>";
+                            return "<a href='<c:url value="/admin/articles/" />" + row.id + "'><i class='fa fa-pencil'></i></a>";
                         }
                     }
                 ]

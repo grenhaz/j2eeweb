@@ -50,8 +50,7 @@ public class NicknameConstraintValidator implements ConstraintValidator<Nickname
             } else {
                 cvc.disableDefaultConstraintViolation();
                 cvc.buildConstraintViolationWithTemplate(message)
-                        // TODO: Deprecated
-                        .addNode(fieldName)
+                        .addPropertyNode(fieldName)
                         .addConstraintViolation();
 
                 return false;
