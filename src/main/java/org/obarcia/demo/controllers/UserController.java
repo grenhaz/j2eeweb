@@ -11,6 +11,7 @@ import org.obarcia.demo.components.mail.MailSenderImpl;
 import org.obarcia.demo.exceptions.SaveException;
 import org.obarcia.demo.models.user.AccountDetails;
 import org.obarcia.demo.models.user.ForgotForm;
+import org.obarcia.demo.models.user.PasswordForm;
 import org.obarcia.demo.models.user.ProfileForm;
 import org.obarcia.demo.models.user.RegisterForm;
 import org.obarcia.demo.models.user.User;
@@ -32,9 +33,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 // TODO: Usuario: Cambiar contraseña por URL
-// TODO: Usuario: Perfil (Cambiar contraseña)
+// TODO: Usuario: Perfil (Cambiar contraseña) => TEST
 /**
- * Controller para el Usuario.
+ * Controlador para el Usuario.
  * 
  * @author obarcia
  */
@@ -42,15 +43,22 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/user")
 public class UserController
 {
+    /**
+     * Instancia del servicio de usuarios.
+     */
     @Autowired
     private UserService userService;
-    
+    /**
+     * Instancia del servicio para el envío de emails.
+     */
     @Autowired
     private MailSenderImpl mailSender;
     
-    // ****************************************
-    // USER
-    // ****************************************
+    /**
+     * Proceso de login.
+     * @param error true si se produjo algún error durante el login.
+     * @return Vista resultante.
+     */
     @RequestMapping("/login")
     @PreAuthorize("!isAuthenticated()")
     public ModelAndView actionLogin(
@@ -59,10 +67,15 @@ public class UserController
         return new ModelAndView("user/login")
             .addObject("error", error);
     }
+    /**
+     * Proceso de logout.
+     * @param request Intancia de la petición
+     * @param response Instancia de la respuesta.
+     * @return Vista resultante.
+     */
     @GetMapping("/logout")
     @PreAuthorize("isAuthenticated()")
     public String actionLogout(
-            @RequestParam(value = "u", required = false) String urlBack,
             HttpServletRequest request, 
             HttpServletResponse response)
     {
@@ -70,8 +83,12 @@ public class UserController
         if (auth != null){
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "redirect:/" + (urlBack != null ? urlBack : "");
+        return "redirect:/";
     }
+    /**
+     * Formulario de registro.
+     * @return Vista resultante.
+     */
     @GetMapping("/register")
     @PreAuthorize("!isAuthenticated()")
     public ModelAndView actionRegister()
@@ -79,17 +96,13 @@ public class UserController
         return new ModelAndView("user/register")
             .addObject("model", new RegisterForm());
     }
-    @GetMapping("/activate")
-    @PreAuthorize("!isAuthenticated()")
-    public ModelAndView actionActivateAccount(
-        @RequestParam(value = "k", required = true) String ukey)
-    {
-        // TODO: Off: Buscar el usuario por la clave (No debe estar activado ya)
-        // TODO: Off: Activar y borrar el ukey
-        // TODO: Off: Auto loguear al usuario???
-        return new ModelAndView("user/register")
-            .addObject("model", new RegisterForm());
-    }
+    /**
+     * Procesamiento del formulario de registro.
+     * @param form Instancia del formulario.
+     * @param result Resultado de la validación.
+     * @return Vista resultante.
+     * @throws SaveException 
+     */
     @PostMapping("/register")
     @PreAuthorize("!isAuthenticated()")
     public ModelAndView actionRegister(
@@ -123,6 +136,33 @@ public class UserController
         return new ModelAndView("user/register")
             .addObject("model", form);
     }
+    /**
+     * Proceso de activación de un usuario tras registrarse.
+     * @param ukey Clave del usaurio.
+     * @return Vista resultante.
+     */
+    @GetMapping("/activate")
+    @PreAuthorize("!isAuthenticated()")
+    public ModelAndView actionActivateAccount(
+        @RequestParam(value = "k", required = true) String ukey)
+    {
+        // Buscar el usuario por la clave (No debe estar activado ya)
+        User user = userService.getUserByUkey(ukey);
+        if (user != null) {
+            // Activar y borrar el ukey
+            user.setActive(Boolean.TRUE);
+            user.setUkey("");
+            if (userService.save(user)) {
+                // TODO: Off: Auto loguear al usuario???
+            }
+        }
+        return new ModelAndView("user/register")
+            .addObject("model", new RegisterForm());
+    }
+    /**
+     * Formulario de recuperación de contraseña.
+     * @return Vista resultante.
+     */
     @GetMapping("/forgot")
     @PreAuthorize("!isAuthenticated()")
     public ModelAndView actionForgotPassword()
@@ -130,6 +170,12 @@ public class UserController
         return new ModelAndView("user/forgot")
             .addObject("model", new ForgotForm());
     }
+    /**
+     * Procesamiento del formulario de recuperación de contraseña.
+     * @param form Instancia del formulario.
+     * @param result Rsultado de la validación.
+     * @return Vista resultante.
+     */
     @PostMapping("/forgot")
     @PreAuthorize("!isAuthenticated()")
     public ModelAndView actionForgotPassword(
@@ -162,25 +208,39 @@ public class UserController
         return new ModelAndView("user/forgot")
             .addObject("model", form);
     }
+    /**
+     * Perfil del usuario.
+     * @return Vista resultante.
+     */
     @GetMapping("/profile")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView actionProfile()
     {
+        PasswordForm pform = new PasswordForm();
         ProfileForm form = new ProfileForm();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null){
             AccountDetails account = ((AccountDetails)auth.getPrincipal());
+            pform.setId(account.getId());
             form.setId(account.getId());
             form.setNickname(account.getNickname());
             form.setAvatar(account.getAvatar());
         }
         
         return new ModelAndView("user/profile")
-            .addObject("model", form);
+            .addObject("model", form)
+            .addObject("pmodel", pform);
     }
+    /**
+     * Procesamiento del formulario de cambio de perfil.
+     * @param form Instancia del formulario.
+     * @param result Resultado de la validación.
+     * @return Vista resultante.
+     * @throws SaveException 
+     */
     @PostMapping("/profile")
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView actionProfile(
+    public ModelAndView actionProfileInfo(
             @Valid @ModelAttribute("model") ProfileForm form,
             BindingResult result) throws SaveException
     {
@@ -208,6 +268,45 @@ public class UserController
         return new ModelAndView("user/profile")
             .addObject("model", form);
     }
+    /**
+     * Procesamiento del formulario de cambio de contraseña del usuario.
+     * @param form Instancia del formulario.
+     * @param result Resultado de la validación.
+     * @return Vista resultante.
+     * @throws SaveException 
+     */
+    @PostMapping("/profile")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView actionProfilePassword(
+            @Valid @ModelAttribute("model") PasswordForm form,
+            BindingResult result) throws SaveException
+    {
+        if (!result.hasErrors()) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null){
+                AccountDetails account = ((AccountDetails)auth.getPrincipal());
+                if (account.getId().equals(form.getId())) {
+                    User user = userService.getUserById(account.getId());
+                    if (user != null) {
+                        user.setPassword(new BCryptPasswordEncoder().encode(form.getPassword()));
+                        if (userService.save(user)) {
+                            return new ModelAndView("redirect:/user/profile");
+                        }
+                    }
+                }
+            }
+            
+            throw new SaveException();
+        }
+        
+        return new ModelAndView("user/profile")
+            .addObject("model", form);
+    }
+    /**
+     * Listado de avatares para selección en le formulario de cambio de perfil.
+     * @param field Campo donde asignar el nuevo avatar.
+     * @return Vista resultante.
+     */
     @GetMapping("/avatars")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView actionAvatarAjax(

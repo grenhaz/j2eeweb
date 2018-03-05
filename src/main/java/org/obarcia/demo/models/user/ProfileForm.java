@@ -7,22 +7,34 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.obarcia.demo.constraints.NicknameConstraint;
 
 /**
- * Profile form.
+ * Formulario de perfil del usuario.
  * 
  * @author obarcia
  */
 @NicknameConstraint(field = "nickname", message = "{error.nickname.invalid}")
 public class ProfileForm
 {
+    /**
+     * Identificador del usuario.
+     */
     private Integer id;
+    /**
+     * Nickname.
+     */
     @NotEmpty
     @Size(max = 32)
-    @Pattern(regexp = "^[A-Za-z0-9]+$")
+    @Pattern(regexp = "^[A-Za-z0-9_-]+$")
     private String nickname;
+    /**
+     * Fichero que hace de avatar.
+     */
     @Size(max = 64)
     @Column(name = "avatar")
     private String avatar;
     
+    // ******************************************
+    // GETTER & SETTER
+    // ******************************************
     public Integer getId()
     {
         return id;

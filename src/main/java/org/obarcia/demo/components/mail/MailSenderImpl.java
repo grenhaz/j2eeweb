@@ -7,8 +7,10 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 
 /**
- *
- * @author Heck
+ * Implementación del JavaMailSender para poder usar un protocolo "fake"
+ * donde no se envía nada.
+ * 
+ * @author obarcia
  */
 public class MailSenderImpl extends JavaMailSenderImpl
 {

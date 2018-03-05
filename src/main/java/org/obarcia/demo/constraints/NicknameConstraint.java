@@ -9,14 +9,16 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- *
- * @author Heck
+ * Constraint para el uso único de un nickname.
+ * 
+ * @author obarcia
  */
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Constraint(validatedBy = NicknameConstraintValidator.class)
-public @interface NicknameConstraint {
+public @interface NicknameConstraint
+{
     String message();
     String field();
     Class<?>[] groups() default {};

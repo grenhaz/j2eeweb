@@ -1,17 +1,36 @@
 package org.obarcia.demo.components.datatables;
 
 /**
- *
+ * Dtatables: Columna.
+ * 
  * @author obarcia
  */
 public class DataTablesColumn
 {
+    /**
+     * Nombre de la columna.
+     */
     private String data;
+    /**
+     * Nombre alternativo de la columna.
+     */
     private String name;
+    /**
+     * Si se puede realizar búsquedas.
+     */
     private Boolean searchable;
+    /**
+     * Si se puede ordenar.
+     */
     private Boolean orderable;
+    /**
+     * Texto de búsqueda.
+     */
     private String search;
     
+    // ******************************************
+    // GETTER & SETTER
+    // ******************************************
     public String getData()
     {
         return data;

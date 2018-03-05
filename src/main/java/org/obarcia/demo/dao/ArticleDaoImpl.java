@@ -23,14 +23,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 /**
- *
+ * Implementación del ArticleDao.
+ * 
  * @author obarcia
  */
 @Repository
 public class ArticleDaoImpl implements ArticleDao
 {
-    private final static Logger LOGGER = Logger.getLogger(ArticleDaoImpl.class.getName());
-    
+    /**
+     * Session factory.
+     */
     @Autowired
     private SessionFactory sessionFactory;
 

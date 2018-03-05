@@ -19,12 +19,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 /**
- *
+ * Implementación del UserDao.
+ * 
  * @author obarcia
  */
 @Repository
 public class UserDaoImpl implements UserDao
 {
+    /**
+     * Session factory.
+     */
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -134,6 +138,17 @@ public class UserDaoImpl implements UserDao
         CriteriaQuery<User> criteria = builder.createQuery(User.class);
         Root<User> root = criteria.from(User.class);
         criteria.where(builder.equal(root.get("nickname"), nickname));
+        Query<User> q = sessionFactory.getCurrentSession().createQuery(criteria);
+        return q.uniqueResult();
+    }
+    @Override
+    @Transactional
+    public User getUserByUkey(String ukey)
+    {
+        CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = builder.createQuery(User.class);
+        Root<User> root = criteria.from(User.class);
+        criteria.where(builder.equal(root.get("ukey"), ukey));
         Query<User> q = sessionFactory.getCurrentSession().createQuery(criteria);
         return q.uniqueResult();
     }

@@ -12,12 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- *
+ * Implementación del servicio de artículos y comentarios.
+ * 
  * @author obarcia
  */
 @Service
 public class ArticleServiceImpl implements ArticleService
 {
+    /**
+     * Instancia del DAO de artículos.
+     */
     @Autowired
     private ArticleDao articleDao;
     

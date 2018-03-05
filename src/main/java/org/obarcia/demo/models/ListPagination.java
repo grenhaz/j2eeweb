@@ -3,18 +3,64 @@ package org.obarcia.demo.models;
 import java.util.List;
 
 /**
- *
+ * Clase para el manejo de listados paginados.
+ * 
  * @author obarcia
  */
 public class ListPagination<T>
 {
+    /**
+     * Inicio.
+     */
     private Integer offset;
+    /**
+     * Número de registros por página.
+     */
     private Integer limit;
+    /**
+     * Total de registros.
+     */
     private Integer total;
+    /**
+     * Registros.
+     */
     private List records;
+    /**
+     * Tipo de registros.
+     */
     private String type;
+    /**
+     * Etiqueta de los registros.
+     */
     private String tag;
     
+    /**
+     * Devuelve la página actual.
+     * @return Página actual.
+     */
+    public Integer getCurrent()
+    {
+        if (limit > 0) {
+            return (offset / limit) + 1;
+        }
+        
+        return 1;
+    }
+    /**
+     * Devuelve el número de páginas.
+     * @return Número de paginas.
+     */
+    public Integer getPages()
+    {
+        if (limit > 0) {
+            return (total / limit) + 1;
+        }
+        
+        return 1;
+    }
+    // ******************************************
+    // GETTER & SETTER
+    // ******************************************
     public Integer getOffset()
     {
         return offset;
@@ -62,21 +108,5 @@ public class ListPagination<T>
     public void setTag(String value)
     {
         tag = value;
-    }
-    public Integer getCurrent()
-    {
-        if (limit > 0) {
-            return (offset / limit) + 1;
-        }
-        
-        return 1;
-    }
-    public Integer getPages()
-    {
-        if (limit > 0) {
-            return (total / limit) + 1;
-        }
-        
-        return 1;
     }
 }

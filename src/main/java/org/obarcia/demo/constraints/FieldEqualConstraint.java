@@ -9,14 +9,16 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- *
- * @author Heck
+ * Constraint para que 2 campos sean iguales.
+ * 
+ * @author obarcia
  */
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = EmailEqualConstraintValidator.class)
-public @interface EmailEqualConstraint {
+@Constraint(validatedBy = FieldEqualConstraintValidator.class)
+public @interface FieldEqualConstraint
+{
     String message();
     String first();
     String second();

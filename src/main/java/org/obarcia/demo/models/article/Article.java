@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- * Article entity.
+ * Artículo.
  * 
  * @author obarcia
  */
@@ -28,46 +28,111 @@ public class Article
 {
     private static final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     
+    /**
+     * Identificador.
+     */
     @Id
     @GeneratedValue
     @Column(name = "id")
     private Integer id;
+    /**
+     * Tipo.
+     */
     @NotEmpty
     @Size(max = 12)
     @Column(name = "type")
     private String type;
+    /**
+     * Título.
+     */
     @NotEmpty
     @Size(max = 250)
     @Column(name = "title")
     private String title;
+    /**
+     * Descripción.
+     */
     @Size(max = 250)
     @Column(name = "description")
     private String description;
+    /**
+     * Imágen de portada.
+     */
     @NotEmpty
     @Size(max = 250)
     @Column(name = "image")
     private String image;
+    /**
+     * Contenido.
+     */
     @NotEmpty
     @Size(max = 9000)
     @Column(name = "content")
     private String content;
+    /**
+     * Fecha de publicación.
+     */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "publish")
     private Date publish;
+    /**
+     * Etiquetas.
+     */
     @NotEmpty
     @Size(max = 128)
     @Column(name = "tags")
     private String tags;
+    /**
+     * Si es imporatante / destacado.
+     */
     @Column(name = "important")
     private Boolean important;
+    /**
+     * Puntuación.
+     */
     @Column(name = "score")
     private Double score;
+    /**
+     * Si está activo o no.
+     */
     @Column(name = "active")
     private Boolean active;
-    
+    /**
+     * Listado de comentarios.
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "article")
     private Set<Comment> comments = new HashSet<>();
     
+    /**
+     * Devuelve las etiquetas formateadas para visualización.
+     * @return Etiquetas formateadas para visualización.
+     */
+    public String getFormattedTags()
+    {
+        if (tags != null) {
+            return tags
+                .replaceAll("\\]\\[", " ")
+                .replaceAll("\\[", "")
+                .replaceAll("\\]", "");
+        }
+        
+        return "";
+    }
+    /**
+     * Devuelve la fecha de publicación formateada.
+     * @return Fecha de publicación formateada.
+     */
+    public String getFormattedPublish()
+    {
+        if (publish != null) {
+            return format.format(publish);
+        }
+        
+        return "";
+    }
+    // ******************************************
+    // GETTER & SETTER
+    // ******************************************
     public Integer getId()
     {
         return id;
@@ -163,32 +228,5 @@ public class Article
     public void setActive(Boolean value)
     {
         active = value;
-    }
-    /**
-     * Devuelve las etiquetas formateadas para visualización.
-     * @return Etiquetas formateadas para visualización.
-     */
-    public String getFormattedTags()
-    {
-        if (tags != null) {
-            return tags
-                .replaceAll("\\]\\[", " ")
-                .replaceAll("\\[", "")
-                .replaceAll("\\]", "");
-        }
-        
-        return "";
-    }
-    /**
-     * Devuelve la fecha de publicación formateada.
-     * @return Fecha de publicación formateada.
-     */
-    public String getFormattedPublish()
-    {
-        if (publish != null) {
-            return format.format(publish);
-        }
-        
-        return "";
     }
 }

@@ -1,23 +1,33 @@
 package org.obarcia.demo.constraints;
 
+import java.lang.reflect.InvocationTargetException;
+import javax.management.IntrospectionException;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.obarcia.demo.components.Utilities;
-import org.obarcia.demo.models.user.RegisterForm;
-import org.springframework.beans.BeanUtils;
 
 /**
- *
- * @author Heck
+ * Constraint Validator para que 2 campos sean iguales.
+ * 
+ * @author obarcia
  */
-public class EmailEqualConstraintValidator implements ConstraintValidator<EmailEqualConstraint, Object>
+public class FieldEqualConstraintValidator implements ConstraintValidator<FieldEqualConstraint, Object>
 {
+    /**
+     * Nombre del primer campo (Se incluirá el error en este).
+     */
     private String firstFieldName;
+    /**
+     * Nombre del segundo campo.
+     */
     private String secondFieldName;
+    /**
+     * Mensaje de error.
+     */
     private String message;
 
     @Override
-    public void initialize(EmailEqualConstraint c)
+    public void initialize(FieldEqualConstraint c)
     {
         firstFieldName = c.first();
         secondFieldName = c.second();
@@ -33,11 +43,14 @@ public class EmailEqualConstraintValidator implements ConstraintValidator<EmailE
                 return true;
             } else {
                 cvc.disableDefaultConstraintViolation();
-                cvc.buildConstraintViolationWithTemplate(message).addNode(firstFieldName).addConstraintViolation();
+                cvc.buildConstraintViolationWithTemplate(message)
+                        // TODO: Deprecated
+                        .addNode(firstFieldName)
+                        .addConstraintViolation();
 
                 return false;
             }
-        } catch (Exception e) {}
+        } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {}
         
         return true;
     }

@@ -1,7 +1,7 @@
 package org.obarcia.demo.exceptions;
 
 /**
- * ArticleNotFoundException.
+ * Excepción de artículo no encontrado.
  * 
  * @author obarcia
  */

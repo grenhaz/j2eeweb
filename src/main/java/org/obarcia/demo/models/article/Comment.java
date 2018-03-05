@@ -17,7 +17,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.obarcia.demo.models.user.User;
 
 /**
- * Comment entity.
+ * Comentario de un artículo.
  * 
  * @author obarcia
  */
@@ -25,28 +25,73 @@ import org.obarcia.demo.models.user.User;
 @Table(name = "comment")
 public class Comment
 {
-    private static final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     
+    /**
+     * Identificador.
+     */
     @Id
     @GeneratedValue
     @Column(name = "id")
     private Integer id;
+    /**
+     * Contenido.
+     */
     @NotEmpty
     @Size(max = 512)
     @Column(name = "content")
     private String content;
+    /**
+     * Fecha de publicación.
+     */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "publish")
     private Date publish;
-    
+    /**
+     * Si el comentario ha sido borrado
+     */
+    @Column(name = "erased")
+    private Boolean erased;
+    /**
+     * Artículo.
+     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_article", nullable = false)
     private Article article;
-    
+    /**
+     * Usuario.
+     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user", nullable = false)
     private User user;
     
+    /**
+     * Devuelve el contenido reducido.
+     * @return Contenido reducido.
+     */
+    public String getShortContent()
+    {
+        if (content.length() > 83) {
+            return content.substring(0, 80) + "...";
+        }
+        
+        return content;
+    }
+    /**
+     * Devuelve la fecha de publicación formateada.
+     * @return Fecha de publicación formateada.
+     */
+    public String getFormattedPublish()
+    {
+        if (publish != null) {
+            return FORMAT.format(publish);
+        }
+        
+        return "";
+    }
+    // ******************************************
+    // GETTER & SETTER
+    // ******************************************
     public Integer getId()
     {
         return id;
@@ -87,24 +132,12 @@ public class Comment
     {
         user = value;
     }
-    public String getShortContent()
+    public Boolean getErased()
     {
-        if (content.length() > 83) {
-            return content.substring(0, 80) + "...";
-        }
-        
-        return content;
+        return erased;
     }
-    /**
-     * Devuelve la fecha de publicación formateada.
-     * @return Fecha de publicación formateada.
-     */
-    public String getFormattedPublish()
+    public void setErased(Boolean value)
     {
-        if (publish != null) {
-            return format.format(publish);
-        }
-        
-        return "";
+        erased = value;
     }
 }

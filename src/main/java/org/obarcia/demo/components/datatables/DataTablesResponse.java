@@ -3,16 +3,32 @@ package org.obarcia.demo.components.datatables;
 import java.util.List;
 
 /**
- *
- * @author Heck
+ * DataTables: Respuesta
+ * 
+ * @author obarcia
  */
 public class DataTablesResponse<T>
 {
+    /**
+     * draw: Debecoincidir con el draw de la petición
+     */
     private int draw = 1;
+    /**
+     * Total de registros.
+     */
     private int recordsTotal = 0;
+    /**
+     * Total de registros filtrados.
+     */
     private int recordsFiltered = 0;
+    /**
+     * Registros.
+     */
     private List<T> data;
     
+    // ******************************************
+    // GETTER & SETTER
+    // ******************************************
     public int getDraw()
     {
         return draw;

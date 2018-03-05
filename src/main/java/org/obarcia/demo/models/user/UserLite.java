@@ -6,9 +6,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
- * User.
+ * User (Lite).
  * 
  * @author obarcia
  */
@@ -16,24 +18,61 @@ import javax.persistence.Table;
 @Table(name = "usuario")
 public class UserLite
 {
-    private static final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     
+    /**
+     * Identificador.
+     */
     @Id
     @Column(name = "id")
     private Integer id;
+    /**
+     * Email.
+     */
     @Column(name = "email")
     private String email;
+    /**
+     * Nickname.
+     */
     @Column(name = "nickname")
     private String nickname;
+    /**
+     * Rol.
+     */
     @Column(name = "user_role")
     private String user_role;
+    /**
+     * Usuario activo o no.
+     */
     @Column(name = "active")
     private Boolean active;
+    /**
+     * Fichero que hace de avatar.
+     */
     @Column(name = "avatar")
     private String avatar;
+    /**
+     * Fecha de creación.
+     */
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created")
     private Date created;
     
+    /**
+     * Devuelve la fecha de alta formateada.
+     * @return Fecha de alta formateada.
+     */
+    public String getFormattedCreated()
+    {
+        if (created != null) {
+            return FORMAT.format(created);
+        }
+        
+        return "";
+    }
+    // ******************************************
+    // GETTER & SETTER
+    // ******************************************
     public Integer getId()
     {
         return id;
@@ -89,17 +128,5 @@ public class UserLite
     public void setCreated(Date value)
     {
         created = value;
-    }
-    /**
-     * Devuelve la fecha de alta formateada.
-     * @return Fecha de alta formateada.
-     */
-    public String getFormattedCreated()
-    {
-        if (created != null) {
-            return format.format(created);
-        }
-        
-        return "";
     }
 }

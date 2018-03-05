@@ -6,37 +6,98 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
- *
+ * Artículo (Lite).
+ * 
  * @author obarcia
  */
 @Entity
 @Table(name = "article")
 public class ArticleLite
 {
-    private static final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     
+    /**
+     * Identificador.
+     */
     @Id
     @Column(name = "id")
     private Integer id;
+    /**
+     * Tipo.
+     */
     @Column(name = "type")
     private String type;
+    /**
+     * Título.
+     */
     @Column(name = "title")
     private String title;
+    /**
+     * Descripción.
+     */
     @Column(name = "description")
     private String description;
+    /**
+     * Fecha de publicación.
+     */
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "publish")
     private Date publish;
+    /**
+     * Etiquetas.
+     */
     @Column(name = "tags")
     private String tags;
+    /**
+     * Si es importante / destacado.
+     */
     @Column(name = "importat")
     private Boolean important;
+    /**
+     * Puntuación.
+     */
     @Column(name = "score")
     private Double score;
+    /**
+     * Si está activo o no.
+     */
     @Column(name = "active")
     private Boolean active;
     
+    /**
+     * Devuelve las etiquetas formateadas para visualización.
+     * @return Etiquetas formateadas para visualización.
+     */
+    public String getFormattedTags()
+    {
+        if (tags != null) {
+            return tags
+                .replaceAll("\\]\\[", " ")
+                .replaceAll("\\[", "")
+                .replaceAll("\\]", "");
+        }
+        
+        return "";
+    }
+    /**
+     * Devuelve la fecha de publicación formateada.
+     * @return Fecha de publicación formateada.
+     */
+    public String getFormattedPublish()
+    {
+        if (publish != null) {
+            return FORMAT.format(publish);
+        }
+        
+        return "";
+    }
+    // ******************************************
+    // GETTER & SETTER
+    // ******************************************
     public Integer getId()
     {
         return id;
@@ -108,32 +169,5 @@ public class ArticleLite
     public void setActive(Boolean value)
     {
         active = value;
-    }
-    /**
-     * Devuelve las etiquetas formateadas para visualización.
-     * @return Etiquetas formateadas para visualización.
-     */
-    public String getFormattedTags()
-    {
-        if (tags != null) {
-            return tags
-                .replaceAll("\\]\\[", " ")
-                .replaceAll("\\[", "")
-                .replaceAll("\\]", "");
-        }
-        
-        return "";
-    }
-    /**
-     * Devuelve la fecha de publicación formateada.
-     * @return Fecha de publicación formateada.
-     */
-    public String getFormattedPublish()
-    {
-        if (publish != null) {
-            return format.format(publish);
-        }
-        
-        return "";
     }
 }

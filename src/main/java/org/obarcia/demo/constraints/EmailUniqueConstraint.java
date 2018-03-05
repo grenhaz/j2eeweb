@@ -9,8 +9,9 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- *
- * @author Heck
+ * Constraint para Email único.
+ * 
+ * @author obarcia
  */
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)

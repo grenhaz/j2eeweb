@@ -31,42 +31,76 @@ public class User
     public static final String ROLE_USER = "ROLE_USER";
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
     
+    /**
+     * Identificador.
+     */
     @Id
     @GeneratedValue
     @Column(name = "id")
     private Integer id;
+    /**
+     * Email.
+     */
     @NotEmpty
     @Email
     @Size(max = 128)
     @Column(name = "email")
     private String email;
-    @NotEmpty
-    @Column(name = "password")
-    private String password;
+    /**
+     * Contraseña.
+     */
     @NotEmpty
     @Size(max = 32)
-    @Pattern(regexp = "^[A-Za-z0-9]+$")
+    @Pattern(regexp = "^[A-Za-z0-9_-]+$")
+    @Column(name = "password")
+    private String password;
+    /**
+     * Nickname.
+     */
+    @NotEmpty
+    @Size(max = 32)
+    @Pattern(regexp = "^[A-Za-z0-9_-]+$")
     @Column(name = "nickname")
     private String nickname;
+    /**
+     * Rol
+     */
     @NotEmpty
     @Size(max = 16)
     @Column(name = "user_role")
     private String user_role;
+    /**
+     * Usuario activado o no.
+     */
     @Column(name = "active")
     private Boolean active;
+    /**
+     * Fichero que hace de avatar.
+     */
     @Size(max = 64)
     @Column(name = "avatar")
     private String avatar;
+    /**
+     * Clave para activación y cambio de contraseña.
+     */
     @Size(max = 64)
     @Column(name = "ukey")
     private String ukey;
+    /**
+     * Fecha de creación.
+     */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created")
     private Date created;
-    
+    /**
+     * Listado de comentarios.
+     */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private Set<Comment> comments = new HashSet<>();
     
+    // ******************************************
+    // GETTER & SETTER
+    // ******************************************
     public Integer getId()
     {
         return id;

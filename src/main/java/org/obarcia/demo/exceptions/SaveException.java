@@ -1,7 +1,7 @@
 package org.obarcia.demo.exceptions;
 
 /**
- * SaveException.
+ * Excepción al Guardar un registro.
  * 
  * @author obarcia
  */

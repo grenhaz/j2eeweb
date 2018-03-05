@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 // TODO: Administración: Tinymce
 // TODO: !!!! Administración: Tablas de listados (FILTERS, ACTIVE, CUSTOM TEXTS)
 /**
- * Controller para la Administración
+ * Controlador para la Administración.
  * 
  * @author obarcia
  */
@@ -28,35 +28,59 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminController
 {
+    /**
+     * Instancia del servicio de usuarios.
+     */
+    @Autowired
+    private UserService userService;
+    /**
+     * Instancia del servicio de artículos.
+     */
     @Autowired
     private ArticleService articleService;
     
-    @Autowired
-    private UserService userService;
-    
     /**
-     * LOGIN
+     * Página principal.
+     * @return Vista resultante.
      */
     @GetMapping("/index")
     public String actionIndex()
     {
         return "admin/index";
     }
+    /**
+     * Listado de usuarios.
+     * @return Vista resultante.
+     */
     @GetMapping("/users")
     public String actionUsers()
     {
         return "admin/users";
     }
+    /**
+     * Listado de usuarios para el DataTables.
+     * @param request Instancia de la petición.
+     * @return JSON resultante.
+     */
     @GetMapping("/ajax/users")
     public @ResponseBody DataTablesResponse<UserLite> actionUsersAjax(HttpServletRequest request)
     {
         return userService.getUsersLite(new DataTablesRequest(request));
     }
+    /**
+     * Listado de artículos.
+     * @return Vista resultante.
+     */
     @GetMapping("/articles")
     public String actionArticles()
     {
         return "admin/articles";
     }
+    /**
+     * Listado de artículos para el DataTables.
+     * @param request Instancia de la petición.
+     * @return JSON resultante.
+     */
     @GetMapping("/ajax/articles")
     public @ResponseBody DataTablesResponse<ArticleLite> actionArticlesAjax(HttpServletRequest request)
     {

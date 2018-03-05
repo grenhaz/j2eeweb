@@ -10,13 +10,18 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 /**
- * Error controller.
+ * Controlador para las Excepciones y errores.
  * 
  * @author obarcia
  */
 @ControllerAdvice
 public class ExceptionHandlingController
 {
+    /**
+     * Excepción de artículo no encontrado.
+     * @param ex Instancia de la excepción.
+     * @return Vista resultante.
+     */
     @ExceptionHandler(ArticleNotFoundException.class)
     @ResponseStatus(value=HttpStatus.NOT_FOUND)
     public ModelAndView actionArticleNotFound(Exception ex)
@@ -26,6 +31,11 @@ public class ExceptionHandlingController
             .addObject("submessage", "")
             .addObject("exception", ex);
     }
+    /**
+     * Excepción de página no encontrada.
+     * @param ex Instancia de la excepción.
+     * @return Vista resultante.
+     */
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(value=HttpStatus.NOT_FOUND)
     public ModelAndView actionNoHandler(Exception ex)
@@ -35,6 +45,11 @@ public class ExceptionHandlingController
             .addObject("submessage", "")
             .addObject("exception", ex);
     }
+    /**
+     * Excepción de acceso denegado.
+     * @param ex Instancia de la excepción.
+     * @return Vista resultante.
+     */
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(value=HttpStatus.NOT_FOUND)
     public ModelAndView actionAccessDenied(Exception ex)
@@ -45,6 +60,11 @@ public class ExceptionHandlingController
             .addObject("exception", ex);
     }
     // TODO: Reactivar para producción
+    /**
+     * Excepción de genérica de error interno.
+     * @param ex Instancia de la excepción.
+     * @return Vista resultante.
+     */
     /*@ExceptionHandler(RuntimeException.class)
     @ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
     public ModelAndView actionInternalError(Exception ex)

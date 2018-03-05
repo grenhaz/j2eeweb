@@ -13,18 +13,23 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
- *
+ * Servicio de acceso de usuarios (login).
+ * 
  * @author obarcia
  */
 @Service("UserAccessService")
 public class UserAccessService implements UserDetailsService
 {
+    /**
+     * Instancia del DAO de usuarios.
+     */
     @Autowired
     private UserDao userDao;
     
     @Override
     public UserDetails loadUserByUsername(String string) throws UsernameNotFoundException
     {
+        // Obtener el usaurio por su email
         org.obarcia.demo.models.user.User user = userDao.getUserByEmail(string);
         if (user != null && user.getActive().equals(Boolean.TRUE)) {
             Set<GrantedAuthority> auths = new HashSet<>();

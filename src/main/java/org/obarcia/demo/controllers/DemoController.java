@@ -13,19 +13,29 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- *
+ * Controlador para la DEMO.
+ * 
  * @author obarcia
  */
 @Controller
 @RequestMapping("/demo")
 public class DemoController
 {
+    /**
+     * Instancia del servicio de usuarios.
+     */
     @Autowired
     private UserService userService;
-    
+    /**
+     * Instancia del servicio de artículos.
+     */
     @Autowired
     private ArticleService articleService;
     
+    /**
+     * Crear / actualizar la demo de prueba.
+     * @return Vista resultante.
+     */
     @GetMapping("/create")
     public String createDemo()
     {
@@ -51,6 +61,19 @@ public class DemoController
         
         return "redirect:/";
     }
+    /**
+     * Crear / Actualizar un artículo.
+     * @param type Tipo de artículo.
+     * @param image Imagen de portada.
+     * @param title Título.
+     * @param description Descripción
+     * @param content Contenido.
+     * @param tags Etiquetas.
+     * @param puntuation Puntuación.
+     * @param important Si es o no imporatante / destacado.
+     * @param comments Número de comentarios aleatorios.
+     * @return Instancia del artículo.
+     */
     private Article createArticle(
         String type, String image, String title, 
         String description, String content,
@@ -101,6 +124,15 @@ public class DemoController
         
         return article;
     }
+    /**
+     * Crear / Actualizar un usuario.
+     * @param nickname Nickname.
+     * @param avatar Fichero del avatar.
+     * @param email Email.
+     * @param password Contraseña.
+     * @param userRole Rol.
+     * @return Instancia del usuario.
+     */
     private User createUser(String nickname, String avatar, String email, String password, String userRole)
     {
         User user = userService.getUserByEmail(email);
