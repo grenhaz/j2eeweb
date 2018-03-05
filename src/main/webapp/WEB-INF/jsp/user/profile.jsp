@@ -8,13 +8,12 @@
     <div class="section profile">
         <div class="header"><spring:message code="label.user.profile" /></div>
         <div class="row">
-            <div class="col-xs-3">
-                <form:form commandName="model" method="POST">
-                    <form:errors path="" />
+            <div class="col-xs-6 col-sm-3">
+                <form:form commandName="form" method="POST">
                     <form:hidden path="id" />
                     <div class="form-group">
                         <div class="avatar">
-                            <img class="clickable avatar-img" src="<c:url value="/data/avatars/${model.avatar}" />" onclick="openWindowAvatars();" />
+                            <img class="clickable avatar-img" src="<c:url value="/data/avatars/${form.avatar}" />" onclick="openWindowAvatars();" />
                             <form:hidden path="avatar" />
                             <form:errors path="avatar" cssClass="help-block help-error" />
                         </div>
@@ -25,9 +24,44 @@
                         <form:errors path="nickname" cssClass="help-block help-error" />
                     </div>
                     <div class="form-group">
-                        <form:button class="btn btn-primary btn-full"><spring:message code="button.profileUpdate" /></form:button>
+                        <form:button class="btn btn-primary btn-full"><spring:message code="button.profile.update" /></form:button>
                     </div>
                 </form:form>
+            </div>
+            <div class="col-xs-6 col-sm-3">
+                <div class="header"><spring:message code="label.user.profile.password" /></div>
+                <c:url value="/user/profile/password" var="urlPassword" />
+                <form:form commandName="pform" method="POST" action="${urlPassword}">
+                    <form:hidden path="id" />
+                    <div class="form-group">
+                        <form:label path="password"><spring:message code="label.password" /></form:label>
+                        <form:input class="form-control" path="password" />
+                        <form:errors path="password" cssClass="help-block help-error" />
+                    </div>
+                    <div class="form-group">
+                        <form:label path="passwordRepeat"><spring:message code="label.passwordRepeat" /></form:label>
+                        <form:input class="form-control" path="passwordRepeat" />
+                        <form:errors path="passwordRepeat" cssClass="help-block help-error" />
+                    </div>
+                    <div class="form-group">
+                        <form:button class="btn btn-primary btn-full"><spring:message code="button.profile.password" /></form:button>
+                    </div>
+                </form:form>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="header"><spring:message code="label.user.last_comments" /></div>
+                <c:if test="${not empty comments}">
+                    <div class="row">
+                        <c:forEach var="comment" items="${comments}">
+                            <div class="col-xs-12">
+                                <ui:mcomment comment="${comment}" />
+                            </div>
+                        </c:forEach>
+                    </div>
+                </c:if>
+                <c:if test="${empty comments}">
+                    <spring:message code="comments.empty" />
+                </c:if>
             </div>
         </div>
     </div>

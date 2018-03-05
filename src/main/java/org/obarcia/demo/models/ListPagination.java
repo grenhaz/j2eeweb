@@ -53,7 +53,7 @@ public class ListPagination<T>
     public Integer getPages()
     {
         if (limit > 0) {
-            return (total / limit) + 1;
+            return (total / limit) + (total % limit > 0 ? 1 : 0);
         }
         
         return 1;

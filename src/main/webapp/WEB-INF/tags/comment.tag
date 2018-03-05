@@ -8,5 +8,12 @@
         <div class="nickname"><c:out value="${comment.user.nickname}" /></div>
         <div class="publish"><c:out value="${comment.formattedPublish}" /></div>
     </div>
-    <div class="content"><c:out value="${comment.content}" /></div>
+    <div class="content">
+        <c:if test="${!comment.erased}">
+            <c:out value="${comment.content}" />
+        </c:if>
+        <c:if test="${comment.erased}">
+            <span class="erased"><spring:message code="comment.erased" /></span>
+        </c:if>
+    </div>
 </div>

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -24,11 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -50,6 +48,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/user")
 public class UserController
 {
+    /**
+     * Instancia del Contexto del servlet.
+     */
+    @Autowired
+    ServletContext servletContext;
     /**
      * Instancia del manager de autentificación
      */
@@ -138,7 +141,7 @@ public class UserController
             newUser.setActive(Boolean.FALSE);
             newUser.setUkey(Utilities.getRandomHexString(64));
             if (userService.save(newUser)) {
-                // TODO: Crear la vista del email
+                // TODO: OFF: Crear la vista del email
                 // Enviar el mail de recuperación
                 SimpleMailMessage emailObj = new SimpleMailMessage();
                 emailObj.setTo(form.getEmail());
@@ -170,7 +173,6 @@ public class UserController
         Locale locale,
         RedirectAttributes flash) throws PageNotFoundException
     {
-        // TODO: Probar a activar un usuario => TEST
         // Buscar el usuario por la clave (No debe estar activado ya)
         User user = userService.getUserByUkey(ukey);
         if (user != null) {
@@ -178,7 +180,7 @@ public class UserController
             user.setActive(Boolean.TRUE);
             user.setUkey("");
             if (userService.save(user)) {
-                // TODO: Off: Auto loguear al usuario => TEST
+                // TODO: OFF: Auto loguear al usuario
                 /*UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, user.getPassword(), userDetails.getAuthorities());
                 authenticationManager.authenticate(auth);
@@ -209,11 +211,10 @@ public class UserController
     @PreAuthorize("!isAuthenticated()")
     public ModelAndView actionRecoverAccount(
         @RequestParam(value = "k", required = true) String ukey,
-        @RequestParam(value = "password", required = true) String password,
+        @RequestParam(value = "p", required = true) String password,
         Locale locale,
         RedirectAttributes flash) throws PageNotFoundException
     {
-        // TODO: Usuario: Cambiar contraseña por URL => TEST
         // Buscar el usuario por la clave (No debe estar activado ya)
         User user = userService.getUserByUkey(ukey);
         if (user != null) {
@@ -221,7 +222,7 @@ public class UserController
             user.setPassword(new BCryptPasswordEncoder().encode(password));
             user.setUkey("");
             if (userService.save(user)) {
-                // TODO: Auto loguear al usuario => TEST
+                // TODO: OFF: Auto loguear al usuario
                 /*UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, user.getPassword(), userDetails.getAuthorities());
                 authenticationManager.authenticate(auth);
@@ -272,7 +273,7 @@ public class UserController
                 // Guardar la clave para la recuperación
                 user.setUkey(Utilities.getRandomHexString(64));
                 if (userService.save(user)) {
-                    // TODO: Crear la vista del email
+                    // TODO: OFF: Crear la vista del email
                     // Enviar el mail de recuperación
                     SimpleMailMessage emailObj = new SimpleMailMessage();
                     emailObj.setTo(form.getEmail());
@@ -316,8 +317,10 @@ public class UserController
         }
         
         return new ModelAndView("user/profile")
-            .addObject("model", form)
-            .addObject("pmodel", pform);
+            .addObject("form", form)
+            .addObject("pform", pform)
+            // TODO: OFF: Obtener los últimos comentarios del usuario
+            .addObject("comments", null);
     }
     /**
      * Procesamiento del formulario de cambio de perfil.
@@ -374,7 +377,7 @@ public class UserController
             Locale locale,
             RedirectAttributes flash) throws SaveException
     {
-        // TODO: Usuario: Perfil (Cambiar contraseña) => TEST
+        // TODO: OFF: Usuario: Perfil (Cambiar contraseña)
         if (!result.hasErrors()) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (auth != null){
@@ -413,12 +416,12 @@ public class UserController
         List<String> avatars = new ArrayList<>();
         avatars.add("anonymous.png");
         
-        // TODO: Leer los posibles avatares => NO SALE NINGUNO, revisar path
-        File file = new File(Utilities.getPath("/WEB-INF/") + "/data/avatars");
-        if (file.isDirectory()) {
-            File[] files = file.listFiles();
+        // Leer los posibles avatares => NO SALE NINGUNO, revisar path
+        File rootDir = new File( servletContext.getRealPath("/WEB-INF/data/avatars/") );
+        if (rootDir.isDirectory()) {
+            File[] files = rootDir.listFiles();
             for (File f: files) {
-                if (f.isFile()) {
+                if (f.isFile() && !f.getName().equals("anonymous.png")) {
                     avatars.add(f.getName());
                 }
             }

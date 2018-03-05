@@ -40,7 +40,6 @@
                         }
                         var data = {};
                         var menu = $(this).data('menu');
-                        console.log(menu);
                         if (menu === true || menu === false) {
                             data['m'] = menu;
                         }
@@ -49,7 +48,7 @@
                     return true;
                 });
                 <c:if test="${not empty flash}">
-                    alert('<c:out value="${flash}" />');
+                    alertJs('<c:out value="${flash}" />');
                 </c:if>
             });
         </script>

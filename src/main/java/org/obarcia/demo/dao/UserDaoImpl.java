@@ -68,7 +68,7 @@ public class UserDaoImpl implements UserDao
         if (req.hasColumnSearch("user_role")) {
             predicates.add(builder.equal(root.get("user_role"), req.getColumnSearch("user_role")));
         }
-        // TODO: Created
+        // TODO: OFF: Created
         if (req.hasColumnSearch("created")) {
             predicates.add(builder.equal(root.get("created"), req.getColumnSearch("created")));
         }
@@ -123,34 +123,46 @@ public class UserDaoImpl implements UserDao
     @Transactional
     public User getUserByEmail(String email)
     {
-        CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
-        CriteriaQuery<User> criteria = builder.createQuery(User.class);
-        Root<User> root = criteria.from(User.class);
-        criteria.where(builder.equal(root.get("email"), email));
-        Query<User> q = sessionFactory.getCurrentSession().createQuery(criteria);
-        return q.uniqueResult();
+        if (email != null && !email.isEmpty()) {
+            CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
+            CriteriaQuery<User> criteria = builder.createQuery(User.class);
+            Root<User> root = criteria.from(User.class);
+            criteria.where(builder.equal(root.get("email"), email));
+            Query<User> q = sessionFactory.getCurrentSession().createQuery(criteria);
+            return q.uniqueResult();
+        }
+        
+        return null;
     }
     @Override
     @Transactional
     public User getUserByNickname(String nickname)
     {
-        CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
-        CriteriaQuery<User> criteria = builder.createQuery(User.class);
-        Root<User> root = criteria.from(User.class);
-        criteria.where(builder.equal(root.get("nickname"), nickname));
-        Query<User> q = sessionFactory.getCurrentSession().createQuery(criteria);
-        return q.uniqueResult();
+        if (nickname != null && !nickname.isEmpty()) {
+            CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
+            CriteriaQuery<User> criteria = builder.createQuery(User.class);
+            Root<User> root = criteria.from(User.class);
+            criteria.where(builder.equal(root.get("nickname"), nickname));
+            Query<User> q = sessionFactory.getCurrentSession().createQuery(criteria);
+            return q.uniqueResult();
+        }
+        
+        return null;
     }
     @Override
     @Transactional
     public User getUserByUkey(String ukey)
     {
-        CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
-        CriteriaQuery<User> criteria = builder.createQuery(User.class);
-        Root<User> root = criteria.from(User.class);
-        criteria.where(builder.equal(root.get("ukey"), ukey));
-        Query<User> q = sessionFactory.getCurrentSession().createQuery(criteria);
-        return q.uniqueResult();
+        if (ukey != null && !ukey.isEmpty()) {
+            CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
+            CriteriaQuery<User> criteria = builder.createQuery(User.class);
+            Root<User> root = criteria.from(User.class);
+            criteria.where(builder.equal(root.get("ukey"), ukey));
+            Query<User> q = sessionFactory.getCurrentSession().createQuery(criteria);
+            return q.uniqueResult();
+        }
+        
+        return null;
     }
     @Override
     @Transactional

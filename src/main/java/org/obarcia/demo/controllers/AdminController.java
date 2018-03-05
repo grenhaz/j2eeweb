@@ -28,14 +28,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-// TODO: !!!! Administración: no salen los últimos comentarios.
-// TODO: Administración: Estadísticas: Artículos
-// TODO: Administración: Estadísticas: Comentarios
-// TODO: Administración: Estadísticas: Mas comentado
-// TODO: Administración: Formularios: User: Completar y pruebas
-// TODO: Administración: Formularios: Artículo: Completar y pruebas
-// TODO: Administración: Formularios: Tinymce
-// TODO: !!!! Administración: Tablas de listados (FILTERS, ACTIVE / DESACTIVE, CUSTOM TEXTS)
+// TODO: LOW: Administración: Estadísticas: Artículos
+// TODO: LOW: Administración: Estadísticas: Comentarios
+// TODO: LOW: Administración: Estadísticas: Mas comentado
+// TODO: OFF: Administración: Formularios: User: Completar y pruebas
+// TODO: OFF: Administración: Formularios: Artículo: Completar y pruebas
+// TODO: OFF: Administración: Formularios: Comentarios: Eliminar / Deseliminar
+// TODO: OFF: Administración: Formularios: Tinymce
+// TODO: OFF: Administración: Tablas de listados (FILTERS, ACTIVE / DESACTIVE, CUSTOM TEXTS)
 /**
  * Controlador para la Administración.
  * 

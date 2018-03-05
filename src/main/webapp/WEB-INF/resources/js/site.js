@@ -31,6 +31,11 @@ function openWindow(url, data, extra) {
     
     return dialog;
 }
+function alertJs(msg) {
+    bootbox.alert({
+        'message': msg
+    });
+}
 
 $(function () {
     // Tooltips

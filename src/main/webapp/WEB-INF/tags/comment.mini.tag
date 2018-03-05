@@ -11,5 +11,12 @@
         </div>
         <div class="title"><c:out value="${comment.article.title}" /></div>
     </div>
-    <div class="content"><c:out value="${comment.shortContent}" /></div>
+    <div class="content">
+        <c:if test="${!comment.erased}">
+            <c:out value="${comment.shortContent}" />
+        </c:if>
+        <c:if test="${comment.erased}">
+            <span class="erased"><spring:message code="comment.erased" /></span>
+        </c:if>
+    </div>
 </div>

@@ -2,7 +2,6 @@ package org.obarcia.demo.dao;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
@@ -80,7 +79,7 @@ public class ArticleDaoImpl implements ArticleDao
         if (req.hasColumnSearch("active")) {
             predicates.add(builder.equal(root.get("active"), Boolean.valueOf(req.getColumnSearch("active"))));
         }
-        // TODO: Publish
+        // TODO: OFF: Publish
         if (req.hasColumnSearch("publish")) {
             predicates.add(builder.equal(root.get("publish"), req.getColumnSearch("publish")));
         }
@@ -254,7 +253,7 @@ public class ArticleDaoImpl implements ArticleDao
     @Transactional
     public List<Article> getArticlesMoreComments(String tag, int count)
     {
-        // TODO: !!!! Obtener los artículos más vistos / comentados.
+        // TODO: OFF: !!!! Obtener los artículos más vistos / comentados.
         return null;
         /*// Criteria
         CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
