@@ -161,6 +161,7 @@ public class UserController
      * @param locale Localización para el i18n
      * @param flash Flash variables.
      * @return Vista resultante.
+     * @throws PageNotFoundException
      */
     @GetMapping("/activate")
     @PreAuthorize("!isAuthenticated()")
@@ -412,13 +413,13 @@ public class UserController
         List<String> avatars = new ArrayList<>();
         avatars.add("anonymous.png");
         
-        // TODO: Leer los posibles avatares => nO SALE NINGUNO, revisar path
-        File file = new File("/WEB-INF/data/avatars");
+        // TODO: Leer los posibles avatares => NO SALE NINGUNO, revisar path
+        File file = new File(Utilities.getPath("/WEB-INF/") + "/data/avatars");
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             for (File f: files) {
                 if (f.isFile()) {
-                    avatars.add("avatar1.jpg");
+                    avatars.add(f.getName());
                 }
             }
         }

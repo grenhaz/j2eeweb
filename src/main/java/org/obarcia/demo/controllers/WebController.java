@@ -30,6 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 // TODO: !!!! Navegador de los artículos: Splash de refresco => (Bajar en los estilos)
 // TODO: !!!! Color acorde de la progressbar
 // TODO: Header: Logo
+// TODO: Colocación de la barra del buscador en diferentes pantallas.
 // XXX: Off: Url back en el login
 // XXX: Artículo: Utilizar ajax para el proceso de añadir un artículo
 // XXX: Crear datos de demo inicialmente (Incluir más)

@@ -1,8 +1,11 @@
 package org.obarcia.demo.components;
 
 import java.beans.PropertyDescriptor;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URLDecoder;
 import java.util.Random;
 import static org.springframework.beans.BeanUtils.getPropertyDescriptor;
 
@@ -51,5 +54,24 @@ public class Utilities
             return null;
         }
         return readMethod.invoke(bean);
+    }
+    public static String getPath(Object obj)
+    {
+        try {
+            String path = obj.getClass().getClassLoader().getResource("").getPath();
+            String fullPath = URLDecoder.decode(path, "UTF-8");
+            String pathArr[] = fullPath.split("/WEB-INF/");
+            System.out.println(fullPath);
+            System.out.println(pathArr[0]);
+            fullPath = pathArr[0];
+            String reponsePath = "";
+
+            // to read a file from webcontent
+            return fullPath;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        
+        return "";
     }
 }

@@ -50,8 +50,7 @@ public class User
      * Contraseña.
      */
     @NotEmpty
-    @Size(max = 32)
-    @Pattern(regexp = "^[A-Za-z0-9_-]+$")
+    @Size(max = 64)
     @Column(name = "password")
     private String password;
     /**
