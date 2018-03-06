@@ -11,14 +11,14 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <form:label path="email"><spring:message code="label.email" /></form:label>
-                            <form:input class="form-control" path="email" />
+                            <form:input class="form-control" path="email" maxlength="128" />
                             <form:errors path="email" cssClass="help-block help-error" />
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <form:label path="nickname"><spring:message code="label.nickname" /></form:label>
-                            <form:input class="form-control" path="nickname" />
+                            <form:input class="form-control" path="nickname" maxlength="32" />
                             <form:errors path="nickname" cssClass="help-block help-error" />
                         </div>
                     </div>

@@ -14,7 +14,7 @@
                     <form:form commandName="model" method="POST">
                         <div class="form-group">
                             <form:label path="email"><spring:message code="label.email" /></form:label>
-                            <form:input class="form-control" path="email" />
+                            <form:input class="form-control" path="email" maxlength="128" />
                             <form:errors path="email" cssClass="help-block help-error" />
                         </div>
                         <div class="form-group">

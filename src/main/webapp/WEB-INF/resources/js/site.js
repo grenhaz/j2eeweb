@@ -19,7 +19,7 @@ function $getContent(url, data, destination) {
             .appendTo($alert);
     });
 };
-function $activate(el, url, data, value) {
+function $activate(el, url, data, value, clsTrue, clsFalse) {
     var $container = $(el).parent();
     $(el).hide();
     var $spinner = $('<i class="fa fa-spinner fa-spin animatedx"></i>').appendTo($container);
@@ -28,13 +28,13 @@ function $activate(el, url, data, value) {
             if (value) {
                 $(el)
                     .data("value", !value)
-                    .removeClass('fa-check-circle-o text-success')
-                    .addClass('fa-times-circle-o text-danger');
+                    .removeClass(clsTrue)
+                    .addClass(clsFalse);
             } else {
                 $(el)
                     .data("value", !value)
-                    .removeClass('fa-times-circle-o text-danger')
-                    .addClass('fa-check-circle-o text-success');
+                    .removeClass(clsFalse)
+                    .addClass(clsTrue);
             }
         }
     }).always(function () {
@@ -67,6 +67,7 @@ function openWindow(url, data, extra) {
 };
 function alertJs(msg) {
     bootbox.alert({
+        'title': '&nbsp;',
         'message': msg
     });
 };

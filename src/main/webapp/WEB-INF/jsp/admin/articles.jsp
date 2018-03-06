@@ -33,17 +33,13 @@
                 "ajax": "<c:url value="/admin/ajax/articles" />",
                 "columns": [
                     {
-                        "data": "id",
-                        "searchable": true
+                        "data": "id"
                     }, {
-                        "data": "title",
-                        "searchable": true
+                        "data": "title"
                     }, {
-                        "data": "description",
-                        "searchable": true
+                        "data": "description"
                     }, {
                         "data": "type",
-                        "searchable": true,
                         "render": function ( data, type, row, meta ) {
                             switch(data) {
                                 case "new": return "<spring:message code="articles.type.new" />";
@@ -57,23 +53,19 @@
                     }, {
                         "data": "formattedTags",
                         "name": "tags",
-                        "orderable": false,
-                        "searchable": true
+                        "orderable": false
                     }, {
                         "data": "formattedPublish",
                         "name": "publish",
-                        "className": "text-center",
-                        "searchable": true
+                        "className": "text-center"
                     }, {
                         "data": "active",
-                        "searchable": true,
                         "className": "text-center",
                         "render": function ( data, type, row, meta ) {
                             return "<i data-id='" + row.id + "' data-value='" + data+ "' class='btn-active fa " + (data ? 'fa-check-circle-o text-success' : 'fa-times-circle-o text-danger') + "'></i>";
                         }
                     }, {
                         "orderable": false,
-                        "searchable": false,
                         "render": function ( data, type, row, meta ) {
                             return "<a href='<c:url value="/admin/article/" />" + row.id + "'><i class='fa fa-pencil'></i></a>";
                         }
@@ -83,7 +75,7 @@
             $('#records').on('click', '.btn-active', function(e) {
                 $activate(this, '<c:url value="/admin/article/" />' + $(this).data('id') + "/active", {
                     '<c:out value="${_csrf.parameterName}" />': '<c:out value="${_csrf.token}" />'
-                }, $(this).data('value'));
+                }, $(this).data('value'), 'fa-check-circle-o text-success', 'fa-times-circle-o text-danger');
             });
         });
     </script>

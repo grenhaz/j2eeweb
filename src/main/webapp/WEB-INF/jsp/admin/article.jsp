@@ -39,5 +39,63 @@
                 <form:button class="btn btn-primary"><spring:message code="button.save" /></form:button>
             </div>
         </form:form>
+        <div>
+            <div class="header"><spring:message code="label.admin.coments" /></div>
+            <table id="records" class="table table-striped table-bordered" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th><spring:message code="column.id" /></th>
+                        <th><spring:message code="column.user" /></th>
+                        <th><spring:message code="column.text" /></th>
+                        <th><spring:message code="column.publish" /></th>
+                        <th style="Width:1px;"></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>         
+        <script>
+            $(function() {
+                $('#records').DataTable({
+                    "language": {
+                        "url": "<c:url value="/resources/datatables/i18n/es.json" />"
+                    },
+                    "order": [[ 3, "desc" ]],
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": "<c:url value="/admin/ajax/comments/${form.id}" />",
+                    "columns": [
+                        {
+                            "data": "id"
+                        }, {
+                            "data": "user",
+                            "searchable": false,
+                            "render": function ( data, type, row, meta ) {
+                                return data.nickname;
+                            }
+                        }, {
+                            "data": "content"
+                        }, {
+                            "data": "formattedPublish",
+                            "name": "publish",
+                            "className": "text-center"
+                        }, {
+                            "data": "erased",
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function ( data, type, row, meta ) {
+                                return "<i data-id='" + row.id + "' data-value='" + data+ "' class='btn-active fa " + (data ? 'fa-ban text-danger' : 'fa-check-circle-o text-success') + "'></i>";
+                            }
+                        }
+                    ]
+                });
+                
+                $('#records').on('click', '.btn-active', function(e) {
+                    $activate(this, '<c:url value="/admin/article/${form.id}" />/erase', {
+                        '<c:out value="${_csrf.parameterName}" />': '<c:out value="${_csrf.token}" />',
+                        'comment': $(this).data('id')
+                    }, $(this).data('value'), 'fa-ban text-danger', 'fa-check-circle-o text-success');
+                });
+            });
+        </script>
     </div>
 </ui:layout>

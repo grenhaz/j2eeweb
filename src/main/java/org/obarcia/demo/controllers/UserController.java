@@ -209,7 +209,6 @@ public class UserController
     /**
      * Recuperar la contraseña de un usuario.
      * @param ukey Clave del usuario.
-     * @param password Contraseña nueva.
      * @param locale Localización para el i18n.
      * @param flash Flash variables.
      * @return Vista resultante.
@@ -239,7 +238,7 @@ public class UserController
                 flash.addFlashAttribute("flash", messageSource.getMessage("message.user.recovery.ok", null, locale));
                 
                 // Redireccionar con mensaje
-                return new ModelAndView("redirect:/user/profile");
+                return new ModelAndView("redirect:/user/profile/password");
             }
         }
         
@@ -307,21 +306,6 @@ public class UserController
     @PreAuthorize("isAuthenticated()")
     public ModelAndView actionProfile()
     {
-        ProfileForm form = getProfileForm();
-        PasswordForm pform = new PasswordForm();
-        pform.setId(form.getId());
-        
-        return new ModelAndView("user/profile")
-            .addObject("form", form)
-            .addObject("pform", pform)
-            .addObject("comments", articleService.getLastCommentsByUser(form.getId(), 8));
-    }
-    /**
-     * Genera y devuelve el ProfileForm.
-     * @return Instancia del ProfileForm.
-     */
-    private ProfileForm getProfileForm()
-    {
         ProfileForm form = new ProfileForm();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null){
@@ -329,9 +313,13 @@ public class UserController
             form.setId(account.getId());
             form.setNickname(account.getNickname());
             form.setAvatar(account.getAvatar());
+        
+            return new ModelAndView("user/profile")
+                .addObject("form", form)
+                .addObject("comments", articleService.getLastCommentsByUser(form.getId(), 8));
         }
         
-        return form;
+        return new ModelAndView("redirect:/");
     }
     /**
      * Procesamiento del formulario de cambio de perfil.
@@ -342,7 +330,7 @@ public class UserController
      */
     @PostMapping("/profile")
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView actionProfileInfo(
+    public ModelAndView actionProfile(
             @Valid @ModelAttribute("model") ProfileForm form,
             BindingResult result) throws SaveException
     {
@@ -368,17 +356,33 @@ public class UserController
             throw new SaveException();
         }
         
-        PasswordForm pform = new PasswordForm();
-        pform.setId(form.getId());
-        
         return new ModelAndView("user/profile")
             .addObject("form", form)
-            .addObject("pform", pform)
             .addObject("comments", articleService.getLastCommentsByUser(form.getId(), 8));
     }
     /**
+     * Cambiar contraseña del usuario.
+     * @return Vista resultante.
+     */
+    @GetMapping("/profile/password")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView actionProfilePassword()
+    {
+        PasswordForm form = new PasswordForm();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null){
+            AccountDetails account = ((AccountDetails)auth.getPrincipal());
+            form.setId(account.getId());
+        
+            return new ModelAndView("user/password")
+                .addObject("form", form);
+        }
+        
+        return new ModelAndView("redirect:/");
+    }
+    /**
      * Procesamiento del formulario de cambio de contraseña del usuario.
-     * @param pform Instancia del formulario.
+     * @param form Instancia del formulario.
      * @param result Resultado de la validación.
      * @param locale Localización para el i18n
      * @param flash Flash variables.
@@ -388,7 +392,7 @@ public class UserController
     @PostMapping("/profile/password")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView actionProfilePassword(
-            @Valid @ModelAttribute("model") PasswordForm pform,
+            @Valid @ModelAttribute("form") PasswordForm form,
             BindingResult result,
             Locale locale,
             RedirectAttributes flash) throws SaveException
@@ -397,10 +401,10 @@ public class UserController
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (auth != null){
                 AccountDetails account = ((AccountDetails)auth.getPrincipal());
-                if (account.getId().equals(pform.getId())) {
+                if (account.getId().equals(form.getId())) {
                     User user = userService.getUserById(account.getId());
                     if (user != null) {
-                        user.setPassword(new BCryptPasswordEncoder().encode(pform.getPassword()));
+                        user.setPassword(new BCryptPasswordEncoder().encode(form.getPassword()));
                         if (userService.save(user)) {
                             // Añadir mensaje flash (I18N)
                             flash.addFlashAttribute("flash", messageSource.getMessage("message.profile.password.ok", null, locale));
@@ -415,12 +419,8 @@ public class UserController
             throw new SaveException();
         }
         
-        ProfileForm form = getProfileForm();
-        
-        return new ModelAndView("user/profile")
-            .addObject("form", form)
-            .addObject("pform", pform)
-            .addObject("comments", articleService.getLastCommentsByUser(form.getId(), 8));
+        return new ModelAndView("user/password")
+            .addObject("form", form);
     }
     /**
      * Listado de avatares para selección en le formulario de cambio de perfil.

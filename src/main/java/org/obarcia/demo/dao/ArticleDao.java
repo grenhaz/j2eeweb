@@ -7,6 +7,7 @@ import org.obarcia.demo.models.ListPagination;
 import org.obarcia.demo.models.article.Article;
 import org.obarcia.demo.models.article.ArticleLite;
 import org.obarcia.demo.models.article.Comment;
+import org.obarcia.demo.models.article.CommentLite;
 
 /**
  * DAO de artículos.
@@ -22,6 +23,14 @@ public interface ArticleDao
      * @return Listado de artículos.
      */
     public DataTablesResponse<ArticleLite> getArticlesLite(DataTablesRequest req);
+    /**
+     * DataTables: Devuelve el listado de comentarios en función a los parámetros
+     * indicados por la petición DataTables.
+     * @param id Identificador del artículo.
+     * @param req Instancia de la petición.
+     * @return Listado de comentarios.
+     */
+    public DataTablesResponse<CommentLite> getCommentsLite(Integer id, DataTablesRequest req);
     /**
      * Devuelve un listado de artículos.
      * @param page Página.

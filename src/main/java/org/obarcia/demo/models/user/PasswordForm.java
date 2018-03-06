@@ -22,14 +22,14 @@ public class PasswordForm
      */
     @NotEmpty(message = "{error.NotEmpty}")
     @Size(max = 32)
-    @Pattern(regexp = "^[A-Za-z0-9_-]+$")
+    @Pattern(regexp = "^[A-Za-z0-9_-]+$", message = "{error.PasswordPattern}")
     private String password;
     /**
      * Contraseña (Confirmación).
      */
     @NotEmpty(message = "{error.NotEmpty}")
     @Size(max = 32)
-    @Pattern(regexp = "^[A-Za-z0-9_-]+$")
+    @Pattern(regexp = "^[A-Za-z0-9_-]+$", message = "{error.PasswordPattern}")
     private String passwordRepeat;
     
     // ******************************************

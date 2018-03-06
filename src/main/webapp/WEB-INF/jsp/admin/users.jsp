@@ -33,18 +33,14 @@
                 "ajax": "<c:url value="/admin/ajax/users" />",
                 "columns": [
                     {
-                        "data": "id",
-                        "searchable": true
+                        "data": "id"
                     }, {
-                        "data": "email",
-                        "searchable": true
+                        "data": "email"
                     }, {
-                        "data": "nickname",
-                        "searchable": true
+                        "data": "nickname"
                     }, {
                         "data": "userRole",
                         "name": "user_role",
-                        "searchable": true,
                         "render": function ( data, type, row, meta ) {
                             switch(data) {
                                 case "ROLE_ADMIN": return "<spring:message code="label.user.ROLE_ADMIN" />";
@@ -61,11 +57,9 @@
                     }, {
                         "data": "formattedCreated",
                         "name": "created",
-                        "className": "text-center",
-                        "searchable": true
+                        "className": "text-center"
                     }, {
                         "data": "active",
-                        "searchable": true,
                         "className": "text-center",
                         "render": function ( data, type, row, meta ) {
                             return "<i data-id='" + row.id + "' data-value='" + data+ "' class='btn-active fa " + (data ? 'fa-check-circle-o text-success' : 'fa-times-circle-o text-danger') + "'></i>";
@@ -82,7 +76,7 @@
             $('#records').on('click', '.btn-active', function(e) {
                 $activate(this, '<c:url value="/admin/user/" />' + $(this).data('id') + "/active", {
                     '<c:out value="${_csrf.parameterName}" />': '<c:out value="${_csrf.token}" />'
-                }, $(this).data('value'));
+                }, $(this).data('value'), 'fa-check-circle-o text-success', 'fa-times-circle-o text-danger');
             });
             // Apply the search
             /*$table.columns().every(function () {

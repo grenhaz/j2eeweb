@@ -26,7 +26,7 @@ public class MailServiceImpl implements MailService
     {
         String url = request.getContextPath() + "/user/activate?k=" + user.getUkey();
         
-        // TODO: Enviar el email
+        // TODO: OFF: Enviar el email
         SimpleMailMessage emailObj = new SimpleMailMessage();
         emailObj.setTo(user.getEmail());
         emailObj.setSubject("EWQ");
@@ -38,6 +38,6 @@ public class MailServiceImpl implements MailService
     {
         String url = request.getContextPath() + "/user/recover?k=" + user.getUkey();
         
-        // TODO: Enviar el email
+        // TODO: OFF: Enviar el email
     }
 }

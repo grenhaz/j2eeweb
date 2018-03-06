@@ -9,7 +9,10 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <!-- TODO: LOGO -->
+                <!-- LOGO -->
+                <div class="logo">
+                    <!-- <img src="<c:url value="/resources/images/logo.png" />" /> -->
+                </div>
                 <!-- USER -->
                 <div class="user">
                     <sec:authorize access="!isAuthenticated()">
@@ -100,6 +103,7 @@
                         </sec:authorize>
                         <sec:authorize access="isAuthenticated()">
                             <li><a href="<c:url value="/user/profile" />"><spring:message code="label.user.profile" /></a></li>
+                            <li><a href="<c:url value="/user/profile/password" />"><spring:message code="label.user.profile.password" /></a></li>
                         </sec:authorize>
                     </c:if>
                     <c:if test="${tag == 'admin'}">

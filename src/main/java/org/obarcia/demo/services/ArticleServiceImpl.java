@@ -8,6 +8,7 @@ import org.obarcia.demo.models.ListPagination;
 import org.obarcia.demo.models.article.Article;
 import org.obarcia.demo.models.article.ArticleLite;
 import org.obarcia.demo.models.article.Comment;
+import org.obarcia.demo.models.article.CommentLite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,11 @@ public class ArticleServiceImpl implements ArticleService
     public DataTablesResponse<ArticleLite> getArticlesLite(DataTablesRequest req)
     {
         return articleDao.getArticlesLite(req);
+    }
+    @Override
+    public DataTablesResponse<CommentLite> getCommentsLite(Integer id, DataTablesRequest req)
+    {
+        return articleDao.getCommentsLite(id, req);
     }
     @Override
     public ListPagination<Article> getArticlesAll(int page, int perPage)
@@ -89,6 +95,11 @@ public class ArticleServiceImpl implements ArticleService
     public Article getArticle(int id)
     {
         return articleDao.getArticle(id);
+    }
+    @Override
+    public Comment getComment(int id)
+    {
+        return articleDao.getComment(id);
     }
     @Override
     public Article getArticleByTitle(String title)

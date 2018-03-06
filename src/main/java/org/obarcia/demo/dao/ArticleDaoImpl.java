@@ -18,6 +18,7 @@ import org.obarcia.demo.models.ListPagination;
 import org.obarcia.demo.models.article.Article;
 import org.obarcia.demo.models.article.ArticleLite;
 import org.obarcia.demo.models.article.Comment;
+import org.obarcia.demo.models.article.CommentLite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -79,7 +80,7 @@ public class ArticleDaoImpl implements ArticleDao
         if (req.hasColumnSearch("active")) {
             predicates.add(builder.equal(root.get("active"), Boolean.valueOf(req.getColumnSearch("active"))));
         }
-        // TODO: LOW: Publish
+        // Publish
         if (req.hasColumnSearch("publish")) {
             predicates.add(builder.equal(root.get("publish"), req.getColumnSearch("publish")));
         }
@@ -111,6 +112,84 @@ public class ArticleDaoImpl implements ArticleDao
         
         // Query
         Query<ArticleLite> q = sessionFactory.getCurrentSession().createQuery(criteria);
+        q.setFirstResult(req.getStart()).setMaxResults(req.getLength());
+        list.setDraw(req.getDraw());
+        list.setRecordsTotal(sessionFactory.getCurrentSession().createQuery(criteriaCount).getSingleResult().intValue());
+        list.setRecordsFiltered(list.getRecordsTotal());
+        list.setData(q.list());
+        
+        return list;
+    }
+    @Override
+    @Transactional
+    public DataTablesResponse<CommentLite> getCommentsLite(Integer id, DataTablesRequest req)
+    {
+        DataTablesResponse<CommentLite> list = new DataTablesResponse<>();
+        
+        // Criteria
+        CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
+        
+        // Count
+        CriteriaQuery<Long> criteriaCount = builder.createQuery(Long.class);
+        criteriaCount.select(builder.count(criteriaCount.from(CommentLite.class)));
+        
+        // Query
+        CriteriaQuery<CommentLite> criteria = builder.createQuery(CommentLite.class);
+        Root<CommentLite> root = criteria.from(CommentLite.class);
+        
+        List<Predicate> predicates = new LinkedList<>();
+        
+        // Filters by column
+        // Id
+        if (req.hasColumnSearch("id")) {
+            predicates.add(builder.equal(root.get("id"), Integer.parseInt(req.getColumnSearch("id"))));
+        }
+        // Content
+        if (req.hasColumnSearch("content")) {
+            predicates.add(builder.like(root.<String>get("content"), "%" + req.getColumnSearch("content") + "%"));
+        }
+        // Erased
+        if (req.hasColumnSearch("erased")) {
+            predicates.add(builder.equal(root.get("erased"), Boolean.valueOf(req.getColumnSearch("erased"))));
+        }
+        // Publish
+        if (req.hasColumnSearch("publish")) {
+            predicates.add(builder.equal(root.get("publish"), req.getColumnSearch("publish")));
+        }
+        
+        // Filters general
+        if (!req.getSearch().isEmpty()) {
+            predicates.add(builder.like(root.<String>get("content"), "%" + req.getSearch() + "%"));
+        }
+        
+        // Where
+        if (predicates.size() > 0) {
+            Predicate[] predArray = new Predicate[predicates.size()];
+            predicates.toArray(predArray);
+            Predicate pComplete = builder.and(
+                builder.equal(root.<String>get("id_article"), id),
+                builder.or(predArray)
+            );
+            criteriaCount.where(pComplete);
+            criteria.where(pComplete);
+        } else {
+            criteriaCount.where(builder.equal(root.<String>get("id_article"), id));
+            criteria.where(builder.equal(root.<String>get("id_article"), id));
+        }
+        
+        // Order
+        List<Order> orders = new LinkedList<>();
+        for (DataTablesOrder o: req.getOrders()) {
+            if (o.getDir() == DataTablesOrder.ORDER_ASC) {
+                orders.add(builder.asc(root.get(o.getData())));
+            } else {
+                orders.add(builder.desc(root.get(o.getData())));
+            }
+        }
+        criteria.orderBy(orders);
+        
+        // Query
+        Query<CommentLite> q = sessionFactory.getCurrentSession().createQuery(criteria);
         q.setFirstResult(req.getStart()).setMaxResults(req.getLength());
         list.setDraw(req.getDraw());
         list.setRecordsTotal(sessionFactory.getCurrentSession().createQuery(criteriaCount).getSingleResult().intValue());

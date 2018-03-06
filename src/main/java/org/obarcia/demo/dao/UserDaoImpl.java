@@ -68,7 +68,7 @@ public class UserDaoImpl implements UserDao
         if (req.hasColumnSearch("user_role")) {
             predicates.add(builder.equal(root.get("user_role"), req.getColumnSearch("user_role")));
         }
-        // TODO: LOW: Created
+        // Created
         if (req.hasColumnSearch("created")) {
             predicates.add(builder.equal(root.get("created"), req.getColumnSearch("created")));
         }

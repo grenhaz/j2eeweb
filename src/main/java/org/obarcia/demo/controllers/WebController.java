@@ -26,11 +26,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 // TODO: GFX: Header: Logo
-// TODO: GFX: Revisar formatos en diferentes pantallas
-// XXX: Off: Url back en el login
-// XXX: Artículo: Utilizar ajax para el proceso de añadir un artículo
+// TODO: LOW: Url back en el login
+// TODO: LOW: Artículo: Utilizar ajax para el proceso de añadir un artículo
 // XXX: Crear datos de demo inicialmente (Incluir más)
-// XXX: Uso de varios idiomas
+// TODO: LOW: Uso de varios idiomas
 // XXX: Diferentes estilos por tag
 /**
  * Controlador de la web.

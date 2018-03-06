@@ -11,6 +11,8 @@ import org.obarcia.demo.exceptions.UserNotFoundException;
 import org.obarcia.demo.models.ActionResponse;
 import org.obarcia.demo.models.article.Article;
 import org.obarcia.demo.models.article.ArticleLite;
+import org.obarcia.demo.models.article.Comment;
+import org.obarcia.demo.models.article.CommentLite;
 import org.obarcia.demo.models.user.User;
 import org.obarcia.demo.models.user.UserForm;
 import org.obarcia.demo.models.user.UserLite;
@@ -34,7 +36,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 // TODO: LOW: Administración: Usuario: Enviar email de recuperación de cuenta.
 // TODO: LOW: Administración: Estadísticas: Artículos, Comentarios, Mas comentado
 // TODO: OFF: Administración: Formularios: Artículo: Completar y pruebas
-// TODO: OFF: Administración: Formularios: Comentarios: Listado con datatables y  Eliminar / Deseliminar
 // TODO: OFF: Administración: Formularios: Tinymce
 // TODO: LOW: Administración: Tablas de listados FILTERS
 /**
@@ -110,6 +111,19 @@ public class AdminController
     public @ResponseBody DataTablesResponse<ArticleLite> actionArticlesAjax(HttpServletRequest request)
     {
         return articleService.getArticlesLite(new DataTablesRequest(request));
+    }
+    /**
+     * Listado de artículos para el DataTables.
+     * @param id Identificador del artículo.
+     * @param request Instancia de la petición.
+     * @return JSON resultante.
+     */
+    @GetMapping("/ajax/comments/{id}")
+    public @ResponseBody DataTablesResponse<CommentLite> actionArticlesAjax(
+            @PathVariable("id") int id,
+            HttpServletRequest request)
+    {
+        return articleService.getCommentsLite(id, new DataTablesRequest(request));
     }
     /**
      * Formulario de un usuario.
@@ -213,6 +227,10 @@ public class AdminController
                     } else {
                         return new ActionResponse(false, 500, "");
                     }
+                case "recovery":
+                    break;
+                case "activate":
+                    break;
             }
             return null;
         } else {
@@ -302,6 +320,7 @@ public class AdminController
         if (article != null) {
             switch (action) {
                 case "active":
+                {
                     // Activar / Desactivar el usuario
                     Boolean value = Boolean.valueOf(request.getParameter("value"));
                     article.setActive(value);
@@ -310,6 +329,22 @@ public class AdminController
                     } else {
                         return new ActionResponse(false, 500, "");
                     }
+                }
+                case "erase":
+                {
+                    // Borrar o mostrar un comentario
+                    Integer commentId = Integer.parseInt(request.getParameter("comment"));
+                    Comment comment = articleService.getComment(commentId);
+                    if (comment != null) {
+                        Boolean value = Boolean.valueOf(request.getParameter("value"));
+                        comment.setErased(value);
+                        if (articleService.save(comment)) {
+                            return new ActionResponse(true);
+                        } else {
+                            return new ActionResponse(false, 500, "");
+                        }
+                    }
+                }
             }
             return null;
         } else {
