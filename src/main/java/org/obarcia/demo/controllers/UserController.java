@@ -19,6 +19,7 @@ import org.obarcia.demo.models.user.PasswordForm;
 import org.obarcia.demo.models.user.ProfileForm;
 import org.obarcia.demo.models.user.RegisterForm;
 import org.obarcia.demo.models.user.User;
+import org.obarcia.demo.services.ArticleService;
 import org.obarcia.demo.services.UserAccessService;
 import org.obarcia.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,11 @@ public class UserController
      */
     @Autowired
     private UserService userService;
+    /**
+     * Instancia del servicio de artículos.
+     */
+    @Autowired
+    private ArticleService articleService;
     /**
      * Instancia del servicio para el envío de emails.
      */
@@ -305,22 +311,31 @@ public class UserController
     @PreAuthorize("isAuthenticated()")
     public ModelAndView actionProfile()
     {
+        ProfileForm form = getProfileForm();
         PasswordForm pform = new PasswordForm();
+        pform.setId(form.getId());
+        
+        return new ModelAndView("user/profile")
+            .addObject("form", form)
+            .addObject("pform", pform)
+            .addObject("comments", articleService.getLastCommentsByUser(form.getId(), 8));
+    }
+    /**
+     * Genera y devuelve el ProfileForm.
+     * @return Instancia del ProfileForm.
+     */
+    private ProfileForm getProfileForm()
+    {
         ProfileForm form = new ProfileForm();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null){
             AccountDetails account = ((AccountDetails)auth.getPrincipal());
-            pform.setId(account.getId());
             form.setId(account.getId());
             form.setNickname(account.getNickname());
             form.setAvatar(account.getAvatar());
         }
         
-        return new ModelAndView("user/profile")
-            .addObject("form", form)
-            .addObject("pform", pform)
-            // TODO: OFF: Obtener los últimos comentarios del usuario
-            .addObject("comments", null);
+        return form;
     }
     /**
      * Procesamiento del formulario de cambio de perfil.
@@ -357,12 +372,17 @@ public class UserController
             throw new SaveException();
         }
         
+        PasswordForm pform = new PasswordForm();
+        pform.setId(form.getId());
+        
         return new ModelAndView("user/profile")
-            .addObject("model", form);
+            .addObject("form", form)
+            .addObject("pform", pform)
+            .addObject("comments", articleService.getLastCommentsByUser(form.getId(), 8));
     }
     /**
      * Procesamiento del formulario de cambio de contraseña del usuario.
-     * @param form Instancia del formulario.
+     * @param pform Instancia del formulario.
      * @param result Resultado de la validación.
      * @param locale Localización para el i18n
      * @param flash Flash variables.
@@ -372,20 +392,20 @@ public class UserController
     @PostMapping("/profile/password")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView actionProfilePassword(
-            @Valid @ModelAttribute("model") PasswordForm form,
+            @Valid @ModelAttribute("model") PasswordForm pform,
             BindingResult result,
             Locale locale,
             RedirectAttributes flash) throws SaveException
     {
-        // TODO: OFF: Usuario: Perfil (Cambiar contraseña)
+        // TODO: OFF: Usuario: Perfil (Cambiar contraseña) => TEST
         if (!result.hasErrors()) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (auth != null){
                 AccountDetails account = ((AccountDetails)auth.getPrincipal());
-                if (account.getId().equals(form.getId())) {
+                if (account.getId().equals(pform.getId())) {
                     User user = userService.getUserById(account.getId());
                     if (user != null) {
-                        user.setPassword(new BCryptPasswordEncoder().encode(form.getPassword()));
+                        user.setPassword(new BCryptPasswordEncoder().encode(pform.getPassword()));
                         if (userService.save(user)) {
                             // Añadir mensaje flash (I18N)
                             flash.addFlashAttribute("flash", messageSource.getMessage("message.profile.password.ok", null, locale));
@@ -400,8 +420,12 @@ public class UserController
             throw new SaveException();
         }
         
+        ProfileForm form = getProfileForm();
+        
         return new ModelAndView("user/profile")
-            .addObject("model", form);
+            .addObject("form", form)
+            .addObject("pform", pform)
+            .addObject("comments", articleService.getLastCommentsByUser(form.getId(), 8));
     }
     /**
      * Listado de avatares para selección en le formulario de cambio de perfil.

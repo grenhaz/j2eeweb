@@ -76,6 +76,11 @@ public class ArticleServiceImpl implements ArticleService
         return articleDao.getLastComments(tag, count);
     }
     @Override
+    public List<Comment> getLastCommentsByUser(int id, int count)
+    {
+        return articleDao.getLastCommentsByUser(id, count);
+    }
+    @Override
     public Article getArticle(int id)
     {
         return articleDao.getArticle(id);

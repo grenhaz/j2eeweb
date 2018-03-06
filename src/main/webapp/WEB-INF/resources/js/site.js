@@ -1,10 +1,25 @@
 function getLoader() {
     return '<div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div></div>';
 }
-function refreshBlock(destination, url, data, scroll) {
+function $getContent(url, data, destination) {
     $(destination).css('position', 'relative');
     $('<div />').addClass('loading-splash').html(getLoader()).appendTo(destination);
     
+    $.get(url, data, function (ret) {
+        $(destination).html(ret);
+    }).fail(function() {
+        $(destination).html('');
+        var $alert = $('<div />').addClass('alert alert-danger').appendTo(destination);
+        $('<a />')
+            .html('RETRY')
+            .attr('href', 'javascript:void(0)')
+            .on('click', function() {
+                $getContent(url, data, destination)
+            })
+            .appendTo($alert);
+    });
+}
+function refreshBlock(destination, url, data, scroll) {
     if (scroll) {
         var aTag = $('#return-top');
         if (aTag.length > 0) {
@@ -14,9 +29,7 @@ function refreshBlock(destination, url, data, scroll) {
         }
     }
     
-    $.get(url, data, function (ret) {
-        $(destination).html(ret);
-    });
+    $getContent(url, data, destination);
 };
 function openWindow(url, data, extra) {
     var options = $.extend({
@@ -25,9 +38,7 @@ function openWindow(url, data, extra) {
     }, extra);
     var dialog = bootbox.dialog(options);
     
-    $.get(url, data, function (ret) {
-        $(dialog).find('.bootbox-body').html(ret);
-    });
+    $getContent(url, data, $(dialog).find('.bootbox-body'));
     
     return dialog;
 }

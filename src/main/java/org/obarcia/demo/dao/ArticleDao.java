@@ -71,6 +71,13 @@ public interface ArticleDao
      */
     public List<Comment> getLastComments(String tag, int count);
     /**
+     * Devuelve un listado de los últimos comentarios de un usuario.
+     * @param id Identificador del usuario.
+     * @param count Número de registros.
+     * @return Listado de comentarios.
+     */
+    public List<Comment> getLastCommentsByUser(int id, int count);
+    /**
      * Devuelve un artículos por su identificador.
      * @param id Identificador del artículo.
      * @return Instancia del artículo o null si no lo encuentra.

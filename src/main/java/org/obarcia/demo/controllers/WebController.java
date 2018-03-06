@@ -24,17 +24,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-// TODO: OFF: Mostrar errores en caso de que una llamada ajax falle / reintentar
+// TODO: OFF: Mostrar errores en caso de que una llamada ajax falle / reintentar => TEST
 // TODO: OFF: Buscador por texto (Resultados y paginación)
-// TODO: LOW: Documento README Completo: Mejorar el texto
 // TODO: GFX: Header: Logo
-// TODO: GFX: Revisar formatos en difrentes oantallas
+// TODO: GFX: Revisar formatos en diferentes pantallas
 // XXX: Off: Url back en el login
 // XXX: Artículo: Utilizar ajax para el proceso de añadir un artículo
 // XXX: Crear datos de demo inicialmente (Incluir más)
 // XXX: Uso de varios idiomas
 // XXX: Diferentes estilos por tag
-// TODO: OFF: Quitar de los últimos comentarios los eliminados por el administrador
 /**
  * Controlador de la web.
  * 

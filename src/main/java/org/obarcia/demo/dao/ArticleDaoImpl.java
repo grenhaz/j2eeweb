@@ -310,7 +310,8 @@ public class ArticleDaoImpl implements ArticleDao
         // Where
         Predicate predicate = builder.and(
             builder.equal(commentRoot.get("article").get("id"), id),
-            builder.equal(commentRoot.get("article").get("active"), true)
+            builder.equal(commentRoot.get("article").get("active"), true),
+            builder.equal(commentRoot.get("erased"), false)
         );
         criteriaCount.where(predicate);
         criteria.where(predicate);
@@ -345,6 +346,34 @@ public class ArticleDaoImpl implements ArticleDao
         Predicate[] predArray = new Predicate[predicates.size()];
         predicates.toArray(predArray);
         criteria.where(predArray);
+        
+        criteria.orderBy(builder.desc(commentRoot.get("publish")));
+        
+        // Query
+        return sessionFactory
+                .getCurrentSession()
+                .createQuery(criteria)
+                .setMaxResults(count)
+                .list();
+    }
+    @Override
+    @Transactional
+    public List<Comment> getLastCommentsByUser(int id, int count)
+    {
+        // Criteria
+        CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
+        
+        // Query
+        CriteriaQuery<Comment> criteria = builder.createQuery(Comment.class);
+        Root<Comment> commentRoot = criteria.from(Comment.class);
+        
+        // Where
+        criteria.where(
+            builder.and(
+                builder.equal(commentRoot.get("erased"), false),
+                builder.equal(commentRoot.get("user").get("id"), id)
+            )
+        );
         
         criteria.orderBy(builder.desc(commentRoot.get("publish")));
         

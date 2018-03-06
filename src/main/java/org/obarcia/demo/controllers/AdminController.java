@@ -28,10 +28,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-// TODO: LOW: Administración: Estadísticas: Artículos
-// TODO: LOW: Administración: Estadísticas: Comentarios
-// TODO: LOW: Administración: Estadísticas: Mas comentado
-// TODO: OFF: Administración: Formularios: User: Completar y pruebas
+// TODO: LOW: Administración: Estadísticas: Artículos, Comentarios, Mas comentado
+// TODO: OFF: Administración: Formularios: User => TEST
 // TODO: OFF: Administración: Formularios: Artículo: Completar y pruebas
 // TODO: OFF: Administración: Formularios: Comentarios: Eliminar / Deseliminar
 // TODO: OFF: Administración: Formularios: Tinymce
@@ -152,7 +150,7 @@ public class AdminController
                 flash.addFlashAttribute("flash", messageSource.getMessage("message.save.ok", null, locale));
 
                 // Redirect
-                return new ModelAndView("redirect:/admin/user/" + id);
+                return new ModelAndView("redirect:/admin/user/" + form.getId());
             }
             
             throw new SaveException();
