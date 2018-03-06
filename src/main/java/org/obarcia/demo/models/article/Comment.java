@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.obarcia.demo.models.user.User;
@@ -51,7 +52,7 @@ public class Comment
      * Si el comentario ha sido borrado
      */
     @Column(name = "erased")
-    private Boolean erased;
+    private Boolean erased = Boolean.FALSE;
     /**
      * Artículo.
      */

@@ -27,6 +27,7 @@
                 "language": {
                     "url": "<c:url value="/resources/datatables/i18n/es.json" />"
                 },
+                "order": [[ 5, "desc" ]],
                 "processing": true,
                 "serverSide": true,
                 "ajax": "<c:url value="/admin/ajax/articles" />",
@@ -58,7 +59,7 @@
                         "searchable": true,
                         "className": "text-center",
                         "render": function ( data, type, row, meta ) {
-                            return "<i class='fa " + (data ? 'fa-check text-success' : 'fa-times text-danger') + "'></i>";
+                            return "<i data-id='" + row.id + "' data-value='" + data+ "' class='btn-active fa " + (data ? 'fa-check-circle-o text-success' : 'fa-times-circle-o text-danger') + "'></i>";
                         }
                     }, {
                         "orderable": false,
@@ -68,6 +69,9 @@
                         }
                     }
                 ]
+            });
+            $('#records').on('click', '.btn-active', function(e) {
+                $activate(this, '<c:url value="/admin/user/" />' + $(this).data('id'), $(this).data('value'));
             });
         });
     </script>

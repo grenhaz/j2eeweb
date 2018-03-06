@@ -118,6 +118,7 @@ public class DemoController
                 c.setUser(users[(int)(Math.random() * 3)]);
                 c.setContent(messages[(int)(Math.random() * 3)]);
                 c.setPublish(new Date());
+                c.setErased(false);
                 articleService.save(c);
             }
         }

@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-// TODO: OFF: Mostrar errores en caso de que una llamada ajax falle / reintentar => TEST
 // TODO: OFF: Buscador por texto (Resultados y paginación)
 // TODO: GFX: Header: Logo
 // TODO: GFX: Revisar formatos en diferentes pantallas
@@ -170,6 +169,7 @@ public class WebController
                     comment.setUser(user);
                     comment.setContent(form.getContent());
                     comment.setPublish(new Date());
+                    comment.setErased(Boolean.FALSE);
                     if (articleService.save(comment)) {
                         return new ModelAndView("redirect:/article/" + id);
                     } else {

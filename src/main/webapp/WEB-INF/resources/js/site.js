@@ -1,13 +1,13 @@
 function getLoader() {
     return '<div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%"></div></div>';
-}
+};
 function $getContent(url, data, destination) {
     $(destination).css('position', 'relative');
     $('<div />').addClass('loading-splash').html(getLoader()).appendTo(destination);
     
     $.get(url, data, function (ret) {
         $(destination).html(ret);
-    }).fail(function() {
+    }).fail(function () {
         $(destination).html('');
         var $alert = $('<div />').addClass('alert alert-danger').appendTo(destination);
         $('<a />')
@@ -18,7 +18,22 @@ function $getContent(url, data, destination) {
             })
             .appendTo($alert);
     });
-}
+};
+function $activate(el, url, value) {
+    var $container = $(el).parent();
+    $(el).hide();
+    var $spinner = $.get(url, data, function (ret) {
+        if (ret.result === 'OK') {
+            
+        } else {
+            $spinner.remove();
+            $(el).show();
+            // TODO: Error
+        }
+    }).fail(function () {
+        
+    });
+};
 function refreshBlock(destination, url, data, scroll) {
     if (scroll) {
         var aTag = $('#return-top');
@@ -41,12 +56,12 @@ function openWindow(url, data, extra) {
     $getContent(url, data, $(dialog).find('.bootbox-body'));
     
     return dialog;
-}
+};
 function alertJs(msg) {
     bootbox.alert({
         'message': msg
     });
-}
+};
 
 $(function () {
     // Tooltips

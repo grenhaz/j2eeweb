@@ -17,6 +17,24 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <form:label path="description"><spring:message code="label.description" /></form:label>
+                        <form:textarea rows="4" class="form-control" path="description" />
+                        <form:errors path="description" cssClass="help-block help-error" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <form:label path="content"><spring:message code="label.content" /></form:label>
+                        <form:textarea rows="4" class="form-control" path="content" />
+                        <form:errors path="content" cssClass="help-block help-error" />
+                    </div>
+                </div>
+            </div>
             <div class="form-group">
                 <form:button class="btn btn-primary"><spring:message code="button.save" /></form:button>
             </div>

@@ -26,7 +26,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -186,13 +188,12 @@ public class UserController
             user.setActive(Boolean.TRUE);
             user.setUkey("");
             if (userService.save(user)) {
-                // TODO: OFF: Auto loguear al usuario
-                /*UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
-                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, user.getPassword(), userDetails.getAuthorities());
-                authenticationManager.authenticate(auth);
-                if (auth.isAuthenticated()) {
-                    SecurityContextHolder.getContext().setAuthentication(auth);
-                }*/
+                // Auto loguear al usuario
+                AccountDetails userDetails = (AccountDetails)userDetailsService.loadUserByUsername(user.getEmail());
+                if (userDetails != null) {
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
                 
                 // Añadir mensaje flash (I18N)
                 flash.addFlashAttribute("flash", messageSource.getMessage("message.user.activate.ok", null, locale));
@@ -228,13 +229,12 @@ public class UserController
             user.setPassword(new BCryptPasswordEncoder().encode(password));
             user.setUkey("");
             if (userService.save(user)) {
-                // TODO: OFF: Auto loguear al usuario
-                /*UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
-                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, user.getPassword(), userDetails.getAuthorities());
-                authenticationManager.authenticate(auth);
-                if (auth.isAuthenticated()) {
-                    SecurityContextHolder.getContext().setAuthentication(auth);
-                }*/
+                // Auto loguear al usuario
+                AccountDetails userDetails = (AccountDetails)userDetailsService.loadUserByUsername(user.getEmail());
+                if (userDetails != null) {
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
                 
                 // Añadir mensaje flash (I18N)
                 flash.addFlashAttribute("flash", messageSource.getMessage("message.user.recovery.ok", null, locale));
@@ -397,7 +397,6 @@ public class UserController
             Locale locale,
             RedirectAttributes flash) throws SaveException
     {
-        // TODO: OFF: Usuario: Perfil (Cambiar contraseña) => TEST
         if (!result.hasErrors()) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (auth != null){

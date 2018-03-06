@@ -60,7 +60,7 @@ public class ExceptionHandlingController
             .addObject("submessage", "")
             .addObject("exception", ex);
     }
-    // TODO: Reactivar para producción
+    // TODO: LOW: Activar para producción
     /**
      * Excepción de genérica de error interno.
      * @param ex Instancia de la excepción.
