@@ -42,7 +42,8 @@
                         "data": "description",
                         "searchable": true
                     }, {
-                        "data": "type",
+                        "data": "formattedType",
+                        "name": "type",
                         "searchable": true
                     }, {
                         "data": "formattedTags",

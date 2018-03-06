@@ -130,6 +130,15 @@ public class Article
         
         return "";
     }
+    /**
+     * Tipo formateado.
+     * @return Tipo formateado.
+     */
+    public String getformattedType()
+    {
+        // TODO: OFF: Formatted type
+        return "";
+    }
     // ******************************************
     // GETTER & SETTER
     // ******************************************

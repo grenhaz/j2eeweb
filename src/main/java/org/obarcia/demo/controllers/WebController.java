@@ -24,9 +24,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+// TODO: OFF: Botón de buscar en vez de un span
 // TODO: OFF: Buscador por texto (Resultados y paginación)
 // TODO: GFX: Header: Logo
 // TODO: GFX: Revisar formatos en diferentes pantallas
+// TODO: GFX: Cambiar el color del botón 
 // XXX: Off: Url back en el login
 // XXX: Artículo: Utilizar ajax para el proceso de añadir un artículo
 // XXX: Crear datos de demo inicialmente (Incluir más)

@@ -3,6 +3,7 @@
 - Spring MVC 4.3.7
 - Spring Security 5.0.0
 - Hibernate 5.2.13
+## Configuración de la Base de datos
 ## Creación de la demo
 Una vez realizado el despliegue de la web si accedemos a "[WEB]/demo/create"
 se generará una demo con datos de prueba.

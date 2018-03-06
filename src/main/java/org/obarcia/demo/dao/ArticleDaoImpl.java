@@ -79,7 +79,7 @@ public class ArticleDaoImpl implements ArticleDao
         if (req.hasColumnSearch("active")) {
             predicates.add(builder.equal(root.get("active"), Boolean.valueOf(req.getColumnSearch("active"))));
         }
-        // TODO: OFF: Publish
+        // TODO: LOW: Publish
         if (req.hasColumnSearch("publish")) {
             predicates.add(builder.equal(root.get("publish"), req.getColumnSearch("publish")));
         }

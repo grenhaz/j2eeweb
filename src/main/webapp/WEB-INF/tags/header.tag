@@ -55,7 +55,7 @@
         <!-- BUSCADOR -->
         <div class="searcher">
             <form method="GET" action="<c:url value="/web/${tag}/search" />">
-                <div class="input-group  input-group-sm">
+                <div class="input-group input-group-sm">
                     <input name="t" class="form-control" />
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>

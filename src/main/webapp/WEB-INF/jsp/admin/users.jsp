@@ -42,7 +42,7 @@
                         "data": "nickname",
                         "searchable": true
                     }, {
-                        "data": "userRole",
+                        "data": "formattedRole",
                         "name": "user_role",
                         "searchable": true
                     }, {

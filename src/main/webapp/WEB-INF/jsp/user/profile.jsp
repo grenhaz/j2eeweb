@@ -9,7 +9,8 @@
         <div class="header"><spring:message code="label.user.profile" /></div>
         <div class="row">
             <div class="col-xs-6 col-sm-3">
-                <form:form commandName="form" method="POST">
+                <c:url value="/user/profile" var="urlProfile" />
+                <form:form commandName="form" method="POST" action="${urlProfile}">
                     <form:hidden path="id" />
                     <div class="form-group">
                         <div class="avatar">

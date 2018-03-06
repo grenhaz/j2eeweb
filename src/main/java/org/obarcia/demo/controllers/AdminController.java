@@ -34,9 +34,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 // TODO: LOW: Administración: Usuario: Enviar email de recuperación de cuenta.
 // TODO: LOW: Administración: Estadísticas: Artículos, Comentarios, Mas comentado
 // TODO: OFF: Administración: Formularios: Artículo: Completar y pruebas
-// TODO: OFF: Administración: Formularios: Comentarios: Eliminar / Deseliminar
+// TODO: OFF: Administración: Formularios: Comentarios: Listado con datatables y  Eliminar / Deseliminar
 // TODO: OFF: Administración: Formularios: Tinymce
-// TODO: OFF: Administración: Tablas de listados (FILTERS, ACTIVE / DESACTIVE, CUSTOM TEXTS)
+// TODO: LOW: Administración: Tablas de listados FILTERS
+// TODO: OFF: Administración: Tablas de listados ACTIVE / DESACTIVE
+// TODO: OFF: Administración: Articulos: Columna type
 /**
  * Controlador para la Administración.
  * 
