@@ -15,6 +15,7 @@ footer .social-networks a{margin-left:8px;color:#555;}
 .loading-splash{z-index:1;position:absolute;top:0;bottom:0;left:0;right:0;background-color:#FFF;opacity:0.5;}
 .loading-splash .progress{margin-top:64px;}
 .progress-bar.progress-bar-striped{background-color:#ED4000;}
+.btn.btn-primary{background-color:#ED4000;border-color:#aa2f01;}
 
 /* HEADER > USER */
 header.top{background:linear-gradient(#000,#131313,#1c1c1c 50%,#040404 50%,#000);}
@@ -135,7 +136,7 @@ ul.list-sections li.active:after{border-color: #aa2f01 transparent transparent t
 /* PROFILE */
 .profile .avatar{border:1px solid #777;border-radius:8px;}
 .profile .avatar img{width:100%;border:1px solid #222;border-radius:8px;}
-.avatars img{width:64;height:96px;border-radius:8px;margin:4px;border:1px solid #222;}
+.avatars img{width:96px;height:96px;border-radius:8px;margin:4px;border:1px solid #222;}
 
 /* FORM */
 .help-error{font-size:0.9em;color:#a94442;}

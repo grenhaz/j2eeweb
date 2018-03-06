@@ -10,9 +10,9 @@
             var anchor = window.location.hash;
             if (anchor !== '' && anchor.length > 1) {
                 var link = anchor.substring(1);
-                refreshBlock('.articles', '<c:url value="/ajax" />/' + link.replace(/\_/g, '/'), {}, false);
+                refreshBlock('.articles', '<c:url value="/ajax/" />' + link.replace(/\_/g, '/'), {}, false);
             } else {
-                refreshBlock('.articles', '<c:url value="/ajax" />/${tag}/all', {}, false);
+                refreshBlock('.articles', '<c:url value="/ajax/${tag}/all" />', {}, false);
             }
         });
     </script>

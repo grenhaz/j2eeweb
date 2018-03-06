@@ -7,6 +7,7 @@
 <%@attribute name="classCss" required="false" type="java.lang.String" %>
 <%@attribute name="tag" required="true" rtexprvalue="true" %>
 <%@attribute name="flash" required="false" rtexprvalue="true" %>
+<%@attribute name="search" required="false" rtexprvalue="true" %>
 <c:set var="lang" value="${(empty lang) ? 'es' : lang}" />
 <c:set var="title" value="${(empty title) ? 'No title' : title}" />
 <!DOCTYPE html>
@@ -38,12 +39,13 @@
                         if (destination === undefined) {
                             destination = '.articles';
                         }
+                        var vars = $(this).data('vars');
                         var data = {};
                         var menu = $(this).data('menu');
                         if (menu === true || menu === false) {
                             data['m'] = menu;
                         }
-                        refreshBlock(destination, '<c:url value="/ajax" />/' + link.replace(/\_/g, '/'), data, true);
+                        refreshBlock(destination, '<c:url value="/ajax/" />' + link.replace(/\_/g, '/') + (vars !== undefined ? vars : ''), data, true);
                     }
                     return true;
                 });
@@ -54,7 +56,7 @@
         </script>
     </head>
     <body class="<c:out value="${classCss}" />">
-        <ui:header tag="${tag}" />
+        <ui:header tag="${tag}" search="${search}" />
 
         <div class="container">
             <div class="wrap">

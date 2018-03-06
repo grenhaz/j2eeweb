@@ -26,6 +26,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Table(name = "article")
 public class Article
 {
+    /**
+     * Formato de fecha
+     */
     private static final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     
     /**
@@ -128,15 +131,6 @@ public class Article
             return format.format(publish);
         }
         
-        return "";
-    }
-    /**
-     * Tipo formateado.
-     * @return Tipo formateado.
-     */
-    public String getformattedType()
-    {
-        // TODO: OFF: Formatted type
         return "";
     }
     // ******************************************

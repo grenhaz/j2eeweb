@@ -97,15 +97,6 @@ public class User
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private Set<Comment> comments = new HashSet<>();
     
-    /**
-     * Texto formateado para el rol del usuario.
-     * @return Rol formateado.
-     */
-    public String getFormattedRole()
-    {
-        // TODO: OFF: Formatted role
-        return "";
-    }
     // ******************************************
     // GETTER & SETTER
     // ******************************************

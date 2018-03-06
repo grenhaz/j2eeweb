@@ -3,6 +3,7 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@attribute name="tag" required="true" rtexprvalue="true" %>
+<%@attribute name="search" required="false" rtexprvalue="true" %>
 <c:url value="" var="urlBack" />
 <header class="top">
     <div class="container">
@@ -54,10 +55,12 @@
     <div class="container">
         <!-- BUSCADOR -->
         <div class="searcher">
-            <form method="GET" action="<c:url value="/web/${tag}/search" />">
+            <form method="GET" action="<c:url value="/web/search/${tag}/" />">
                 <div class="input-group input-group-sm">
-                    <input name="t" class="form-control" />
-                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    <input name="t" class="form-control" value="<c:out value="${search}" />" />
+                    <div class="input-group-btn">
+                        <button class="btn btn-primary"><i class="fa fa-search"></i></button>
+                    </div>
                 </div>
             </form>
         </div>

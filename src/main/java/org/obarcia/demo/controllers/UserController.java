@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.obarcia.demo.components.Utilities;
-import org.obarcia.demo.components.mail.MailSenderImpl;
 import org.obarcia.demo.exceptions.PageNotFoundException;
 import org.obarcia.demo.exceptions.SaveException;
 import org.obarcia.demo.models.user.AccountDetails;
@@ -20,15 +19,14 @@ import org.obarcia.demo.models.user.ProfileForm;
 import org.obarcia.demo.models.user.RegisterForm;
 import org.obarcia.demo.models.user.User;
 import org.obarcia.demo.services.ArticleService;
+import org.obarcia.demo.services.MailService;
 import org.obarcia.demo.services.UserAccessService;
 import org.obarcia.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -57,10 +55,10 @@ public class UserController
     @Autowired
     ServletContext servletContext;
     /**
-     * Instancia del manager de autentificación
+     * Instancia del servicio de emails
      */
-    //@Autowired
-    //private AuthenticationManager authenticationManager;
+    @Autowired
+    private MailService mailService;
     /**
      * Instancia del servicio i18n
      */
@@ -77,10 +75,8 @@ public class UserController
     @Autowired
     private ArticleService articleService;
     /**
-     * Instancia del servicio para el envío de emails.
+     * Instancia del servicio de login.
      */
-    @Autowired
-    private MailSenderImpl mailSender;
     @Autowired
     private UserAccessService userDetailsService;
     
@@ -130,14 +126,20 @@ public class UserController
      * Procesamiento del formulario de registro.
      * @param form Instancia del formulario.
      * @param result Resultado de la validación.
+     * @param locale Localización para el i18n
+     * @param flash Flash variables.
+     * @param request Instancia de la petición.
      * @return Vista resultante.
      * @throws SaveException 
      */
     @PostMapping("/register")
     @PreAuthorize("!isAuthenticated()")
     public ModelAndView actionRegister(
-            @Valid @ModelAttribute("model") RegisterForm form,
-            BindingResult result) throws SaveException
+        @Valid @ModelAttribute("model") RegisterForm form,
+        BindingResult result,
+        Locale locale,
+        RedirectAttributes flash,
+        HttpServletRequest request) throws SaveException
     {
         if (!result.hasErrors()) {
             User newUser = new User();
@@ -149,15 +151,14 @@ public class UserController
             newUser.setActive(Boolean.FALSE);
             newUser.setUkey(Utilities.getRandomHexString(64));
             if (userService.save(newUser)) {
-                // TODO: OFF: Crear la vista del email
                 // Enviar el mail de recuperación
-                SimpleMailMessage emailObj = new SimpleMailMessage();
-                emailObj.setTo(form.getEmail());
-                emailObj.setSubject("EWQ");
-                emailObj.setText("QWE");
-                mailSender.send(emailObj);
+                mailService.sendmailActivation(request, newUser);
 
-                // TODO; Redirect with message
+                // Añadir mensaje flash (I18N)
+                flash.addFlashAttribute("flash", messageSource.getMessage("message.user.register.ok", null, locale));
+                
+                // Redireccionar con mensaje
+                return new ModelAndView("redirect:/");
             } else {
                 throw new SaveException();
             }
@@ -174,7 +175,7 @@ public class UserController
      * @return Vista resultante.
      * @throws PageNotFoundException
      */
-    @GetMapping("/activate")
+    @GetMapping("/")
     @PreAuthorize("!isAuthenticated()")
     public ModelAndView actionActivateAccount(
         @RequestParam(value = "k", required = true) String ukey,
@@ -218,7 +219,6 @@ public class UserController
     @PreAuthorize("!isAuthenticated()")
     public ModelAndView actionRecoverAccount(
         @RequestParam(value = "k", required = true) String ukey,
-        @RequestParam(value = "p", required = true) String password,
         Locale locale,
         RedirectAttributes flash) throws PageNotFoundException
     {
@@ -226,7 +226,6 @@ public class UserController
         User user = userService.getUserByUkey(ukey);
         if (user != null) {
             // Activar y borrar el ukey
-            user.setPassword(new BCryptPasswordEncoder().encode(password));
             user.setUkey("");
             if (userService.save(user)) {
                 // Auto loguear al usuario
@@ -240,7 +239,7 @@ public class UserController
                 flash.addFlashAttribute("flash", messageSource.getMessage("message.user.recovery.ok", null, locale));
                 
                 // Redireccionar con mensaje
-                return new ModelAndView("redirect:/");
+                return new ModelAndView("redirect:/user/profile");
             }
         }
         
@@ -263,6 +262,7 @@ public class UserController
      * @param result Rsultado de la validación.
      * @param locale Localización para el i18n
      * @param flash Flash variables.
+     * @param request Instancia de la petición.
      * @return Vista resultante.
      */
     @PostMapping("/forgot")
@@ -271,7 +271,8 @@ public class UserController
             @Valid @ModelAttribute("model") ForgotForm form,
             BindingResult result,
             Locale locale,
-            RedirectAttributes flash)
+            RedirectAttributes flash,
+            HttpServletRequest request)
     {
         if (!result.hasErrors()) {
             User user = userService.getUserByEmail(form.getEmail());
@@ -279,13 +280,8 @@ public class UserController
                 // Guardar la clave para la recuperación
                 user.setUkey(Utilities.getRandomHexString(64));
                 if (userService.save(user)) {
-                    // TODO: OFF: Crear la vista del email
                     // Enviar el mail de recuperación
-                    SimpleMailMessage emailObj = new SimpleMailMessage();
-                    emailObj.setTo(form.getEmail());
-                    emailObj.setSubject("EWQ");
-                    emailObj.setText("QWE");
-                    mailSender.send(emailObj);
+                    mailService.sendmailRecovery(request, user);
                     
                     // Añadir mensaje flash (I18N)
                     flash.addFlashAttribute("flash", messageSource.getMessage("message.user.forgot.ok", null, locale));

@@ -18,6 +18,9 @@ import javax.persistence.TemporalType;
 @Table(name = "article")
 public class ArticleLite
 {
+    /**
+     * Formato de fecha
+     */
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     
     /**

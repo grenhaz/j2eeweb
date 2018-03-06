@@ -8,6 +8,7 @@ import org.obarcia.demo.components.datatables.DataTablesRequest;
 import org.obarcia.demo.exceptions.ArticleNotFoundException;
 import org.obarcia.demo.exceptions.SaveException;
 import org.obarcia.demo.exceptions.UserNotFoundException;
+import org.obarcia.demo.models.ActionResponse;
 import org.obarcia.demo.models.article.Article;
 import org.obarcia.demo.models.article.ArticleLite;
 import org.obarcia.demo.models.user.User;
@@ -29,7 +30,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-// TODO: LOW: Administración: Activar / Desactivar usaurio y artículo.
 // TODO: LOW: Administración: Usuario: Reenviar email de activación.
 // TODO: LOW: Administración: Usuario: Enviar email de recuperación de cuenta.
 // TODO: LOW: Administración: Estadísticas: Artículos, Comentarios, Mas comentado
@@ -37,8 +37,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 // TODO: OFF: Administración: Formularios: Comentarios: Listado con datatables y  Eliminar / Deseliminar
 // TODO: OFF: Administración: Formularios: Tinymce
 // TODO: LOW: Administración: Tablas de listados FILTERS
-// TODO: OFF: Administración: Tablas de listados ACTIVE / DESACTIVE
-// TODO: OFF: Administración: Articulos: Columna type
 /**
  * Controlador para la Administración.
  * 
@@ -190,6 +188,39 @@ public class AdminController
         }
     }
     /**
+     * Realizar una operación sobre el usuario.
+     * @param id Identificador.
+     * @param action Nombre de la acción.
+     * @param request Instancia de la petición.
+     * @return Respuesta.
+     * @throws UserNotFoundException 
+     */
+    @PostMapping("/user/{id}/{action}")
+    public @ResponseBody ActionResponse actionUserAction(
+            @PathVariable("id") int id,
+            @PathVariable("action") String action,
+            HttpServletRequest request) throws UserNotFoundException
+    {
+        User user = userService.getUserById(id);
+        if (user != null) {
+            switch (action) {
+                case "active":
+                    // Activar / Desactivar el usuario
+                    Boolean value = Boolean.valueOf(request.getParameter("value"));
+                    user.setActive(value);
+                    if (userService.save(user)) {
+                        return new ActionResponse(true);
+                    } else {
+                        return new ActionResponse(false, 500, "");
+                    }
+            }
+            return null;
+        } else {
+            // No se encontró el usuario
+            throw new UserNotFoundException();
+        }
+    }
+    /**
      * Formulario de un artículo.
      * @param id Identificador de lartículo.
      * @return Vista resultante.
@@ -251,6 +282,39 @@ public class AdminController
         } else {
             // No se encontró el artículo
             throw new SaveException();
+        }
+    }
+    /**
+     * Realizar una operación sobre el artículo.
+     * @param id Identificador.
+     * @param action Nombre de la acción.
+     * @param request Instancia de la petición.
+     * @return Respuesta.
+     * @throws ArticleNotFoundException 
+     */
+    @PostMapping("/article/{id}/{action}")
+    public @ResponseBody ActionResponse actionArticleAction(
+            @PathVariable("id") int id,
+            @PathVariable("action") String action,
+            HttpServletRequest request) throws ArticleNotFoundException
+    {
+        Article article = articleService.getArticle(id);
+        if (article != null) {
+            switch (action) {
+                case "active":
+                    // Activar / Desactivar el usuario
+                    Boolean value = Boolean.valueOf(request.getParameter("value"));
+                    article.setActive(value);
+                    if (articleService.save(article)) {
+                        return new ActionResponse(true);
+                    } else {
+                        return new ActionResponse(false, 500, "");
+                    }
+            }
+            return null;
+        } else {
+            // No se encontró el artículo
+            throw new ArticleNotFoundException();
         }
     }
 }

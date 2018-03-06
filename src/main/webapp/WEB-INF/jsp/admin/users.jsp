@@ -42,9 +42,16 @@
                         "data": "nickname",
                         "searchable": true
                     }, {
-                        "data": "formattedRole",
+                        "data": "userRole",
                         "name": "user_role",
-                        "searchable": true
+                        "searchable": true,
+                        "render": function ( data, type, row, meta ) {
+                            switch(data) {
+                                case "ROLE_ADMIN": return "<spring:message code="label.user.ROLE_ADMIN" />";
+                                case "ROLE_USER": return "<spring:message code="label.user.ROLE_USER" />";
+                            }
+                            return "";
+                        }
                     }, {
                         "data": "avatar",
                         "orderable": false,
@@ -73,7 +80,9 @@
                 ]
             });
             $('#records').on('click', '.btn-active', function(e) {
-                $activate(this, '<c:url value="/admin/user/" />' + $(this).data('id'), $(this).data('value'));
+                $activate(this, '<c:url value="/admin/user/" />' + $(this).data('id') + "/active", {
+                    '<c:out value="${_csrf.parameterName}" />': '<c:out value="${_csrf.token}" />'
+                }, $(this).data('value'));
             });
             // Apply the search
             /*$table.columns().every(function () {

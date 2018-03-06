@@ -12,6 +12,7 @@ import org.obarcia.demo.models.user.User;
 import org.obarcia.demo.services.ArticleService;
 import org.obarcia.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -24,11 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-// TODO: OFF: Botón de buscar en vez de un span
-// TODO: OFF: Buscador por texto (Resultados y paginación)
 // TODO: GFX: Header: Logo
 // TODO: GFX: Revisar formatos en diferentes pantallas
-// TODO: GFX: Cambiar el color del botón 
 // XXX: Off: Url back en el login
 // XXX: Artículo: Utilizar ajax para el proceso de añadir un artículo
 // XXX: Crear datos de demo inicialmente (Incluir más)
@@ -43,9 +41,16 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/")
 public class WebController
 {
-    // TODO: OFF: Usar placeholders
-    private final int ARTICLES_PER_PAGE = 10;
-    private final int COMMENTS_PER_PAGE = 10;
+    /**
+     * Artículos por página.
+     */
+    @Value("#{new Integer('${articles.perPage}')}")
+    private int ARTICLES_PER_PAGE;
+    /**
+     * Comentarios por página.
+     */
+    @Value("#{new Integer('${comments.perPage}')}")
+    private int COMMENTS_PER_PAGE;
 
     /**
      * Instancia del servicio de usuarios.
@@ -100,7 +105,7 @@ public class WebController
      * @param text Texto de búsqueda.
      * @return Vista resultante.
      */
-    @GetMapping("/web/{tag}/search")
+    @GetMapping("/web/search/{tag}")
     public ModelAndView actionArticlesSearch(
             @PathVariable("tag") String tag,
             @RequestParam(value = "t", required = true) String text)
@@ -219,6 +224,40 @@ public class WebController
         return new ModelAndView("articles/comments.ajax")
                 .addObject("id",        id)
                 .addObject("comments",  articleService.getComments(id, page, COMMENTS_PER_PAGE));
+    }
+    /**
+     * Listado de artículos por búsqueda.
+     * @param tag Tag.
+     * @param text Texto de búsqueda.
+     * @return Vista resultante.
+     */
+    @GetMapping("/ajax/search/{tag}")
+    public ModelAndView actionArticlesSearchAjax(
+            @PathVariable("tag") String tag,
+            @RequestParam(value = "t", required = true) String text)
+    {
+        return new ModelAndView("articles/articles.search.ajax")
+                .addObject("tag",       tag)
+                .addObject("search",    text)
+                .addObject("articles",  articleService.getArticlesSearch(1, ARTICLES_PER_PAGE, tag, text));
+    }
+    /**
+     * Listado de artículos por búsqueda.
+     * @param tag Tag.
+     * @param text Texto de búsqueda.
+     * @param page Página.
+     * @return Vista resultante.
+     */
+    @GetMapping("/ajax/search/{tag}/{page}")
+    public ModelAndView actionArticlesSearchAjax(
+            @PathVariable("tag") String tag,
+            @PathVariable("page") int page,
+            @RequestParam(value = "t", required = true) String text)
+    {
+        return new ModelAndView("articles/articles.search.ajax")
+                .addObject("tag",       tag)
+                .addObject("search",    text)
+                .addObject("articles",  articleService.getArticlesSearch(page, ARTICLES_PER_PAGE, tag, text));
     }
     /**
      * Listado de artículos.

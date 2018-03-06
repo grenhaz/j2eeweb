@@ -5,6 +5,8 @@
 <%@attribute name="current" required="true" rtexprvalue="true"%>
 <%@attribute name="pages" required="true" rtexprvalue="true"%>
 <%@attribute name="menu" required="false" type="java.lang.Boolean" rtexprvalue="true"%>
+<%@attribute name="urlGet" required="false"  rtexprvalue="true"%>
+<c:set value="${not empty urlGet ? urlGet : ''}" var="getvars" />  
 <c:set value="${current - 3 >= 1 ? current - 3 : 1}" var="first" />
 <c:set value="${current + 3 <= pages ? current + 3 : pages}" var="last" />
 <c:if test="${pages > 1}">
@@ -14,6 +16,7 @@
                 <a class="go" 
                    data-menu="${menu}" 
                    data-destination="${destination}" 
+                   data-vars="${getvars}"
                    href="#${pre}_1">
                     &lt;&lt;
                 </a>
@@ -24,7 +27,8 @@
                 <li>
                     <a class="go" 
                        data-menu="${menu}" 
-                       data-destination="${destination}" 
+                       data-destination="${destination}"
+                       data-vars="${getvars}"
                        href="#${pre}_${i}">
                         <c:out value="${i}" />
                     </a>
@@ -38,6 +42,7 @@
                     <a class="go" 
                        data-menu="${menu}" 
                        data-destination="${destination}" 
+                       data-vars="${getvars}"
                        href="#${pre}_${i}">
                         <c:out value="${i}" />
                     </a>
@@ -49,6 +54,7 @@
                 <a class="go" 
                    data-menu="${menu}" 
                    data-destination="${destination}" 
+                   data-vars="${getvars}"
                    href="#${pre}_${pages}">
                     &gt;&gt;
                 </a>

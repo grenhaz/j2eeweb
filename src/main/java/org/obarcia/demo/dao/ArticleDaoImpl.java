@@ -194,9 +194,9 @@ public class ArticleDaoImpl implements ArticleDao
         }
         predicates.add(
             builder.or(
-                builder.like(root.<String>get("title"), "%[" + search + "]%"),
-                builder.like(root.<String>get("description"), "%[" + search + "]%"),
-                builder.like(root.<String>get("content"), "%[" + search + "]%")
+                builder.like(root.<String>get("title"), "%" + search + "%"),
+                builder.like(root.<String>get("description"), "%" + search + "%"),
+                builder.like(root.<String>get("content"), "%" + search + "%")
             )
         );
         predicates.add(builder.equal(root.get("active"), true));

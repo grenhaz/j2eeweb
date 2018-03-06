@@ -47,6 +47,15 @@ public interface ArticleService
      */
     public ListPagination<Article> getArticlesAll(int page, int perPage, String tag, String type);
     /**
+     * Búsqueda de artículos.
+     * @param page Página.
+     * @param perPage Registros por página.
+     * @param tag Tipo de etiqueta.
+     * @param search Texto de búsqueda.
+     * @return Listado de artículos
+     */
+    public ListPagination<Article> getArticlesSearch(int page, int perPage, String tag, String search);
+    /**
      * Devuelve un listado de artículos marcados como imporatantes.
      * @param tag Etiqueta de búsqueda.
      * @return Listado de artículos.

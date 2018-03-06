@@ -48,6 +48,14 @@
         </property>
     </bean>
     
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:properties/config.properties</value>
+            </list>
+        </property>
+    </bean>
+    
     <!-- STATIC PROPERTIES -->
     <util:properties id="configProperties" location="classpath:properties/config.properties"/>
 </beans>

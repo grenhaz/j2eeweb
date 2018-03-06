@@ -42,9 +42,18 @@
                         "data": "description",
                         "searchable": true
                     }, {
-                        "data": "formattedType",
-                        "name": "type",
-                        "searchable": true
+                        "data": "type",
+                        "searchable": true,
+                        "render": function ( data, type, row, meta ) {
+                            switch(data) {
+                                case "new": return "<spring:message code="articles.type.new" />";
+                                case "review": return "<spring:message code="articles.type.review" />";
+                                case "video": return "<spring:message code="articles.type.video" />";
+                                case "special": return "<spring:message code="articles.type.special" />";
+                                case "guide": return "<spring:message code="articles.type.guide" />";
+                            }
+                            return "";
+                        }
                     }, {
                         "data": "formattedTags",
                         "name": "tags",
@@ -72,7 +81,9 @@
                 ]
             });
             $('#records').on('click', '.btn-active', function(e) {
-                $activate(this, '<c:url value="/admin/user/" />' + $(this).data('id'), $(this).data('value'));
+                $activate(this, '<c:url value="/admin/article/" />' + $(this).data('id') + "/active", {
+                    '<c:out value="${_csrf.parameterName}" />': '<c:out value="${_csrf.token}" />'
+                }, $(this).data('value'));
             });
         });
     </script>

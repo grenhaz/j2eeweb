@@ -46,6 +46,11 @@ public class ArticleServiceImpl implements ArticleService
         return articleDao.getArticles(page, perPage, tag, type);
     }
     @Override
+    public ListPagination<Article> getArticlesSearch(int page, int perPage, String tag, String search)
+    {
+        return articleDao.getArticlesSearch(page, perPage, tag, search);
+    }
+    @Override
     public List getArticlesImportants(String tag)
     {
         return articleDao.getArticlesImportant(tag, null, 3);

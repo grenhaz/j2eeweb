@@ -19,19 +19,27 @@ function $getContent(url, data, destination) {
             .appendTo($alert);
     });
 };
-function $activate(el, url, value) {
+function $activate(el, url, data, value) {
     var $container = $(el).parent();
     $(el).hide();
-    var $spinner = $.get(url, data, function (ret) {
-        if (ret.result === 'OK') {
-            
-        } else {
-            $spinner.remove();
-            $(el).show();
-            // TODO: Error
+    var $spinner = $('<i class="fa fa-spinner fa-spin animatedx"></i>').appendTo($container);
+    $.post(url, $.extend({ 'value': !value }, data), function (ret) {
+        if (ret.result === true) {
+            if (value) {
+                $(el)
+                    .data("value", !value)
+                    .removeClass('fa-check-circle-o text-success')
+                    .addClass('fa-times-circle-o text-danger');
+            } else {
+                $(el)
+                    .data("value", !value)
+                    .removeClass('fa-times-circle-o text-danger')
+                    .addClass('fa-check-circle-o text-success');
+            }
         }
-    }).fail(function () {
-        
+    }).always(function () {
+        $spinner.remove();
+        $(el).show();
     });
 };
 function refreshBlock(destination, url, data, scroll) {
