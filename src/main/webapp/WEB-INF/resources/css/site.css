@@ -18,6 +18,7 @@ footer .social-networks a:hover{color:#FFF;}
 .progress-bar.progress-bar-striped{background-color:#ED4000;}
 .btn.btn-primary{background-color:#ED4000;border-color:#aa2f01;}
 .btn.btn-primary:hover{background-color:#aa2f01;}
+.tab-container{padding:15px;}
 
 /* HEADER > USER */
 header .logo{position:absolute;}
@@ -115,6 +116,8 @@ ul.list-sections li.active:after{border-color: #aa2f01 transparent transparent t
 .article.left.mini .image .over.over-play .fa{font-size:12px;right:48px;bottom:8px;}
 .article.left.mini .image .over.score{display:none;}
 
+.comments{min-height:64px;}
+
 .comment{margin-bottom:12px;}
 .comment .comment-header{height:48px;position:relative;width:100%;border-radius:29px 4px 4px 29px;border:1px solid #cfcfcf;padding:4px 4px 4px 64px;background-color: #f6f6f6;background:-moz-linear-gradient(top,#f2f2f2 15%,#fff);background:-webkit-linear-gradient(top,#f2f2f2 15%,#fff);background:-o-linear-gradient(top,#f2f2f2 15%,#fff);background:-ms-linear-gradient(top,#f2f2f2 15%,#fff);background:linear-gradient(top,#f2f2f2 15%,#fff);}
 .comment .comment-header:after{border-color:#cfcfcf transparent transparent transparent;z-index:1;bottom:-6px;left:30px;width:0;position:absolute;content:" ";margin-left:-5px;height:0;border-style:solid;border-width:6px 6px 0 6px;filter:drop-shadow(0 2px 1px rgba(255,255,255,1));}
@@ -135,6 +138,7 @@ ul.list-sections li.active:after{border-color: #aa2f01 transparent transparent t
 .comment .content .erased,.comment-mini .content .erased{font-style:italic;color:#666;font-size:0.9em;}
 
 .article-section{padding:0 16px;margin-bottom:32px;}
+.article-section .image img{width:100%;border-radius:8px;}
 .header-type{color:#ED4000;text-transform:uppercase;font-weight:bold;}
 
 /* PROFILE */

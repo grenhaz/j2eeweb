@@ -11,6 +11,7 @@ import org.obarcia.demo.exceptions.SaveException;
 import org.obarcia.demo.exceptions.UserNotFoundException;
 import org.obarcia.demo.models.ActionResponse;
 import org.obarcia.demo.models.article.Article;
+import org.obarcia.demo.models.article.ArticleForm;
 import org.obarcia.demo.models.article.ArticleLite;
 import org.obarcia.demo.models.article.Comment;
 import org.obarcia.demo.models.article.CommentLite;
@@ -34,10 +35,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+// TODO: OFF: Administración: Nuevo usuario
+// TODO: OFF: Administración: Nuevo artículo
 // TODO: LOW: Administración: Usuario: Reenviar email de activación (Colocar el botón).
 // TODO: LOW: Administración: Usuario: Enviar email de recuperación de cuenta (Coloar el botón).
 // TODO: LOW: Administración: Estadísticas: Artículos, Comentarios, Mas comentado
 // TODO: OFF: Administración: Formularios: Artículo: Completar y pruebas
+// TODO: OFF: Administración: Formularios: TinyMCE ampliado (insertar imagenes
+// TODO: OFF: Administración: Formularios: Campo de selección de una imagen
+// TODO: OFF: Administración: Formularios: Tags
+// TODO: OFF: Administración: Formularios: Fecha
 // TODO: LOW: Administración: Tablas de listados FILTERS
 /**
  * Controlador para la Administración.
@@ -146,6 +153,7 @@ public class AdminController
         if (user != null) {
             // Rellanar los datos del formulario con los del usuario
             UserForm form = new UserForm();
+            form.setId(id);
             form.setEmail(user.getEmail());
             form.setNickname(user.getNickname());
             
@@ -283,15 +291,33 @@ public class AdminController
             @PathVariable("id") int id) throws ArticleNotFoundException
     {
         // Obtener el artículo por id
-        Article form = articleService.getArticle(id);
-        if (form != null) {
-            // Vista con el formulario
-            return new ModelAndView("admin/article")
-                    .addObject("form", form);
+        ArticleForm form = new ArticleForm();
+        Article article;
+        if (id == 0) {
+            article = new Article();
         } else {
-            // No se encontró el artículo
-            throw new ArticleNotFoundException();
+            article = articleService.getArticle(id);
+            if (article != null) {
+                // Rellenar el formulario
+                form.setTitle(article.getTitle());
+                form.setDescription(article.getDescription());
+                form.setImage(article.getImage());
+                form.setContent(article.getContent());
+                form.setImportant(article.getImportant());
+                form.setActive(article.getActive());
+                form.setTags(article.getTags());
+                form.setPublish(article.getPublish());
+                form.setScore(article.getScore());
+            } else {
+                // No se encontró el artículo
+                throw new ArticleNotFoundException();
+            }
         }
+
+        // Vista con el formulario
+        return new ModelAndView("admin/article")
+                .addObject("id", id)
+                .addObject("form", form);
     }
     /**
      * Formulario de un artículo.
@@ -301,40 +327,59 @@ public class AdminController
      * @param locale Localización para el i18n.
      * @param flash Flash variables.
      * @return Vista resultante.
-     * @throws SaveException 
+     * @throws SaveException
+     * @throws ArticleNotFoundException
      */
     @PostMapping("/article/{id}")
     public ModelAndView actionArticle(
             @PathVariable("id") int id,
-            @Valid @ModelAttribute("form") Article form,
+            @Valid @ModelAttribute("form") ArticleForm form,
             BindingResult result,
             Locale locale,
-            RedirectAttributes flash) throws SaveException
+            RedirectAttributes flash) throws SaveException, ArticleNotFoundException
     {
-        // El id del formulario y el de la url deben coincidir
-        if (id == form.getId()) {
-            // Si no hay errores
-            if (!result.hasErrors()) {
-                // Guardar el artículo
-                if (articleService.save(form)) {
-                    // Añadir mensaje flash (I18N)
-                    flash.addFlashAttribute("flash", messageSource.getMessage("message.save.ok", null, locale));
+        // Obtener el artículo por id
+        Article article;
+        if (id == 0) {
+            article = new Article();
+        } else {
+            article = articleService.getArticle(id);
+            if (article != null) {
+                // Rellenar el articulo
+                article.setTitle(form.getTitle());
+                article.setDescription(form.getDescription());
+                article.setImage(form.getImage());
+                article.setContent(form.getContent());
+                article.setImportant(form.getImportant());
+                article.setActive(form.getActive());
+                article.setTags(form.getTags());
+                article.setPublish(form.getPublish());
+                article.setScore(form.getScore());
+            } else {
+                // No se encontró el artículo
+                throw new ArticleNotFoundException();
+            }
+        }
+        
+        // Si no hay errores
+        if (!result.hasErrors()) {
+            // Guardar el artículo
+            if (articleService.save(article)) {
+                // Añadir mensaje flash (I18N)
+                flash.addFlashAttribute("flash", messageSource.getMessage("message.save.ok", null, locale));
 
-                    // Redirect
-                    return new ModelAndView("redirect:/admin/article/" + id);
-                }
-
-                // Error al guardar
-                throw new SaveException();
+                // Redirect
+                return new ModelAndView("redirect:/admin/article/" + id);
             }
 
-            // Si hubo errores se muestra el formulario
-            return new ModelAndView("admin/article")
-                        .addObject("form", form);
-        } else {
-            // No se encontró el artículo
+            // Error al guardar
             throw new SaveException();
         }
+
+        // Si hubo errores se muestra el formulario
+        return new ModelAndView("admin/article")
+                .addObject("id", id)
+                .addObject("form", form);
     }
     /**
      * Realizar una operación sobre el artículo.
