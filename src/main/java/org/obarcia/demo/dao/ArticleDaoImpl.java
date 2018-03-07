@@ -333,16 +333,15 @@ public class ArticleDaoImpl implements ArticleDao
     public List<Article> getArticlesMoreComments(String tag, int count)
     {
         // TODO: OFF: !!!! Obtener los artículos más vistos / comentados.
-        return null;
-        /*// Criteria
-        CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
+        // Criteria
+        /*CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
         
         // Query
-        CriteriaQuery<Article> criteria = builder.createQuery(Article.class);
+        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
         Root<Comment> root = criteria.from(Comment.class);
         
         // Select
-        criteria.multiselect(root.get("article"));
+        criteria.select(root);
         
         // Where
         List<Predicate> predicates = new LinkedList<>();
@@ -350,14 +349,16 @@ public class ArticleDaoImpl implements ArticleDao
             predicates.add(builder.like(root.get("article").<String>get("tags"), "%[" + tag.toUpperCase() + "]%"));
         }
         predicates.add(builder.equal(root.get("article").get("active"), true));
-        Predicate[] predArray = new Predicate[predicates.size()];
-        predicates.toArray(predArray);
-        criteria.where(predArray);
+        if (predicates.size() > 0) {
+            Predicate[] predArray = new Predicate[predicates.size()];
+            predicates.toArray(predArray);
+            criteria.where(predArray);
+        }
         
         // Group By
-        criteria.groupBy(root.get("article").get("id"));
+        criteria.groupBy(rootComment.get("article").get("id"));
         
-        criteria.orderBy(builder.desc(builder.count(root)));
+        criteria.orderBy(builder.desc(builder.count(rootComment)));
         
         // Query
         return sessionFactory
@@ -365,6 +366,7 @@ public class ArticleDaoImpl implements ArticleDao
                 .createQuery(criteria)
                 .setMaxResults(count)
                 .list();*/
+        return null;
     }
     @Override
     @Transactional

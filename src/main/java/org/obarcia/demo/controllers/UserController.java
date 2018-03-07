@@ -126,7 +126,7 @@ public class UserController
      * Procesamiento del formulario de registro.
      * @param form Instancia del formulario.
      * @param result Resultado de la validación.
-     * @param locale Localización para el i18n
+     * @param locale Localización para el i18n.
      * @param flash Flash variables.
      * @param request Instancia de la petición.
      * @return Vista resultante.

@@ -48,13 +48,15 @@
                         <th><spring:message code="column.user" /></th>
                         <th><spring:message code="column.text" /></th>
                         <th><spring:message code="column.publish" /></th>
-                        <th style="Width:1px;"></th>
+                        <th style="width:1px;"></th>
                     </tr>
                 </thead>
             </table>
         </div>         
         <script>
             $(function() {
+                $('*[name=content]').tinymce({});
+                
                 $('#records').DataTable({
                     "language": {
                         "url": "<c:url value="/resources/datatables/i18n/es.json" />"

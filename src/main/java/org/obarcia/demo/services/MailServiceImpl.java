@@ -30,7 +30,7 @@ public class MailServiceImpl implements MailService
         SimpleMailMessage emailObj = new SimpleMailMessage();
         emailObj.setTo(user.getEmail());
         emailObj.setSubject("EWQ");
-        emailObj.setText("QWE");
+        emailObj.setText("QWE <a href='" + url + "'>activación de la cuenta</a>");
         mailSender.send(emailObj);
     }
     @Override
@@ -39,5 +39,10 @@ public class MailServiceImpl implements MailService
         String url = request.getContextPath() + "/user/recover?k=" + user.getUkey();
         
         // TODO: OFF: Enviar el email
+        SimpleMailMessage emailObj = new SimpleMailMessage();
+        emailObj.setTo(user.getEmail());
+        emailObj.setSubject("EWQ ");
+        emailObj.setText("QWE <a href='" + url + "'>acceso a la recuperación de la cuenta</a>");
+        mailSender.send(emailObj);
     }
 }

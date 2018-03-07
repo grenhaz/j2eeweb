@@ -3,6 +3,7 @@ package org.obarcia.demo.controllers;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import org.obarcia.demo.components.Utilities;
 import org.obarcia.demo.components.datatables.DataTablesResponse;
 import org.obarcia.demo.components.datatables.DataTablesRequest;
 import org.obarcia.demo.exceptions.ArticleNotFoundException;
@@ -17,6 +18,7 @@ import org.obarcia.demo.models.user.User;
 import org.obarcia.demo.models.user.UserForm;
 import org.obarcia.demo.models.user.UserLite;
 import org.obarcia.demo.services.ArticleService;
+import org.obarcia.demo.services.MailService;
 import org.obarcia.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -32,11 +34,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-// TODO: LOW: Administración: Usuario: Reenviar email de activación.
-// TODO: LOW: Administración: Usuario: Enviar email de recuperación de cuenta.
+// TODO: LOW: Administración: Usuario: Reenviar email de activación (Colocar el botón).
+// TODO: LOW: Administración: Usuario: Enviar email de recuperación de cuenta (Coloar el botón).
 // TODO: LOW: Administración: Estadísticas: Artículos, Comentarios, Mas comentado
 // TODO: OFF: Administración: Formularios: Artículo: Completar y pruebas
-// TODO: OFF: Administración: Formularios: Tinymce
 // TODO: LOW: Administración: Tablas de listados FILTERS
 /**
  * Controlador para la Administración.
@@ -48,6 +49,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminController
 {
+    /**
+     * Instancia del servicio de emails
+     */
+    @Autowired
+    private MailService mailService;
     /**
      * Instancia del servicio i18n
      */
@@ -206,6 +212,7 @@ public class AdminController
      * @param id Identificador.
      * @param action Nombre de la acción.
      * @param request Instancia de la petición.
+     * @param flash Flash variables.
      * @return Respuesta.
      * @throws UserNotFoundException 
      */
@@ -213,26 +220,53 @@ public class AdminController
     public @ResponseBody ActionResponse actionUserAction(
             @PathVariable("id") int id,
             @PathVariable("action") String action,
+            RedirectAttributes flash,
             HttpServletRequest request) throws UserNotFoundException
     {
         User user = userService.getUserById(id);
         if (user != null) {
             switch (action) {
                 case "active":
+                {
                     // Activar / Desactivar el usuario
                     Boolean value = Boolean.valueOf(request.getParameter("value"));
                     user.setActive(value);
                     if (userService.save(user)) {
                         return new ActionResponse(true);
-                    } else {
-                        return new ActionResponse(false, 500, "");
                     }
+                }
+                break;
                 case "recovery":
-                    break;
+                {
+                    // Reenviar el mensaje de recuperación
+                    user.setUkey(Utilities.getRandomHexString(64));
+                    if (userService.save(user)) {
+                        // Enviar el mail de recuperación
+                        mailService.sendmailRecovery(request, user);
+
+                        // Redireccionar con mensaje
+                        return new ActionResponse(true);
+                    }
+                }
+                break;
                 case "activate":
-                    break;
+                {
+                    // Reenviar el mensaje de activación
+                    if (user.getActive().equals(Boolean.FALSE)) {
+                        user.setUkey(Utilities.getRandomHexString(64));
+                        if (userService.save(user)) {
+                            // Enviar el mail de recuperación
+                            mailService.sendmailActivation(request, user);
+
+                            // Redireccionar con mensaje
+                            return new ActionResponse(true);
+                        }
+                    }
+                }
+                break;
             }
-            return null;
+            
+            return new ActionResponse(false, 500, "");
         } else {
             // No se encontró el usuario
             throw new UserNotFoundException();

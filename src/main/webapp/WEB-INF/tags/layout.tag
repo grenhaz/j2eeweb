@@ -20,13 +20,19 @@
         <link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css" />" rel="stylesheet" type="text/css">
         <link href="<c:url value="/resources/fontawesome/css/font-awesome.min.css" />" rel="stylesheet" type="text/css">
         <link href="<c:url value="/resources/css/site.css" />" rel="stylesheet" type="text/css">
-        <link href="<c:url value="/resources/datatables/datatables.min.css" />" rel="stylesheet" type="text/css" />
  
         <script src="<c:url value="/resources/jquery/jquery.min.js" />"></script>
         <script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js" />"></script>
         <script src="<c:url value="/resources/bootbox/bootbox.min.js" />"></script>
         <script src="<c:url value="/resources/js/site.js" />"></script>
-        <script src="<c:url value="/resources/datatables/datatables.min.js" />"></script>
+        
+        <sec:authorize access="isAuthenticated() and hasRole('ROLE_ADMIN')">
+            <link href="<c:url value="/resources/datatables/datatables.min.css" />" rel="stylesheet" type="text/css" />
+            
+            <script src="<c:url value="/resources/datatables/datatables.min.js" />"></script>
+            <script src="<c:url value="/resources/tinymce/tinymce.min.js" />" type="text/javascript"></script>
+            <script src="<c:url value="/resources/tinymce/jquery.tinymce.min.js" />" type="text/javascript"></script>
+        </sec:authorize>
         <script>
             $(function () {
                 // Cambio de secciones
