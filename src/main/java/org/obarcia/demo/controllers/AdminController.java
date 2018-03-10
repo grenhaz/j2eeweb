@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
+// XXX: Administración: Subir ficheros.
 // XXX: Administración: Usuario: Reenviar email de activación (Colocar el botón).
 // XXX: Administración: Usuario: Enviar email de recuperación de cuenta (Coloar el botón).
 // XXX: Administración: Estadísticas: Artículos, Comentarios, Mas comentado
