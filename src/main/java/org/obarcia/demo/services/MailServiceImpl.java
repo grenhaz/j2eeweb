@@ -1,10 +1,14 @@
 package org.obarcia.demo.services;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import org.obarcia.demo.components.mail.MailSenderImpl;
 import org.obarcia.demo.models.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 /**
@@ -26,23 +30,39 @@ public class MailServiceImpl implements MailService
     {
         String url = request.getContextPath() + "/user/activate?k=" + user.getUkey();
         
-        // TODO: OFF: Enviar el email
-        SimpleMailMessage emailObj = new SimpleMailMessage();
-        emailObj.setTo(user.getEmail());
-        emailObj.setSubject("EWQ");
-        emailObj.setText("QWE <a href='" + url + "'>activación de la cuenta</a>");
-        mailSender.send(emailObj);
+        try {
+            String htmlMsg = "" +
+                    "<p>Pulse sobre el <a href='" + url + "'>ENLACE</a> para la activación de la cuenta.";
+            
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper;
+            helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
+            mimeMessage.setContent(htmlMsg, "text/html");
+            helper.setTo(user.getEmail());
+            helper.setSubject("Activación de la cuenta");
+            mailSender.send(mimeMessage);
+        } catch (MessagingException ex) {
+            Logger.getLogger(MailServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     @Override
     public void sendmailRecovery(HttpServletRequest request, User user)
     {
         String url = request.getContextPath() + "/user/recover?k=" + user.getUkey();
         
-        // TODO: OFF: Enviar el email
-        SimpleMailMessage emailObj = new SimpleMailMessage();
-        emailObj.setTo(user.getEmail());
-        emailObj.setSubject("EWQ ");
-        emailObj.setText("QWE <a href='" + url + "'>acceso a la recuperación de la cuenta</a>");
-        mailSender.send(emailObj);
+        try {
+            String htmlMsg = "" +
+                    "<p>Pulse sobre el <a href='" + url + "'>ENLACE</a> para la recuperación de la cuenta.";
+            
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper;
+            helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
+            mimeMessage.setContent(htmlMsg, "text/html");
+            helper.setTo(user.getEmail());
+            helper.setSubject("Recuperación de la cuenta");
+            mailSender.send(mimeMessage);
+        } catch (MessagingException ex) {
+            Logger.getLogger(MailServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

@@ -1,16 +1,20 @@
 package org.obarcia.demo.services;
 
 import java.util.List;
+import org.hibernate.HibernateException;
 import org.obarcia.demo.components.datatables.DataTablesResponse;
 import org.obarcia.demo.components.datatables.DataTablesRequest;
 import org.obarcia.demo.dao.ArticleDao;
+import org.obarcia.demo.exceptions.SaveException;
 import org.obarcia.demo.models.ListPagination;
 import org.obarcia.demo.models.article.Article;
 import org.obarcia.demo.models.article.ArticleLite;
+import org.obarcia.demo.models.article.ArticleSimple;
 import org.obarcia.demo.models.article.Comment;
 import org.obarcia.demo.models.article.CommentLite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implementación del servicio de artículos y comentarios.
@@ -27,93 +31,183 @@ public class ArticleServiceImpl implements ArticleService
     private ArticleDao articleDao;
     
     @Override
+    @Transactional(readOnly = true)
     public DataTablesResponse<ArticleLite> getArticlesLite(DataTablesRequest req)
     {
         return articleDao.getArticlesLite(req);
     }
     @Override
+    @Transactional(readOnly = true)
     public DataTablesResponse<CommentLite> getCommentsLite(Integer id, DataTablesRequest req)
     {
         return articleDao.getCommentsLite(id, req);
     }
     @Override
-    public ListPagination<Article> getArticlesAll(int page, int perPage)
+    @Transactional(readOnly = true)
+    public ListPagination<ArticleSimple> getArticlesAll(int page, int perPage)
     {
-        return articleDao.getArticles(page, perPage, null, null);
+        ListPagination<ArticleSimple> list = articleDao.getArticles(page, perPage, null, null);
+        // Obtener el contador de comentarios
+        if (list.getRecords() != null) {
+            for (ArticleSimple a: list.getRecords()) {
+                a.getCommentsCount();
+            }
+        }
+        
+        return list;
     }
     @Override
-    public ListPagination<Article> getArticlesAll(int page, int perPage, String type)
+    @Transactional(readOnly = true)
+    public ListPagination<ArticleSimple> getArticlesAll(int page, int perPage, String type)
     {
-        return articleDao.getArticles(page, perPage, null, type);
+        ListPagination<ArticleSimple> list = articleDao.getArticles(page, perPage, null, type);
+        // Obtener el contador de comentarios
+        if (list.getRecords() != null) {
+            for (ArticleSimple a: list.getRecords()) {
+                a.getCommentsCount();
+            }
+        }
+        
+        return list;
     }
     @Override
-    public ListPagination<Article> getArticlesAll(int page, int perPage, String tag, String type)
+    @Transactional(readOnly = true)
+    public ListPagination<ArticleSimple> getArticlesAll(int page, int perPage, String tag, String type)
     {
-        return articleDao.getArticles(page, perPage, tag, type);
+        ListPagination<ArticleSimple> list = articleDao.getArticles(page, perPage, tag, type);
+        // Obtener el contador de comentarios
+        if (list.getRecords() != null) {
+            for (ArticleSimple a: list.getRecords()) {
+                a.getCommentsCount();
+            }
+        }
+        
+        return list;
     }
     @Override
-    public ListPagination<Article> getArticlesSearch(int page, int perPage, String tag, String search)
+    @Transactional(readOnly = true)
+    public ListPagination<ArticleSimple> getArticlesSearch(int page, int perPage, String tag, String search)
     {
-        return articleDao.getArticlesSearch(page, perPage, tag, search);
+        ListPagination<ArticleSimple> list = articleDao.getArticlesSearch(page, perPage, tag, search);
+        // Obtener el contador de comentarios
+        if (list.getRecords() != null) {
+            for (ArticleSimple a: list.getRecords()) {
+                a.getCommentsCount();
+            }
+        }
+        
+        return list;
     }
     @Override
-    public List getArticlesImportants(String tag)
+    @Transactional(readOnly = true)
+    public List<ArticleSimple> getArticlesImportants(String tag)
     {
-        return articleDao.getArticlesImportant(tag, null, 3);
+        List<ArticleSimple> list = articleDao.getArticlesImportant(tag, null, 3);
+        // Obtener el contador de comentarios
+        if (list != null) {
+            for (ArticleSimple a: list) {
+                a.getCommentsCount();
+            }
+        }
+        
+        return list;
     }
     @Override
-    public List getArticlesImportants(String tag, String type)
+    @Transactional(readOnly = true)
+    public List<ArticleSimple> getArticlesImportants(String tag, String type)
     {
-        return articleDao.getArticlesImportant(tag, type, 3);
+        List<ArticleSimple> list = articleDao.getArticlesImportant(tag, type, 3);
+        // Obtener el contador de comentarios
+        if (list != null) {
+            for (ArticleSimple a: list) {
+                a.getCommentsCount();
+            }
+        }
+        
+        return list;
     }
     @Override
-    public List getArticlesByType(String tag, String type, int count)
+    @Transactional(readOnly = true)
+    public List<ArticleSimple> getArticlesByType(String tag, String type, int count)
     {
-        return articleDao.getArticles(0, count, tag, type).getRecords();
+        List<ArticleSimple> list = articleDao.getArticles(0, count, tag, type).getRecords();
+        // Obtener el contador de comentarios
+        if (list != null) {
+            for (ArticleSimple a: list) {
+                a.getCommentsCount();
+            }
+        }
+        
+        return list;
     }
     @Override
-    public List getArticlesMoreComments(String tag, int count)
+    @Transactional(readOnly = true)
+    public List<ArticleSimple> getArticlesMoreComments(String tag, int count)
     {
-        return articleDao.getArticlesMoreComments(tag, count);
+        List<ArticleSimple> list = articleDao.getArticlesMoreComments(tag, count);
+        // Obtener el contador de comentarios
+        if (list != null) {
+            for (ArticleSimple a: list) {
+                a.getCommentsCount();
+            }
+        }
+        
+        return list;
     }
     @Override
+    @Transactional(readOnly = true)
     public ListPagination<Comment> getComments(int id, int page, int perPage)
     {
         return articleDao.getComments(id, page, perPage);
     }
     @Override
+    @Transactional(readOnly = true)
     public List<Comment> getLastComments(String tag, int count)
     {
         return articleDao.getLastComments(tag, count);
     }
     @Override
+    @Transactional(readOnly = true)
     public List<Comment> getLastCommentsByUser(int id, int count)
     {
         return articleDao.getLastCommentsByUser(id, count);
     }
     @Override
+    @Transactional(readOnly = true)
     public Article getArticle(int id)
     {
         return articleDao.getArticle(id);
     }
     @Override
+    @Transactional(readOnly = true)
     public Comment getComment(int id)
     {
         return articleDao.getComment(id);
     }
     @Override
+    @Transactional(readOnly = true)
     public Article getArticleByTitle(String title)
     {
         return articleDao.getArticleByTitle(title);
     }
     @Override
-    public boolean save(Article article)
+    @Transactional
+    public void save(Article article) throws SaveException
     {
-        return articleDao.save(article);
+        try {
+            articleDao.save(article);
+        } catch (HibernateException e) {
+            throw new SaveException();
+        }
     }
     @Override
-    public boolean save(Comment comment)
+    @Transactional
+    public void save(Comment comment) throws SaveException
     {
-        return articleDao.save(comment);
+        try {
+            articleDao.save(comment);
+        } catch (HibernateException e) {
+            throw new SaveException();
+        }
     }
 }

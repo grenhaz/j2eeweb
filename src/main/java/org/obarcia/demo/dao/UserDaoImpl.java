@@ -7,7 +7,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.obarcia.demo.components.datatables.DataTablesOrder;
@@ -33,7 +33,6 @@ public class UserDaoImpl implements UserDao
     private SessionFactory sessionFactory;
 
     @Override
-    @Transactional
     public DataTablesResponse<UserLite> getUsersLite(DataTablesRequest req)
     {
         DataTablesResponse<UserLite> list = new DataTablesResponse<>();
@@ -114,13 +113,11 @@ public class UserDaoImpl implements UserDao
         return list;
     }
     @Override
-    @Transactional
     public User getUserById(int id)
     {
         return sessionFactory.getCurrentSession().get(User.class, id);
     }
     @Override
-    @Transactional
     public User getUserByEmail(String email)
     {
         if (email != null && !email.isEmpty()) {
@@ -135,7 +132,6 @@ public class UserDaoImpl implements UserDao
         return null;
     }
     @Override
-    @Transactional
     public User getUserByNickname(String nickname)
     {
         if (nickname != null && !nickname.isEmpty()) {
@@ -150,7 +146,6 @@ public class UserDaoImpl implements UserDao
         return null;
     }
     @Override
-    @Transactional
     public User getUserByUkey(String ukey)
     {
         if (ukey != null && !ukey.isEmpty()) {
@@ -165,16 +160,8 @@ public class UserDaoImpl implements UserDao
         return null;
     }
     @Override
-    @Transactional
-    public boolean save(User user)
+    public void save(User user) throws HibernateException
     {
-        try {
-            sessionFactory.getCurrentSession().saveOrUpdate(user);
-            
-            return true;
-        } catch (Exception e) {
-        }
-        
-        return false;
+        sessionFactory.getCurrentSession().saveOrUpdate(user);
     }
 }

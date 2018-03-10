@@ -19,6 +19,7 @@ import org.obarcia.demo.models.user.User;
 import org.obarcia.demo.models.user.UserForm;
 import org.obarcia.demo.models.user.UserLite;
 import org.obarcia.demo.services.ArticleService;
+import org.obarcia.demo.services.BrowserService;
 import org.obarcia.demo.services.MailService;
 import org.obarcia.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,21 +32,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-// TODO: OFF: Administración: Nuevo usuario
-// TODO: OFF: Administración: Nuevo artículo
-// TODO: LOW: Administración: Usuario: Reenviar email de activación (Colocar el botón).
-// TODO: LOW: Administración: Usuario: Enviar email de recuperación de cuenta (Coloar el botón).
-// TODO: LOW: Administración: Estadísticas: Artículos, Comentarios, Mas comentado
-// TODO: OFF: Administración: Formularios: Artículo: Completar y pruebas
-// TODO: OFF: Administración: Formularios: TinyMCE ampliado (insertar imagenes
-// TODO: OFF: Administración: Formularios: Campo de selección de una imagen
-// TODO: OFF: Administración: Formularios: Tags
-// TODO: OFF: Administración: Formularios: Fecha
-// TODO: LOW: Administración: Tablas de listados FILTERS
+
+// XXX: Administración: Usuario: Reenviar email de activación (Colocar el botón).
+// XXX: Administración: Usuario: Enviar email de recuperación de cuenta (Coloar el botón).
+// XXX: Administración: Estadísticas: Artículos, Comentarios, Mas comentado
+// XXX: Administración: Tablas de listados FILTERS
 /**
  * Controlador para la Administración.
  * 
@@ -76,6 +72,11 @@ public class AdminController
      */
     @Autowired
     private ArticleService articleService;
+    /**
+     * Instancia del servicio de explorador de archivos.
+     */
+    @Autowired
+    private BrowserService browserService;
     
     /**
      * Página principal.
@@ -114,6 +115,18 @@ public class AdminController
     public String actionArticles()
     {
         return "admin/articles";
+    }
+    @GetMapping("/ajax/browser")
+    public ModelAndView actionBrowserAjax(
+        @RequestParam(value = "field", required = true) String field,
+        @RequestParam(value = "path", required = true) String path,
+        @RequestParam(value = "type", required = true) String type)
+    {
+        return new ModelAndView("admin/filebrowser.ajax")
+            .addObject("field", field)
+            .addObject("path", path)
+            .addObject("type", type)
+            .addObject("files", browserService.getFiles(path, type));
     }
     /**
      * Listado de artículos para el DataTables.
@@ -195,15 +208,13 @@ public class AdminController
                 user.setNickname(form.getNickname());
                 
                 // Guardar el registro
-                if (userService.save(user)) {
-                    // Añadir mensaje flash (I18N)
-                    flash.addFlashAttribute("flash", messageSource.getMessage("message.save.ok", null, locale));
+                userService.save(user);
+                
+                // Añadir mensaje flash (I18N)
+                flash.addFlashAttribute("flash", messageSource.getMessage("message.save.ok", null, locale));
 
-                    // Redirect
-                    return new ModelAndView("redirect:/admin/user/" + id);
-                }
-
-                throw new SaveException();
+                // Redirect
+                return new ModelAndView("redirect:/admin/user/" + user.getId());
             }
 
             // Como hay errores se muestra la vista del formulario
@@ -222,14 +233,15 @@ public class AdminController
      * @param request Instancia de la petición.
      * @param flash Flash variables.
      * @return Respuesta.
-     * @throws UserNotFoundException 
+     * @throws UserNotFoundException
+     * @throws SaveException
      */
     @PostMapping("/user/{id}/{action}")
     public @ResponseBody ActionResponse actionUserAction(
             @PathVariable("id") int id,
             @PathVariable("action") String action,
             RedirectAttributes flash,
-            HttpServletRequest request) throws UserNotFoundException
+            HttpServletRequest request) throws UserNotFoundException, SaveException
     {
         User user = userService.getUserById(id);
         if (user != null) {
@@ -239,35 +251,51 @@ public class AdminController
                     // Activar / Desactivar el usuario
                     Boolean value = Boolean.valueOf(request.getParameter("value"));
                     user.setActive(value);
-                    if (userService.save(user)) {
+                    
+                    try {
+                        // Guardar el usuario
+                        userService.save(user);
+
                         return new ActionResponse(true);
+                    } catch(SaveException e) {
+                        return new ActionResponse(false, 500, "");
                     }
                 }
-                break;
                 case "recovery":
                 {
                     // Reenviar el mensaje de recuperación
                     user.setUkey(Utilities.getRandomHexString(64));
-                    if (userService.save(user)) {
+
+                    try {
+                        // Guardar el usuario
+                        userService.save(user);
+
                         // Enviar el mail de recuperación
                         mailService.sendmailRecovery(request, user);
 
                         // Redireccionar con mensaje
                         return new ActionResponse(true);
+                    } catch(SaveException e) {
+                        return new ActionResponse(false, 500, "");
                     }
                 }
-                break;
                 case "activate":
                 {
                     // Reenviar el mensaje de activación
                     if (user.getActive().equals(Boolean.FALSE)) {
                         user.setUkey(Utilities.getRandomHexString(64));
-                        if (userService.save(user)) {
+                        
+                        try {
+                            // Guardar el usuario
+                            userService.save(user);
+
                             // Enviar el mail de recuperación
                             mailService.sendmailActivation(request, user);
 
                             // Redireccionar con mensaje
                             return new ActionResponse(true);
+                        } catch(SaveException e) {
+                            return new ActionResponse(false, 500, "");
                         }
                     }
                 }
@@ -297,21 +325,21 @@ public class AdminController
             article = new Article();
         } else {
             article = articleService.getArticle(id);
-            if (article != null) {
-                // Rellenar el formulario
-                form.setTitle(article.getTitle());
-                form.setDescription(article.getDescription());
-                form.setImage(article.getImage());
-                form.setContent(article.getContent());
-                form.setImportant(article.getImportant());
-                form.setActive(article.getActive());
-                form.setTags(article.getTags());
-                form.setPublish(article.getPublish());
-                form.setScore(article.getScore());
-            } else {
-                // No se encontró el artículo
-                throw new ArticleNotFoundException();
-            }
+        }
+        if (article != null) {
+            // Rellenar el formulario
+            form.setTitle(article.getTitle());
+            form.setDescription(article.getDescription());
+            form.setImage(article.getImage());
+            form.setContent(article.getContent());
+            form.setImportant(article.getImportant());
+            form.setActive(article.getActive());
+            form.setTags(article.getTags());
+            form.setPublish(article.getPublish());
+            form.setScore(article.getScore());
+        } else {
+            // No se encontró el artículo
+            throw new ArticleNotFoundException();
         }
 
         // Vista con el formulario
@@ -338,12 +366,15 @@ public class AdminController
             Locale locale,
             RedirectAttributes flash) throws SaveException, ArticleNotFoundException
     {
-        // Obtener el artículo por id
-        Article article;
-        if (id == 0) {
-            article = new Article();
-        } else {
-            article = articleService.getArticle(id);
+        // Si no hay errores
+        if (!result.hasErrors()) {
+            // Obtener el artículo por id
+            Article article;
+            if (id == 0) {
+                article = new Article();
+            } else {
+                article = articleService.getArticle(id);
+            }
             if (article != null) {
                 // Rellenar el articulo
                 article.setTitle(form.getTitle());
@@ -359,21 +390,15 @@ public class AdminController
                 // No se encontró el artículo
                 throw new ArticleNotFoundException();
             }
-        }
-        
-        // Si no hay errores
-        if (!result.hasErrors()) {
+            
             // Guardar el artículo
-            if (articleService.save(article)) {
-                // Añadir mensaje flash (I18N)
-                flash.addFlashAttribute("flash", messageSource.getMessage("message.save.ok", null, locale));
+            articleService.save(article);
+            
+            // Añadir mensaje flash (I18N)
+            flash.addFlashAttribute("flash", messageSource.getMessage("message.save.ok", null, locale));
 
-                // Redirect
-                return new ModelAndView("redirect:/admin/article/" + id);
-            }
-
-            // Error al guardar
-            throw new SaveException();
+            // Redirect
+            return new ModelAndView("redirect:/admin/article/" + article.getId());
         }
 
         // Si hubo errores se muestra el formulario
@@ -403,9 +428,13 @@ public class AdminController
                     // Activar / Desactivar el usuario
                     Boolean value = Boolean.valueOf(request.getParameter("value"));
                     article.setActive(value);
-                    if (articleService.save(article)) {
+                    
+                    try {
+                        // Guardar el artículo
+                        articleService.save(article);
+
                         return new ActionResponse(true);
-                    } else {
+                    } catch(SaveException e) {
                         return new ActionResponse(false, 500, "");
                     }
                 }
@@ -417,9 +446,11 @@ public class AdminController
                     if (comment != null) {
                         Boolean value = Boolean.valueOf(request.getParameter("value"));
                         comment.setErased(value);
-                        if (articleService.save(comment)) {
+                        try {
+                            articleService.save(comment);
+                            
                             return new ActionResponse(true);
-                        } else {
+                        } catch(SaveException e) {
                             return new ActionResponse(false, 500, "");
                         }
                     }

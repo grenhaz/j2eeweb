@@ -23,6 +23,7 @@
     <!-- Resources: jQuery, Bootstrap,... -->
     <!-- TODO: Incluir cache -->
     <mvc:resources mapping="/resources/**" location="/WEB-INF/resources/">
+        <mvc:cache-control cache-public="true" max-age="2592000"/>
     </mvc:resources>
     <!-- Imágenes, avatares, ... -->
     <mvc:resources mapping="/data/**" location="/WEB-INF/data/">

@@ -2,6 +2,7 @@ package org.obarcia.demo.services;
 
 import org.obarcia.demo.components.datatables.DataTablesRequest;
 import org.obarcia.demo.components.datatables.DataTablesResponse;
+import org.obarcia.demo.exceptions.SaveException;
 import org.obarcia.demo.models.user.User;
 import org.obarcia.demo.models.user.UserLite;
 
@@ -45,7 +46,7 @@ public interface UserService
     /**
      * Guarda un usuario.
      * @param user Instancia del usuario.
-     * @return true si la operación fué correcta, false en caso contrario.
+     * @throws SaveException
      */
-    public boolean save(User user);
+    public void save(User user) throws SaveException;
 }

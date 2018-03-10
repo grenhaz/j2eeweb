@@ -1,15 +1,11 @@
 package org.obarcia.demo.models.user;
 
+import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -17,7 +13,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.obarcia.demo.models.article.Comment;
 
 /**
  * User.
@@ -26,7 +21,7 @@ import org.obarcia.demo.models.article.Comment;
  */
 @Entity
 @Table(name = "usuario")
-public class User
+public class User implements Serializable
 {
     public static final String ROLE_USER = "ROLE_USER";
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
@@ -91,11 +86,6 @@ public class User
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created")
     private Date created;
-    /**
-     * Listado de comentarios.
-     */
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
-    private Set<Comment> comments = new HashSet<>();
     
     // ******************************************
     // GETTER & SETTER
@@ -171,9 +161,5 @@ public class User
     public void setCreated(Date value)
     {
         created = value;
-    }
-    public Set<Comment> getComments()
-    {
-        return comments;
     }
 }

@@ -1,6 +1,5 @@
 package org.obarcia.demo.models.user;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.hibernate.annotations.Immutable;
+import org.obarcia.demo.components.Utilities;
 
 /**
  * User (Lite).
@@ -15,11 +16,10 @@ import javax.persistence.TemporalType;
  * @author obarcia
  */
 @Entity
+@Immutable
 @Table(name = "usuario")
 public class UserLite
 {
-    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-    
     /**
      * Identificador.
      */
@@ -64,11 +64,7 @@ public class UserLite
      */
     public String getFormattedCreated()
     {
-        if (created != null) {
-            return FORMAT.format(created);
-        }
-        
-        return "";
+        return Utilities.getElapsedTime(created);
     }
     // ******************************************
     // GETTER & SETTER

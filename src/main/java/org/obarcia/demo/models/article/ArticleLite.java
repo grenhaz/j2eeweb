@@ -1,13 +1,18 @@
 package org.obarcia.demo.models.article;
 
-import java.text.SimpleDateFormat;
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Size;
+import org.hibernate.annotations.Immutable;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.obarcia.demo.components.Utilities;
 
 /**
  * Artículo (Lite).
@@ -15,35 +20,44 @@ import javax.persistence.TemporalType;
  * @author obarcia
  */
 @Entity
+@Immutable
 @Table(name = "article")
-public class ArticleLite
+public class ArticleLite implements Serializable
 {
-    /**
-     * Formato de fecha
-     */
-    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-    
     /**
      * Identificador.
      */
     @Id
+    @GeneratedValue
     @Column(name = "id")
     private Integer id;
     /**
      * Tipo.
      */
+    @NotEmpty
+    @Size(max = 12)
     @Column(name = "type")
     private String type;
     /**
      * Título.
      */
+    @NotEmpty
+    @Size(max = 250)
     @Column(name = "title")
     private String title;
     /**
      * Descripción.
      */
+    @Size(max = 250)
     @Column(name = "description")
     private String description;
+    /**
+     * Imágen de portada.
+     */
+    @NotEmpty
+    @Size(max = 250)
+    @Column(name = "image")
+    private String image;
     /**
      * Fecha de publicación.
      */
@@ -53,12 +67,14 @@ public class ArticleLite
     /**
      * Etiquetas.
      */
+    @NotEmpty
+    @Size(max = 128)
     @Column(name = "tags")
     private String tags;
     /**
-     * Si es importante / destacado.
+     * Si es imporatante / destacado.
      */
-    @Column(name = "importat")
+    @Column(name = "important")
     private Boolean important;
     /**
      * Puntuación.
@@ -92,11 +108,7 @@ public class ArticleLite
      */
     public String getFormattedPublish()
     {
-        if (publish != null) {
-            return FORMAT.format(publish);
-        }
-        
-        return "";
+        return Utilities.getElapsedTime(publish);
     }
     // ******************************************
     // GETTER & SETTER
@@ -108,6 +120,14 @@ public class ArticleLite
     public void setId(Integer value)
     {
         id = value;
+    }
+    public String getImage()
+    {
+        return image;
+    }
+    public void setImage(String value)
+    {
+        image = value;
     }
     public String getType()
     {

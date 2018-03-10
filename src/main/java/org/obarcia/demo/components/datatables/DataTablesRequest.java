@@ -60,7 +60,7 @@ public class DataTablesRequest
         start = Integer.parseInt(request.getParameter("start"));
         length = Integer.parseInt(request.getParameter("length"));
         
-        // Columns
+        // Columnas
         String data;
         int i = 0;
         do {
@@ -81,7 +81,7 @@ public class DataTablesRequest
             i ++;
         } while(data != null);
         
-        // Order
+        // Orden
         String column;
         i = 0;
         do {

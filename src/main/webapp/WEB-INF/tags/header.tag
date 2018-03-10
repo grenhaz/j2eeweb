@@ -4,7 +4,6 @@
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@attribute name="tag" required="true" rtexprvalue="true" %>
 <%@attribute name="search" required="false" rtexprvalue="true" %>
-<c:url value="" var="urlBack" />
 <header class="top">
     <div class="container">
         <div class="row">
@@ -22,7 +21,7 @@
                         <div class="text">
                             <div class="nickname"><a href="<c:url value="/user/login" />"><spring:message code="label.user.anonymous" /></a></div>
                             <div class="actions">
-                                <a href="<c:url value="/user/login?u=${urlBack}" />"><spring:message code="label.user.login" /></a>
+                                <a href="<c:url value="/user/login" />"><spring:message code="label.user.login" /></a>
                                 <span class="separator">|</span>
                                 <a href="<c:url value="/user/register" />"><spring:message code="label.user.register" /></a>
                             </div>

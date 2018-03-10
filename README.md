@@ -3,7 +3,8 @@
 - Spring MVC 4.3.7
 - Spring Security 5.0.0
 - Hibernate 5.2.13
-## Configuración de la Base de datos
+## Configuración de la web
+Los parámetros de configuración de la Web, la Base de Datos, el servidor de correo y otros parámetros se especifica en el fichero src/main/resources/properties/config.properties.
 ## Creación de la demo
 Una vez realizado el despliegue de la web si accedemos a "[WEB]/demo/create"
 se generará una demo con datos de prueba.

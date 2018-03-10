@@ -7,7 +7,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -17,6 +16,7 @@ import org.obarcia.demo.components.datatables.DataTablesRequest;
 import org.obarcia.demo.models.ListPagination;
 import org.obarcia.demo.models.article.Article;
 import org.obarcia.demo.models.article.ArticleLite;
+import org.obarcia.demo.models.article.ArticleSimple;
 import org.obarcia.demo.models.article.Comment;
 import org.obarcia.demo.models.article.CommentLite;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,6 @@ public class ArticleDaoImpl implements ArticleDao
     private SessionFactory sessionFactory;
 
     @Override
-    @Transactional
     public DataTablesResponse<ArticleLite> getArticlesLite(DataTablesRequest req)
     {
         DataTablesResponse<ArticleLite> list = new DataTablesResponse<>();
@@ -121,7 +120,6 @@ public class ArticleDaoImpl implements ArticleDao
         return list;
     }
     @Override
-    @Transactional
     public DataTablesResponse<CommentLite> getCommentsLite(Integer id, DataTablesRequest req)
     {
         DataTablesResponse<CommentLite> list = new DataTablesResponse<>();
@@ -199,11 +197,10 @@ public class ArticleDaoImpl implements ArticleDao
         return list;
     }
     @Override
-    @Transactional
-    public ListPagination<Article> getArticles(int page, int perPage, String tag, String type)
+    public ListPagination<ArticleSimple> getArticles(int page, int perPage, String tag, String type)
     {
         // Pagination
-        ListPagination<Article> list = new ListPagination<>();
+        ListPagination<ArticleSimple> list = new ListPagination<>();
         list.setType(type != null ? type : "all");
         list.setTag(tag != null ? tag : "games");
         list.setOffset((page - 1) * perPage);
@@ -214,11 +211,11 @@ public class ArticleDaoImpl implements ArticleDao
         
         // Count
         CriteriaQuery<Long> criteriaCount = builder.createQuery(Long.class);
-        criteriaCount.select(builder.count(criteriaCount.from(Article.class)));
+        criteriaCount.select(builder.count(criteriaCount.from(ArticleSimple.class)));
         
         // Query
-        CriteriaQuery<Article> criteria = builder.createQuery(Article.class);
-        Root<Article> root = criteria.from(Article.class);
+        CriteriaQuery<ArticleSimple> criteria = builder.createQuery(ArticleSimple.class);
+        Root<ArticleSimple> root = criteria.from(ArticleSimple.class);
         
         // Where
         List<Predicate> predicates = new LinkedList<>();
@@ -237,7 +234,7 @@ public class ArticleDaoImpl implements ArticleDao
         criteria.orderBy(builder.desc(root.get("publish")));
         
         // Query
-        Query<Article> q = sessionFactory.getCurrentSession().createQuery(criteria);
+        Query<ArticleSimple> q = sessionFactory.getCurrentSession().createQuery(criteria);
         q.setFirstResult(list.getOffset()).setMaxResults(list.getLimit());
         list.setTotal(sessionFactory.getCurrentSession().createQuery(criteriaCount).getSingleResult().intValue());
         list.setRecords(q.list());
@@ -245,11 +242,10 @@ public class ArticleDaoImpl implements ArticleDao
         return list;
     }    
     @Override
-    @Transactional
-    public ListPagination<Article> getArticlesSearch(int page, int perPage, String tag, String search)
+    public ListPagination<ArticleSimple> getArticlesSearch(int page, int perPage, String tag, String search)
     {
         // Pagination
-        ListPagination<Article> list = new ListPagination<>();
+        ListPagination<ArticleSimple> list = new ListPagination<>();
         list.setType("all");
         list.setTag(tag != null ? tag : "games");
         list.setOffset((page - 1) * perPage);
@@ -260,11 +256,11 @@ public class ArticleDaoImpl implements ArticleDao
         
         // Count
         CriteriaQuery<Long> criteriaCount = builder.createQuery(Long.class);
-        criteriaCount.select(builder.count(criteriaCount.from(Article.class)));
+        criteriaCount.select(builder.count(criteriaCount.from(ArticleSimple.class)));
         
         // Query
-        CriteriaQuery<Article> criteria = builder.createQuery(Article.class);
-        Root<Article> root = criteria.from(Article.class);
+        CriteriaQuery<ArticleSimple> criteria = builder.createQuery(ArticleSimple.class);
+        Root<ArticleSimple> root = criteria.from(ArticleSimple.class);
         
         // Where
         List<Predicate> predicates = new LinkedList<>();
@@ -274,8 +270,7 @@ public class ArticleDaoImpl implements ArticleDao
         predicates.add(
             builder.or(
                 builder.like(root.<String>get("title"), "%" + search + "%"),
-                builder.like(root.<String>get("description"), "%" + search + "%"),
-                builder.like(root.<String>get("content"), "%" + search + "%")
+                builder.like(root.<String>get("description"), "%" + search + "%")
             )
         );
         predicates.add(builder.equal(root.get("active"), true));
@@ -287,7 +282,7 @@ public class ArticleDaoImpl implements ArticleDao
         criteria.orderBy(builder.desc(root.get("publish")));
         
         // Query
-        Query<Article> q = sessionFactory.getCurrentSession().createQuery(criteria);
+        Query<ArticleSimple> q = sessionFactory.getCurrentSession().createQuery(criteria);
         q.setFirstResult(list.getOffset()).setMaxResults(list.getLimit());
         list.setTotal(sessionFactory.getCurrentSession().createQuery(criteriaCount).getSingleResult().intValue());
         list.setRecords(q.list());
@@ -295,15 +290,14 @@ public class ArticleDaoImpl implements ArticleDao
         return list;
     }
     @Override
-    @Transactional
-    public List<Article> getArticlesImportant(String tag, String type, int count)
+    public List<ArticleSimple> getArticlesImportant(String tag, String type, int count)
     {
         // Criteria
         CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
         
         // Query
-        CriteriaQuery<Article> criteria = builder.createQuery(Article.class);
-        Root<Article> root = criteria.from(Article.class);
+        CriteriaQuery<ArticleSimple> criteria = builder.createQuery(ArticleSimple.class);
+        Root<ArticleSimple> root = criteria.from(ArticleSimple.class);
         
         // Where
         List<Predicate> predicates = new LinkedList<>();
@@ -329,10 +323,9 @@ public class ArticleDaoImpl implements ArticleDao
                 .list();
     }
     @Override
-    @Transactional
-    public List<Article> getArticlesMoreComments(String tag, int count)
+    public List<ArticleSimple> getArticlesMoreComments(String tag, int count)
     {
-        // TODO: OFF: !!!! Obtener los artículos más vistos / comentados.
+        // TODO: Obtener los artículos más vistos / comentados.
         // Criteria
         /*CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
         
@@ -359,17 +352,29 @@ public class ArticleDaoImpl implements ArticleDao
         criteria.groupBy(rootComment.get("article").get("id"));
         
         criteria.orderBy(builder.desc(builder.count(rootComment)));
+        */
         
         // Query
-        return sessionFactory
+        // BUG: https://hibernate.atlassian.net/browse/HHH-1615
+        /*Query<ArticleLite> q = sessionFactory.getCurrentSession().createQuery(
+                    "SELECT a.id, a.image, a.type, a.title, a.description, a.publish, a.tags, a.important, a.score, a.active " + 
+                    "FROM ArticleLite as a " +
+                    "INNER JOIN CommentLite c ON c.id_article = a.id " + 
+                    "GROUP BY a.id, a.image, a.type, a.title, a.description, a.publish, a.tags, a.important, a.score, a.active " + 
+                    "ORDER BY COUNT(c.id) DESC");
+        return q.setMaxResults(count).list();*/
+        /*return sessionFactory
                 .getCurrentSession()
-                .createQuery(criteria)
+                .createQuery("SELECT a.id, a.image, a.type, a.title, a.description, a.publish, a.tags, a.important, a.score, a.active " + 
+                    "FROM ArticleLite as a " +
+                    "INNER JOIN CommentLite c ON c.id_article = a.id " + 
+                    "GROUP BY a.id, a.image, a.type, a.title, a.description, a.publish, a.tags, a.important, a.score, a.active " + 
+                    "ORDER BY COUNT(c.id)")
                 .setMaxResults(count)
                 .list();*/
         return null;
     }
     @Override
-    @Transactional
     public ListPagination<Comment> getComments(int id, int page, int perPage)
     {
         // Pagination
@@ -408,7 +413,19 @@ public class ArticleDaoImpl implements ArticleDao
         return list;
     }
     @Override
-    @Transactional
+    public int getCommentsCount(int id)
+    {
+        // Criteria
+        CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
+        
+        // Count
+        CriteriaQuery<Long> criteriaCount = builder.createQuery(Long.class);
+        Root<CommentLite> root = criteriaCount.from(CommentLite.class);
+        criteriaCount.select(builder.count(root));
+        criteriaCount.where(builder.and(builder.equal(root.get("id_article"), id)));
+        return sessionFactory.getCurrentSession().createQuery(criteriaCount).getSingleResult().intValue();
+    }
+    @Override
     public List<Comment> getLastComments(String tag, int count)
     {
         // Criteria
@@ -438,7 +455,6 @@ public class ArticleDaoImpl implements ArticleDao
                 .list();
     }
     @Override
-    @Transactional
     public List<Comment> getLastCommentsByUser(int id, int count)
     {
         // Criteria
@@ -466,13 +482,11 @@ public class ArticleDaoImpl implements ArticleDao
                 .list();
     }
     @Override
-    @Transactional
     public Article getArticle(int id)
     {
         return sessionFactory.getCurrentSession().get(Article.class, id);
     }
     @Override
-    @Transactional
     public Article getArticleByTitle(String title)
     {
         // Criteria
@@ -495,35 +509,18 @@ public class ArticleDaoImpl implements ArticleDao
                 .uniqueResult();
     }
     @Override
-    @Transactional
     public Comment getComment(int id)
     {
         return sessionFactory.getCurrentSession().get(Comment.class, id);
     }
     @Override
-    @Transactional
-    public boolean save(Article article)
+    public void save(Article article) throws HibernateException
     {
-        try {
-            sessionFactory.getCurrentSession().saveOrUpdate(article);
-            
-            return true;
-        } catch (HibernateException e) {
-        }
-        
-        return false;
+        sessionFactory.getCurrentSession().saveOrUpdate(article);
     }
     @Override
-    @Transactional
-    public boolean save(Comment comment)
+    public void save(Comment comment) throws HibernateException
     {
-        try {
-            sessionFactory.getCurrentSession().saveOrUpdate(comment);
-            
-            return true;
-        } catch (HibernateException e) {
-        }
-        
-        return false;
+        sessionFactory.getCurrentSession().saveOrUpdate(comment);
     }
 }

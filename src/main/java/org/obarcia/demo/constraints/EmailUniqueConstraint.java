@@ -13,13 +13,14 @@ import javax.validation.Payload;
  * 
  * @author obarcia
  */
-@Target({ ElementType.FIELD })
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Constraint(validatedBy = EmailUniqueConstraintValidator.class)
 public @interface EmailUniqueConstraint
 {
     String message();
+    String field();
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

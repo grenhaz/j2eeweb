@@ -25,12 +25,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-// TODO: GFX: Header: Logo
-// TODO: LOW: Url back en el login
-// TODO: LOW: Artículo: Utilizar ajax para el proceso de añadir un artículo
-// XXX: Crear datos de demo inicialmente (Incluir más)
-// TODO: LOW: Uso de varios idiomas
+// XXX: Uso de varios idiomas
 // XXX: Diferentes estilos por tag
+
 /**
  * Controlador de la web.
  * 
@@ -164,31 +161,33 @@ public class WebController
             @Valid @ModelAttribute("comment") CommentForm form,
             BindingResult result) throws ArticleNotFoundException, SaveException
     {
+        // Obtener el artículo
         Article model = articleService.getArticle(id);
         if (model != null && model.getActive().equals(Boolean.TRUE)) {
+            // Si no hay errores
             if (!result.hasErrors()) {
+                // Obtener el usuario conectado
                 int userId = ((AccountDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
                 User user = userService.getUserById(userId);
                 if (user != null) {
+                    // Crear el comentario
                     Comment comment = new Comment();
                     comment.setArticle(model);
                     comment.setUser(user);
                     comment.setContent(form.getContent());
                     comment.setPublish(new Date());
                     comment.setErased(Boolean.FALSE);
-                    if (articleService.save(comment)) {
-                        return new ModelAndView("redirect:/article/" + id);
-                    } else {
-                        throw new SaveException();
-                    }
+                    
+                    // Guardar el comentario
+                    articleService.save(comment);
+                    
+                    return new ModelAndView("articles/comment.ajax", "comment", new CommentForm());
                 } else {
                     throw new SaveException();
                 }
             }
 
-            return new ModelAndView("articles/article")
-                    .addObject("comment",   form)
-                    .addObject("model",     model);
+            return new ModelAndView("articles/comment.ajax", "comment", form);
         } else {
             throw new ArticleNotFoundException();
         }

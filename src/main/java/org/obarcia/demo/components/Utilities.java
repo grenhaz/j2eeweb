@@ -1,13 +1,11 @@
 package org.obarcia.demo.components;
 
 import java.beans.PropertyDescriptor;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static org.springframework.beans.BeanUtils.getPropertyDescriptor;
 
 /**
@@ -17,7 +15,10 @@ import static org.springframework.beans.BeanUtils.getPropertyDescriptor;
  */
 public class Utilities
 {
-    private final static Logger LOGGER = Logger.getLogger(Utilities.class.getCanonicalName());
+    /**
+     * Formato de fecha
+     */
+    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd/MM/yyyy");
     
     /**
      * Devuelve un texto aleatoria formado por valores hexadecimales.
@@ -56,6 +57,34 @@ public class Utilities
         if (readMethod == null) {
             return null;
         }
+        
         return readMethod.invoke(bean);
+    }
+    /**
+     * Devuelve el tiempo transcurrido.
+     * @param dt Tiempo base,
+     * @return Tiempo transcurrido o fecha.
+     */
+    public static String getElapsedTime(Date dt)
+    {
+        if (dt != null) {
+            long ts = dt.getTime();
+            long now = new Date().getTime();
+            long diff = (now - ts) / 1000;
+            if (diff > 24 * 60 * 60) {
+                // Más de un día
+                return FORMAT.format(dt);
+            } else if (diff > 3600) {
+                // Más de una 1 hora
+                int value = (int)(diff / 3600);
+                return value + " h";
+            } else {
+                // Minutos
+                int value = (int)(diff / 60);
+                return value + " m";
+            }
+        }
+        
+        return "";
     }
 }

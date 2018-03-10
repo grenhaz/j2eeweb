@@ -14,7 +14,7 @@ footer .social-networks a:hover{color:#FFF;}
 .btn-full{width:100%;}
 .clickable{cursor:pointer;}
 .loading-splash{z-index:1;position:absolute;top:0;bottom:0;left:0;right:0;background-color:#FFF;opacity:0.5;}
-.loading-splash .progress{margin-top:64px;}
+/*.loading-splash .progress{margin-top:64px;}*/
 .progress-bar.progress-bar-striped{background-color:#ED4000;}
 .btn.btn-primary{background-color:#ED4000;border-color:#aa2f01;}
 .btn.btn-primary:hover{background-color:#aa2f01;}
@@ -168,6 +168,16 @@ ul.list-sections li.active:after{border-color: #aa2f01 transparent transparent t
 
 /* LISTADOS */
 #records .fa-ban,#records .fa-check-circle-o,#records .fa-times-circle-o{font-size:20px;cursor:pointer;}
+
+/* MODAL */
+.browser-modal{z-index:65555!important;}
+
+/* ADMIN */
+.image-img{width:100%;border-radius:8px;}
+.browser .file{cursor:pointer;}
+.browser .file .image{width:100%;overflow:hidden;height:100px;text-align:center;border-radius:8px;border:1px solid #666;}
+.browser .file .image.folder{padding-top:8px;}
+.browser .file .image img{max-width:100%;}
 
 /* LOADING */
 .loading-info{position:fixed;top:0;z-index:1000;text-align:center;margin:auto;}

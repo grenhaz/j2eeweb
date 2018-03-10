@@ -3,9 +3,11 @@ package org.obarcia.demo.services;
 import java.util.List;
 import org.obarcia.demo.components.datatables.DataTablesResponse;
 import org.obarcia.demo.components.datatables.DataTablesRequest;
+import org.obarcia.demo.exceptions.SaveException;
 import org.obarcia.demo.models.ListPagination;
 import org.obarcia.demo.models.article.Article;
 import org.obarcia.demo.models.article.ArticleLite;
+import org.obarcia.demo.models.article.ArticleSimple;
 import org.obarcia.demo.models.article.Comment;
 import org.obarcia.demo.models.article.CommentLite;
 
@@ -37,7 +39,7 @@ public interface ArticleService
      * @param perPage Registros por página.
      * @return Listado de artículos
      */
-    public ListPagination<Article> getArticlesAll(int page, int perPage);
+    public ListPagination<ArticleSimple> getArticlesAll(int page, int perPage);
     /**
      * Devuelve un listado de artículos.
      * @param page Página.
@@ -45,7 +47,7 @@ public interface ArticleService
      * @param type Tipo de artículo.
      * @return Listado de artículos
      */
-    public ListPagination<Article> getArticlesAll(int page, int perPage, String type);
+    public ListPagination<ArticleSimple> getArticlesAll(int page, int perPage, String type);
     /**
      * Devuelve un listado de artículos.
      * @param page Página.
@@ -54,7 +56,7 @@ public interface ArticleService
      * @param type Tipo de artículo.
      * @return Listado de artículos
      */
-    public ListPagination<Article> getArticlesAll(int page, int perPage, String tag, String type);
+    public ListPagination<ArticleSimple> getArticlesAll(int page, int perPage, String tag, String type);
     /**
      * Búsqueda de artículos.
      * @param page Página.
@@ -63,20 +65,20 @@ public interface ArticleService
      * @param search Texto de búsqueda.
      * @return Listado de artículos
      */
-    public ListPagination<Article> getArticlesSearch(int page, int perPage, String tag, String search);
+    public ListPagination<ArticleSimple> getArticlesSearch(int page, int perPage, String tag, String search);
     /**
      * Devuelve un listado de artículos marcados como imporatantes.
      * @param tag Etiqueta de búsqueda.
      * @return Listado de artículos.
      */
-    public List getArticlesImportants(String tag);
+    public List<ArticleSimple> getArticlesImportants(String tag);
     /**
      * Devuelve un listado de artículos marcados como imporatantes.
      * @param tag Etiqueta de búsqueda.
      * @param type Tipo de artículo
      * @return Listado de artículos.
      */
-    public List getArticlesImportants(String tag, String type);
+    public List<ArticleSimple> getArticlesImportants(String tag, String type);
     /**
      * Devuelve un listado de artículos por tipo.
      * @param tag Etiqueta.
@@ -84,7 +86,7 @@ public interface ArticleService
      * @param count Número de registros.
      * @return Listado de artículos.
      */
-    public List getArticlesByType(String tag, String type, int count);
+    public List<ArticleSimple> getArticlesByType(String tag, String type, int count);
     /**
      * Devuelve un listado de artículos ordenados por número de comentarios.
      * De más comentado a menos.
@@ -92,7 +94,7 @@ public interface ArticleService
      * @param count Número de registros.
      * @return Listado de artículos.
      */
-    public List getArticlesMoreComments(String tag, int count);
+    public List<ArticleSimple> getArticlesMoreComments(String tag, int count);
     /**
      * Devuelve un listado de comentarios de un artículo.
      * @param id Identificador del artículo.
@@ -136,13 +138,13 @@ public interface ArticleService
     /**
      * Guarda un artículo.
      * @param article Instancia del artículo.
-     * @return true si la operación fué correcta, false en caso contrario.
+     * @throws SaveException
      */
-    public boolean save(Article article);
+    public void save(Article article) throws SaveException;
     /**
      * Guarda un comentario.
      * @param comment Instancia del comentario.
-     * @return true si la operación fué correcta, false en caso contrario.
+     * @throws SaveException
      */
-    public boolean save(Comment comment);
+    public void save(Comment comment) throws SaveException;
 }

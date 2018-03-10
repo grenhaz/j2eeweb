@@ -42,7 +42,7 @@ public class NicknameConstraintValidator implements ConstraintValidator<Nickname
     {
         try {
             final Object id = Utilities.getPropertyValue(candidate, "id");
-            final Object nickname = Utilities.getPropertyValue(candidate, "nickname");
+            final Object nickname = Utilities.getPropertyValue(candidate, fieldName);
 
             User user = userService.getUserByNickname((String)nickname);
             if  (user == null || (id != null && user.getId().equals(id))) {
@@ -57,6 +57,6 @@ public class NicknameConstraintValidator implements ConstraintValidator<Nickname
             }
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {}
         
-        return true;
+        return false;
     }
 }

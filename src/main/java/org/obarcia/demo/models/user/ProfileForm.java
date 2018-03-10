@@ -1,6 +1,5 @@
 package org.obarcia.demo.models.user;
 
-import javax.persistence.Column;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -21,15 +20,14 @@ public class ProfileForm
     /**
      * Nickname.
      */
-    @NotEmpty
+    @NotEmpty(message = "{error.NotEmpty}")
     @Size(max = 32)
-    @Pattern(regexp = "^[A-Za-z0-9_-]+$")
+    @Pattern(regexp = "^[A-Za-z0-9_-]+$", message = "{error.NicknamePattern}")
     private String nickname;
     /**
      * Fichero que hace de avatar.
      */
     @Size(max = 64)
-    @Column(name = "avatar")
     private String avatar;
     
     // ******************************************

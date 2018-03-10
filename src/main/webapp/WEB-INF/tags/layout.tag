@@ -28,10 +28,17 @@
         
         <sec:authorize access="isAuthenticated() and hasRole('ROLE_ADMIN')">
             <link href="<c:url value="/resources/datatables/datatables.min.css" />" rel="stylesheet" type="text/css" />
+            <link href="<c:url value="/resources/datepicker/css/bootstrap-datepicker3.min.css" />" rel="stylesheet" type="text/css" />
             
             <script src="<c:url value="/resources/datatables/datatables.min.js" />"></script>
+            <script src="<c:url value="/resources/datatables/datatables.buttons.min.js" />"></script>
             <script src="<c:url value="/resources/tinymce/tinymce.min.js" />" type="text/javascript"></script>
             <script src="<c:url value="/resources/tinymce/jquery.tinymce.min.js" />" type="text/javascript"></script>
+            <script src="<c:url value="/resources/js/admin.js" />"></script>
+            <script src="<c:url value="/resources/datepicker/js/bootstrap-datepicker.js" />"></script>
+            <script src="<c:url value="/resources/datepicker/js/bootstrap-timepicker.js" />"></script>
+            <script src="<c:url value="/resources/datepicker/js/bootstrap-datepicker.es.min.js" />"></script>
+            <script src="<c:url value="/resources/datepicker/js/bootstrap-datepicker.en.min.js" />"></script>
         </sec:authorize>
         <script>
             $(function () {

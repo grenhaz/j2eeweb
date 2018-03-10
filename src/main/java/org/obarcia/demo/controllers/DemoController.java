@@ -1,6 +1,7 @@
 package org.obarcia.demo.controllers;
 
 import java.util.Date;
+import org.obarcia.demo.exceptions.SaveException;
 import org.obarcia.demo.models.article.Article;
 import org.obarcia.demo.models.article.Comment;
 import org.obarcia.demo.models.user.User;
@@ -35,9 +36,10 @@ public class DemoController
     /**
      * Crear / actualizar la demo de prueba.
      * @return Vista resultante.
+     * @throws SaveException
      */
     @GetMapping("/create")
-    public String createDemo()
+    public String createDemo() throws SaveException
     {
         String content = "<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu</p><p>In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus.</p><p>Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,</p>";
         // Usuarios
@@ -45,6 +47,8 @@ public class DemoController
         createUser("obarcia", "avatar1.jpg", "user@test.com", "password", "ROLE_USER");
         createUser("Heck", "avatar2.jpg", "yo@test.com", "password", "ROLE_USER");
         createUser("Tester", "avatar3.jpg", "yo2@test.com", "password", "ROLE_USER");
+        createUser("Tester2", "avatar3.jpg", "yo3@test.com", "password", "ROLE_USER");
+        createUser("Tester3", "avatar3.jpg", "yo4@test.com", "password", "ROLE_USER");
         // Artículos
         createArticle("new", "game.jpg", "Mañana es el cierre de servidores de Demon's Souls", "El clásico de PlayStation 3 cortará a partir de mañana sus posibilidades on-line definitivamente.", content, "[PC]", null, true, 3);
         createArticle("new", "game1.jpg", "El rodaje de la serie televisiva de Halo comenzaría a finales de 2018", "El afamado director Steven Spielberg continuaría vinculado al proyecto.", content, "[PC][PS4]", null, true, 5);
@@ -73,12 +77,13 @@ public class DemoController
      * @param important Si es o no imporatante / destacado.
      * @param comments Número de comentarios aleatorios.
      * @return Instancia del artículo.
+     * @throws SaveException
      */
     private Article createArticle(
         String type, String image, String title, 
         String description, String content,
         String tags, Double puntuation,
-        boolean important, int comments)
+        boolean important, int comments) throws SaveException
     {
         Article article = articleService.getArticleByTitle(title);
         boolean isNewRecord = false;
@@ -96,9 +101,9 @@ public class DemoController
         article.setImportant(important);
         article.setPublish(new Date());
         article.setActive(true);
-        if (!articleService.save(article)) {
-            throw new RuntimeException("Article creation error.");
-        }
+        
+        // Guardar el artículo
+        articleService.save(article);
         
         if (isNewRecord) {
             String[] messages = {
@@ -111,11 +116,13 @@ public class DemoController
                 userService.getUserByEmail("user@test.com"),
                 userService.getUserByEmail("yo@test.com"),
                 userService.getUserByEmail("yo2@test.com"),
+                userService.getUserByEmail("yo3@test.com"),
+                userService.getUserByEmail("yo4@test.com"),
             };
             for (int i = 0; i < comments; i ++) {
                 Comment c = new Comment();
                 c.setArticle(article);
-                c.setUser(users[(int)(Math.random() * 3)]);
+                c.setUser(users[(int)(Math.random() * 5)]);
                 c.setContent(messages[(int)(Math.random() * 3)]);
                 c.setPublish(new Date());
                 c.setErased(false);
@@ -133,8 +140,9 @@ public class DemoController
      * @param password Contraseña.
      * @param userRole Rol.
      * @return Instancia del usuario.
+     * @throws SaveException
      */
-    private User createUser(String nickname, String avatar, String email, String password, String userRole)
+    private User createUser(String nickname, String avatar, String email, String password, String userRole) throws SaveException
     {
         User user = userService.getUserByEmail(email);
         if (user == null) {
@@ -146,9 +154,9 @@ public class DemoController
         user.setPassword(new BCryptPasswordEncoder().encode(password));
         user.setUserRole(userRole);
         user.setActive(Boolean.TRUE);
-        if (!userService.save(user)) {
-            throw new RuntimeException("User creation error.");
-        }
+        
+        // Guardar el usuario
+        userService.save(user);
         
         return user;
     }

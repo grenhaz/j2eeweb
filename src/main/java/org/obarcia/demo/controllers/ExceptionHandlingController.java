@@ -1,7 +1,10 @@
 package org.obarcia.demo.controllers;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.obarcia.demo.exceptions.ArticleNotFoundException;
 import org.obarcia.demo.exceptions.PageNotFoundException;
+import org.obarcia.demo.services.MailServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -60,18 +63,19 @@ public class ExceptionHandlingController
             .addObject("submessage", "")
             .addObject("exception", ex);
     }
-    // TODO: LOW: Activar para producción
     /**
      * Excepción de genérica de error interno.
      * @param ex Instancia de la excepción.
      * @return Vista resultante.
      */
-    /*@ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
     public ModelAndView actionInternalError(Exception ex)
     {
+        Logger.getLogger(ExceptionHandlingController.class.getName()).log(Level.SEVERE, null, ex);
+        
         return new ModelAndView("error")
             .addObject("message", "error.505")
             .addObject("exception", ex);
-    }*/
+    }
 }

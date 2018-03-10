@@ -1,132 +1,149 @@
 package org.obarcia.demo.models.article;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
+import java.util.List;
 import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.obarcia.demo.constraints.ArrayNotEmptyConstraint;
 
 /**
- *
- * @author Heck
+ * Formulario del artículo.
+ * 
+ * @author obarcia
  */
 public class ArticleForm
 {
     /**
      * Formato de fecha
      */
-    private static final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    private static final SimpleDateFormat FORMAT_DATE = new SimpleDateFormat("dd/MM/yyyy");
+    private static final SimpleDateFormat FORMAT_TIME = new SimpleDateFormat("HH:mm");
+    private static final SimpleDateFormat FORMAT_FORM = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     
     /**
      * Identificador.
      */
-    @Id
     @GeneratedValue
-    @Column(name = "id")
     private Integer id;
     /**
      * Tipo.
      */
-    @NotEmpty
+    @NotEmpty(message = "{error.NotEmpty}")
     @Size(max = 12)
-    @Column(name = "type")
     private String type;
     /**
      * Título.
      */
-    @NotEmpty
+    @NotEmpty(message = "{error.NotEmpty}")
     @Size(max = 250)
-    @Column(name = "title")
     private String title;
     /**
      * Descripción.
      */
     @Size(max = 250)
-    @Column(name = "description")
     private String description;
     /**
      * Imágen de portada.
      */
-    @NotEmpty
+    @NotEmpty(message = "{error.NotEmpty}")
     @Size(max = 250)
-    @Column(name = "image")
     private String image;
     /**
      * Contenido.
      */
-    @NotEmpty
+    @NotEmpty(message = "{error.NotEmpty}")
     @Size(max = 9000)
-    @Column(name = "content")
     private String content;
     /**
      * Fecha de publicación.
      */
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "publish")
-    private Date publish;
+    @NotEmpty(message = "{error.NotEmpty}")
+    private String publishDate;
+    /**
+     * Hora de publicación.
+     */
+    @NotEmpty(message = "{error.NotEmpty}")
+    private String publishTime;
     /**
      * Etiquetas.
      */
-    @NotEmpty
-    @Size(max = 128)
-    @Column(name = "tags")
-    private String tags;
+    // TODO: Administración: Constraint array no vacio
+    //@ArrayNotEmptyConstraint(message = "{error.NotEmpty}")
+    private final List<String> tags = new ArrayList<>();
     /**
      * Si es imporatante / destacado.
      */
-    @Column(name = "important")
     private Boolean important;
     /**
      * Puntuación.
      */
-    @Column(name = "score")
+    // TODO: Adminsitración: Constraint numeric
     private Double score;
     /**
      * Si está activo o no.
      */
-    @Column(name = "active")
     private Boolean active;
-    /**
-     * Listado de comentarios.
-     */
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "article")
-    private Set<Comment> comments = new HashSet<>();
     
     /**
-     * Devuelve las etiquetas formateadas para visualización.
-     * @return Etiquetas formateadas para visualización.
+     * Devuelve las etiquetas.
+     * @return Valor de las etiquetas.
      */
-    public String getFormattedTags()
+    public String getTags()
     {
-        if (tags != null) {
-            return tags
-                .replaceAll("\\]\\[", " ")
-                .replaceAll("\\[", "")
-                .replaceAll("\\]", "");
+        if (tags.size() > 0) {
+            return "[" + String.join("][", tags) + "]";
         }
         
         return "";
     }
     /**
-     * Devuelve la fecha de publicación formateada.
-     * @return Fecha de publicación formateada.
+     * Asigna las etiquetas.
+     * @param value Valor de las etiquetas.
      */
-    public String getFormattedPublish()
+    public void setTags(String value)
     {
-        if (publish != null) {
-            return format.format(publish);
+        tags.clear();
+        if (value != null) {
+            String[] list = value
+                .replaceAll("\\]\\[", ",")
+                .replaceAll("\\[", "")
+                .replaceAll("\\]", "")
+                .split(",");
+            if (list != null && list.length > 0) {
+                for (String l: list) {
+                    tags.add(l);
+                }
+            }
         }
+    }
+    /**
+     * Devuelve la fecha de publicación.
+     * 
+     * @return Valor de la fecha.
+     */
+    public Date getPublish()
+    {
+        try {
+            return FORMAT_FORM.parse(publishDate + " " + publishTime);
+        } catch (ParseException ex) {}
         
-        return "";
+        return null;
+    }
+    /**
+     * Asigna la fecha de publicacción.
+     * @param value Valor de la fecha.
+     */
+    public void setPublish(Date value)
+    {
+        if (value == null) {
+            value = new Date();
+        }
+        publishDate = FORMAT_DATE.format(value);
+        publishTime = FORMAT_TIME.format(value);
     }
     // ******************************************
     // GETTER & SETTER
@@ -179,21 +196,30 @@ public class ArticleForm
     {
         content = value;
     }
-    public Date getPublish()
+    public String getPublishDate()
     {
-        return publish;
+        return publishDate;
     }
-    public void setPublish(Date value)
+    public void setPublishDate(String value)
     {
-        publish = value;
+        publishDate = value;
     }
-    public String getTags()
+    public String getPublishTime()
+    {
+        return publishTime;
+    }
+    public void setPublishTime(String value)
+    {
+        publishTime = value;
+    }
+    public List<String> getTagsCheckbox()
     {
         return tags;
     }
-    public void setTags(String value)
+    public void setTagsCheckbox(List<String> value)
     {
-        tags = value;
+        tags.clear();
+        tags.addAll(value);
     }
     public Boolean getImportant()
     {
@@ -210,14 +236,6 @@ public class ArticleForm
     public void setScore(Double value)
     {
         score = value;
-    }
-    public Set<Comment> getComments()
-    {
-        return comments;
-    }
-    public int getCommentsCount()
-    {
-        return comments.size();
     }
     public Boolean getActive()
     {

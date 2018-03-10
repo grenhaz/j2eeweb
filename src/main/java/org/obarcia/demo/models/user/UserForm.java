@@ -16,29 +16,26 @@ import org.obarcia.demo.constraints.NicknameConstraint;
  * @author obarcia
  */
 @NicknameConstraint(field = "nickname", message = "{error.nickname.invalid}")
+@EmailUniqueConstraint(field = "email", message = "{error.email.unique}")
 public class UserForm
 {
     /**
      * Identificador.
      */
-    @Column(name = "id")
     private Integer id;
     /**
      * Email.
      */
-    @NotEmpty
+    @NotEmpty(message = "{error.NotEmpty}")
     @Email
     @Size(max = 128)
-    @EmailUniqueConstraint(message = "{error.email.unique}")
-    @Column(name = "email")
     private String email;
     /**
      * Nickname.
      */
-    @NotEmpty
+    @NotEmpty(message = "{error.NotEmpty}")
     @Size(max = 32)
-    @Pattern(regexp = "^[A-Za-z0-9_-]+$")
-    @Column(name = "nickname")
+    @Pattern(regexp = "^[A-Za-z0-9_-]+$", message = "{error.NicknamePattern}")
     private String nickname;
     
     // ******************************************

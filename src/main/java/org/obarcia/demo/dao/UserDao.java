@@ -1,5 +1,6 @@
 package org.obarcia.demo.dao;
 
+import org.hibernate.HibernateException;
 import org.obarcia.demo.components.datatables.DataTablesRequest;
 import org.obarcia.demo.components.datatables.DataTablesResponse;
 import org.obarcia.demo.models.user.User;
@@ -45,7 +46,7 @@ public interface UserDao
     /**
      * Guarda un usuario.
      * @param user Instancia del usuario.
-     * @return true si la operación fué correcta, false en caso contrario.
+     * @throws HibernateException
      */
-    public boolean save(User user);
+    public void save(User user) throws HibernateException;
 }

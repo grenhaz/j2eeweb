@@ -23,10 +23,28 @@
     </div>
     <script>
         $(function() {
+            $('.btn-refresh')
             $('#records').DataTable({
                 "language": {
                     "url": "<c:url value="/resources/datatables/i18n/es.json" />"
                 },
+                "dom": "<'row'<'col-sm-3'l><'col-sm-6'B><'col-sm-3'f>>rt<'row'<'col-sm-6'i><'col-sm-6'p>>",//'lBfrtip',
+                "buttons": [
+                    {
+                        "text": "<spring:message code="label.admin.articles.new" />",
+                        "className": 'btn btn-primary',
+                        "action": function (e, dt, node, config) {
+                            document.location = "<c:url value="/admin/article/0" />";
+                        }
+                    },
+                    {
+                        "text": "<spring:message code="label.admin.refresh" />",
+                        "className": 'btn btn-primary',
+                        "action": function (e, dt, node, config) {
+                            dt.ajax.reload();
+                        }
+                    }
+                ],
                 "order": [[ 5, "desc" ]],
                 "processing": true,
                 "serverSide": true,
@@ -62,12 +80,12 @@
                         "data": "active",
                         "className": "text-center",
                         "render": function ( data, type, row, meta ) {
-                            return "<i data-id='" + row.id + "' data-value='" + data+ "' class='btn-active fa " + (data ? 'fa-check-circle-o text-success' : 'fa-times-circle-o text-danger') + "'></i>";
+                            return "<i data-toggle='tooltip' data-placement='top' title='<spring:message code="label.admin.tooltip.active" />' data-id='" + row.id + "' data-value='" + data+ "' class='btn-active fa " + (data ? 'fa-check-circle-o text-success' : 'fa-times-circle-o text-danger') + "'></i>";
                         }
                     }, {
                         "orderable": false,
                         "render": function ( data, type, row, meta ) {
-                            return "<a href='<c:url value="/admin/article/" />" + row.id + "'><i class='fa fa-pencil'></i></a>";
+                            return "<a data-toggle='tooltip' data-placement='top' title='<spring:message code="label.admin.tooltip.edit" />' href='<c:url value="/admin/article/" />" + row.id + "'><i class='fa fa-pencil'></i></a>";
                         }
                     }
                 ]

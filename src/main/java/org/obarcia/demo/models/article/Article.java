@@ -1,10 +1,9 @@
 package org.obarcia.demo.models.article;
 
-import java.text.SimpleDateFormat;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,7 +14,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.obarcia.demo.components.Utilities;
 
 /**
  * Artículo.
@@ -24,13 +27,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Entity
 @Table(name = "article")
-public class Article
+public class Article implements Serializable
 {
-    /**
-     * Formato de fecha
-     */
-    private static final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-    
     /**
      * Identificador.
      */
@@ -103,8 +101,10 @@ public class Article
     /**
      * Listado de comentarios.
      */
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "article")
-    private Set<Comment> comments = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.EXTRA)
+    private final Set<Comment> comments = new HashSet<>();
     
     /**
      * Devuelve las etiquetas formateadas para visualización.
@@ -127,11 +127,7 @@ public class Article
      */
     public String getFormattedPublish()
     {
-        if (publish != null) {
-            return format.format(publish);
-        }
-        
-        return "";
+        return Utilities.getElapsedTime(publish);
     }
     // ******************************************
     // GETTER & SETTER

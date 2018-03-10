@@ -1,3 +1,4 @@
+
 package org.obarcia.demo.models.user;
 
 import javax.validation.constraints.Pattern;
@@ -14,13 +15,13 @@ import org.obarcia.demo.constraints.FieldEqualConstraint;
  * @author obarcia
  */
 @NicknameConstraint(field = "nickname", message = "{error.nickname.invalid}")
+@EmailUniqueConstraint(field = "email", message = "{error.email.unique}")
 @FieldEqualConstraint(first = "email", second = "emailRepeat", message = "{error.email.repeat}")
 public class RegisterForm
 {
     /**
      * Email.
      */
-    @EmailUniqueConstraint(message = "{error.email.unique}")
     @NotEmpty(message = "{error.NotEmpty}")
     @Email(message = "{error.Email}")
     @Size(max = 128)

@@ -19,29 +19,6 @@ function $getContent(url, data, destination) {
             .appendTo($alert);
     });
 };
-function $activate(el, url, data, value, clsTrue, clsFalse) {
-    var $container = $(el).parent();
-    $(el).hide();
-    var $spinner = $('<i class="fa fa-spinner fa-spin animatedx"></i>').appendTo($container);
-    $.post(url, $.extend({ 'value': !value }, data), function (ret) {
-        if (ret.result === true) {
-            if (value) {
-                $(el)
-                    .data("value", !value)
-                    .removeClass(clsTrue)
-                    .addClass(clsFalse);
-            } else {
-                $(el)
-                    .data("value", !value)
-                    .removeClass(clsFalse)
-                    .addClass(clsTrue);
-            }
-        }
-    }).always(function () {
-        $spinner.remove();
-        $(el).show();
-    });
-};
 function refreshBlock(destination, url, data, scroll) {
     if (scroll) {
         var aTag = $('#return-top');
@@ -57,7 +34,7 @@ function refreshBlock(destination, url, data, scroll) {
 function openWindow(url, data, extra) {
     var options = $.extend({
         'title': '&nbsp;',
-        'message': getLoader()
+        'message': '&nbsp;'
     }, extra);
     var dialog = bootbox.dialog(options);
     
@@ -74,7 +51,9 @@ function alertJs(msg) {
 
 $(function () {
     // Tooltips
-    $('[data-toggle="tooltip"]').tooltip();
+    $('body').tooltip({
+        selector: '[data-toggle="tooltip"]'
+    });
     
     // Slider de cambio de página
     $(window).on('beforeunload', function () {

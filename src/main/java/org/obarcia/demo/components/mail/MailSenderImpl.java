@@ -8,7 +8,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 
-// TODO: LOW: Protocolo por log
 /**
  * Implementación del JavaMailSender para poder usar un protocolo "fake"
  * donde no se envía nada.

@@ -1,6 +1,6 @@
 package org.obarcia.demo.models.article;
 
-import java.text.SimpleDateFormat;
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,9 +12,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.obarcia.demo.components.Utilities;
 import org.obarcia.demo.models.user.User;
 
 /**
@@ -24,10 +24,8 @@ import org.obarcia.demo.models.user.User;
  */
 @Entity
 @Table(name = "comment")
-public class Comment
+public class Comment implements Serializable
 {
-    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-    
     /**
      * Identificador.
      */
@@ -84,11 +82,7 @@ public class Comment
      */
     public String getFormattedPublish()
     {
-        if (publish != null) {
-            return FORMAT.format(publish);
-        }
-        
-        return "";
+        return Utilities.getElapsedTime(publish);
     }
     // ******************************************
     // GETTER & SETTER

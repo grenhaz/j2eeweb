@@ -1,7 +1,8 @@
 package org.obarcia.demo.models;
 
 /**
- *
+ * Respuesta ante una acción.
+ * 
  * @author obarcia
  */
 public class ActionResponse

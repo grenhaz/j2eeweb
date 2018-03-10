@@ -1,9 +1,6 @@
 package org.obarcia.demo.controllers;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +16,7 @@ import org.obarcia.demo.models.user.ProfileForm;
 import org.obarcia.demo.models.user.RegisterForm;
 import org.obarcia.demo.models.user.User;
 import org.obarcia.demo.services.ArticleService;
+import org.obarcia.demo.services.BrowserService;
 import org.obarcia.demo.services.MailService;
 import org.obarcia.demo.services.UserAccessService;
 import org.obarcia.demo.services.UserService;
@@ -79,6 +77,11 @@ public class UserController
      */
     @Autowired
     private UserAccessService userDetailsService;
+    /**
+     * Instancia del servicio de explorador de archivos.
+     */
+    @Autowired
+    private BrowserService browserService;
     
     /**
      * Proceso de login.
@@ -141,7 +144,9 @@ public class UserController
         RedirectAttributes flash,
         HttpServletRequest request) throws SaveException
     {
+        // Si no hay errores
         if (!result.hasErrors()) {
+            // Crear el usuario
             User newUser = new User();
             newUser.setNickname(form.getNickname());
             newUser.setEmail(form.getEmail());
@@ -150,18 +155,18 @@ public class UserController
             newUser.setUserRole(User.ROLE_USER);
             newUser.setActive(Boolean.FALSE);
             newUser.setUkey(Utilities.getRandomHexString(64));
-            if (userService.save(newUser)) {
-                // Enviar el mail de recuperación
-                mailService.sendmailActivation(request, newUser);
+            
+            // Guardar el usuario
+            userService.save(newUser);
+            
+            // Enviar el mail de recuperación
+            mailService.sendmailActivation(request, newUser);
 
-                // Añadir mensaje flash (I18N)
-                flash.addFlashAttribute("flash", messageSource.getMessage("message.user.register.ok", null, locale));
+            // Añadir mensaje flash (I18N)
+            flash.addFlashAttribute("flash", messageSource.getMessage("message.user.register.ok", null, locale));
                 
-                // Redireccionar con mensaje
-                return new ModelAndView("redirect:/");
-            } else {
-                throw new SaveException();
-            }
+            // Redireccionar con mensaje
+            return new ModelAndView("redirect:/");
         }
         
         return new ModelAndView("user/register")
@@ -174,13 +179,14 @@ public class UserController
      * @param flash Flash variables.
      * @return Vista resultante.
      * @throws PageNotFoundException
+     * @throws SaveException
      */
     @GetMapping("/")
     @PreAuthorize("!isAuthenticated()")
     public ModelAndView actionActivateAccount(
         @RequestParam(value = "k", required = true) String ukey,
         Locale locale,
-        RedirectAttributes flash) throws PageNotFoundException
+        RedirectAttributes flash) throws PageNotFoundException, SaveException
     {
         // Buscar el usuario por la clave (No debe estar activado ya)
         User user = userService.getUserByUkey(ukey);
@@ -188,20 +194,22 @@ public class UserController
             // Activar y borrar el ukey
             user.setActive(Boolean.TRUE);
             user.setUkey("");
-            if (userService.save(user)) {
-                // Auto loguear al usuario
-                AccountDetails userDetails = (AccountDetails)userDetailsService.loadUserByUsername(user.getEmail());
-                if (userDetails != null) {
-                    Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
-                
-                // Añadir mensaje flash (I18N)
-                flash.addFlashAttribute("flash", messageSource.getMessage("message.user.activate.ok", null, locale));
-                
-                // Redireccionar con mensaje
-                return new ModelAndView("redirect:/");
+            
+            // Guardar el usuario
+            userService.save(user);
+            
+            // Auto loguear al usuario
+            AccountDetails userDetails = (AccountDetails)userDetailsService.loadUserByUsername(user.getEmail());
+            if (userDetails != null) {
+                Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+
+            // Añadir mensaje flash (I18N)
+            flash.addFlashAttribute("flash", messageSource.getMessage("message.user.activate.ok", null, locale));
+
+            // Redireccionar con mensaje
+            return new ModelAndView("redirect:/");
         }
         
         throw new PageNotFoundException();
@@ -213,33 +221,36 @@ public class UserController
      * @param flash Flash variables.
      * @return Vista resultante.
      * @throws PageNotFoundException
+     * @throws SaveException
      */
     @GetMapping("/recover")
     @PreAuthorize("!isAuthenticated()")
     public ModelAndView actionRecoverAccount(
         @RequestParam(value = "k", required = true) String ukey,
         Locale locale,
-        RedirectAttributes flash) throws PageNotFoundException
+        RedirectAttributes flash) throws PageNotFoundException, SaveException
     {
         // Buscar el usuario por la clave (No debe estar activado ya)
         User user = userService.getUserByUkey(ukey);
         if (user != null) {
             // Activar y borrar el ukey
             user.setUkey("");
-            if (userService.save(user)) {
-                // Auto loguear al usuario
-                AccountDetails userDetails = (AccountDetails)userDetailsService.loadUserByUsername(user.getEmail());
-                if (userDetails != null) {
-                    Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
-                
-                // Añadir mensaje flash (I18N)
-                flash.addFlashAttribute("flash", messageSource.getMessage("message.user.recovery.ok", null, locale));
-                
-                // Redireccionar con mensaje
-                return new ModelAndView("redirect:/user/profile/password");
+            
+            // Guardar el usuario
+            userService.save(user);
+            
+            // Auto loguear al usuario
+            AccountDetails userDetails = (AccountDetails)userDetailsService.loadUserByUsername(user.getEmail());
+            if (userDetails != null) {
+                Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+
+            // Añadir mensaje flash (I18N)
+            flash.addFlashAttribute("flash", messageSource.getMessage("message.user.recovery.ok", null, locale));
+
+            // Redireccionar con mensaje
+            return new ModelAndView("redirect:/user/profile/password");
         }
         
         throw new PageNotFoundException();
@@ -263,6 +274,7 @@ public class UserController
      * @param flash Flash variables.
      * @param request Instancia de la petición.
      * @return Vista resultante.
+     * @throws SaveException
      */
     @PostMapping("/forgot")
     @PreAuthorize("!isAuthenticated()")
@@ -271,25 +283,25 @@ public class UserController
             BindingResult result,
             Locale locale,
             RedirectAttributes flash,
-            HttpServletRequest request)
+            HttpServletRequest request) throws SaveException
     {
         if (!result.hasErrors()) {
             User user = userService.getUserByEmail(form.getEmail());
             if (user != null) {
                 // Guardar la clave para la recuperación
                 user.setUkey(Utilities.getRandomHexString(64));
-                if (userService.save(user)) {
-                    // Enviar el mail de recuperación
-                    mailService.sendmailRecovery(request, user);
-                    
-                    // Añadir mensaje flash (I18N)
-                    flash.addFlashAttribute("flash", messageSource.getMessage("message.user.forgot.ok", null, locale));
-                    
-                    // Redireccionar
-                    return new ModelAndView("redirect:/");
-                } else {
-                    result.rejectValue("email", "error.sendmail", "Se produjo un error durante el envío del email.");
-                }
+                
+                // Guardar el usuario
+                userService.save(user);
+                
+                // Enviar el mail de recuperación
+                mailService.sendmailRecovery(request, user);
+
+                // Añadir mensaje flash (I18N)
+                flash.addFlashAttribute("flash", messageSource.getMessage("message.user.forgot.ok", null, locale));
+
+                // Redireccionar
+                return new ModelAndView("redirect:/");
             } else {
                 result.rejectValue("email", "error.recovery.email", "El usuario no existe.");
             }
@@ -325,14 +337,18 @@ public class UserController
      * Procesamiento del formulario de cambio de perfil.
      * @param form Instancia del formulario.
      * @param result Resultado de la validación.
+     * @param locale Localización para el i18n
+     * @param flash Flash variables.
      * @return Vista resultante.
      * @throws SaveException 
      */
     @PostMapping("/profile")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView actionProfile(
-            @Valid @ModelAttribute("model") ProfileForm form,
-            BindingResult result) throws SaveException
+            @Valid @ModelAttribute("form") ProfileForm form,
+            BindingResult result,
+            Locale locale,
+            RedirectAttributes flash) throws SaveException
     {
         if (!result.hasErrors()) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -345,10 +361,12 @@ public class UserController
                     if (user != null) {
                         user.setNickname(form.getNickname());
                         user.setAvatar(form.getAvatar());
-                        if (userService.save(user)) {
-                            // Redirect
-                            return new ModelAndView("redirect:/user/profile");
-                        }
+                        
+                        // Guardar el usuario
+                        userService.save(user);
+                        
+                        // Redirect
+                        return new ModelAndView("redirect:/user/profile");
                     }
                 }
             }
@@ -405,13 +423,15 @@ public class UserController
                     User user = userService.getUserById(account.getId());
                     if (user != null) {
                         user.setPassword(new BCryptPasswordEncoder().encode(form.getPassword()));
-                        if (userService.save(user)) {
-                            // Añadir mensaje flash (I18N)
-                            flash.addFlashAttribute("flash", messageSource.getMessage("message.profile.password.ok", null, locale));
-                            
-                            // Redirect
-                            return new ModelAndView("redirect:/user/profile");
-                        }
+                        
+                        // Guardar el usuario
+                        userService.save(user);
+                        
+                        // Añadir mensaje flash (I18N)
+                        flash.addFlashAttribute("flash", messageSource.getMessage("message.profile.password.ok", null, locale));
+
+                        // Redirect
+                        return new ModelAndView("redirect:/user/profile");
                     }
                 }
             }
@@ -432,22 +452,8 @@ public class UserController
     public ModelAndView actionAvatarAjax(
             @RequestParam(value = "field", required = true) String field)
     {
-        List<String> avatars = new ArrayList<>();
-        avatars.add("anonymous.png");
-        
-        // Leer los posibles avatares => NO SALE NINGUNO, revisar path
-        File rootDir = new File( servletContext.getRealPath("/WEB-INF/data/avatars/") );
-        if (rootDir.isDirectory()) {
-            File[] files = rootDir.listFiles();
-            for (File f: files) {
-                if (f.isFile() && !f.getName().equals("anonymous.png")) {
-                    avatars.add(f.getName());
-                }
-            }
-        }
-        
         return new ModelAndView("user/avatars")
             .addObject("field", field)
-            .addObject("avatars", avatars);
+            .addObject("avatars", browserService.getAvatars());
     }
 }
