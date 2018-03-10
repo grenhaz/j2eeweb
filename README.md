@@ -24,7 +24,7 @@ Al igual que ocurre con NetBeans se puede utilizar un gestor de BBDD Derby.
 Los parámetros de configuración de la Web, la Base de Datos, el servidor de correo y otros parámetros se especifica en el fichero src/main/resources/properties/config.properties.
 ## Creación de la demo
 Una vez realizado el despliegue de la web si accedemos a "[WEB]/demo/create" se generará una demo con datos de prueba.
-![Preview]https://raw.githubusercontent.com/grenhaz/j2eeweb/branch/doc/preview.jpg
+![Preview](doc/preview.jpg?raw=true "Preview")
 ## Accesos de la demo
 ### Usuario administrador
 username: admin@test.com
