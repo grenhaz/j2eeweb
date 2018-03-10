@@ -57,11 +57,11 @@ public class UserDaoImpl implements UserDao
         }
         // Nickname
         if (req.hasColumnSearch("nickname")) {
-            predicates.add(builder.like(root.<String>get("nickname"), "%" + req.getColumnSearch("nickname") + "%"));
+            predicates.add(builder.like(builder.lower(root.<String>get("nickname")), "%" + req.getColumnSearch("nickname").toLowerCase() + "%"));
         }
         // Email
         if (req.hasColumnSearch("email")) {
-            predicates.add(builder.like(root.<String>get("email"), "%" + req.getColumnSearch("email") + "%"));
+            predicates.add(builder.like(builder.lower(root.<String>get("email")), "%" + req.getColumnSearch("email").toLowerCase() + "%"));
         }
         // User role
         if (req.hasColumnSearch("user_role")) {
@@ -78,8 +78,8 @@ public class UserDaoImpl implements UserDao
         
         // Filters general
         if (!req.getSearch().isEmpty()) {
-            predicates.add(builder.like(root.<String>get("nickname"), "%" + req.getSearch() + "%"));
-            predicates.add(builder.like(root.<String>get("email"), "%" + req.getSearch() + "%"));
+            predicates.add(builder.like(builder.lower(root.<String>get("nickname")), "%" + req.getSearch().toLowerCase() + "%"));
+            predicates.add(builder.like(builder.lower(root.<String>get("email")), "%" + req.getSearch().toLowerCase() + "%"));
         }
         
         // Where

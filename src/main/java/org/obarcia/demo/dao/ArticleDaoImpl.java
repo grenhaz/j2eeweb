@@ -61,11 +61,11 @@ public class ArticleDaoImpl implements ArticleDao
         }
         // Title
         if (req.hasColumnSearch("tile")) {
-            predicates.add(builder.like(root.<String>get("tile"), "%" + req.getColumnSearch("title") + "%"));
+            predicates.add(builder.like(builder.lower(root.<String>get("tile")), "%" + req.getColumnSearch("title").toLowerCase() + "%"));
         }
         // Description
         if (req.hasColumnSearch("description")) {
-            predicates.add(builder.like(root.<String>get("description"), "%" + req.getColumnSearch("description") + "%"));
+            predicates.add(builder.like(builder.lower(root.<String>get("description")), "%" + req.getColumnSearch("description").toLowerCase() + "%"));
         }
         // Type
         if (req.hasColumnSearch("type")) {
@@ -144,7 +144,7 @@ public class ArticleDaoImpl implements ArticleDao
         }
         // Content
         if (req.hasColumnSearch("content")) {
-            predicates.add(builder.like(root.<String>get("content"), "%" + req.getColumnSearch("content") + "%"));
+            predicates.add(builder.like(builder.lower(root.<String>get("content")), "%" + req.getColumnSearch("content").toLowerCase() + "%"));
         }
         // Erased
         if (req.hasColumnSearch("erased")) {
@@ -157,7 +157,7 @@ public class ArticleDaoImpl implements ArticleDao
         
         // Filters general
         if (!req.getSearch().isEmpty()) {
-            predicates.add(builder.like(root.<String>get("content"), "%" + req.getSearch() + "%"));
+            predicates.add(builder.like(builder.lower(root.<String>get("content")), "%" + req.getSearch().toLowerCase() + "%"));
         }
         
         // Where
@@ -269,8 +269,8 @@ public class ArticleDaoImpl implements ArticleDao
         }
         predicates.add(
             builder.or(
-                builder.like(root.<String>get("title"), "%" + search + "%"),
-                builder.like(root.<String>get("description"), "%" + search + "%")
+                builder.like(builder.lower(root.<String>get("title")), "%" + search.toLowerCase() + "%"),
+                builder.like(builder.lower(root.<String>get("description")), "%" + search.toLowerCase() + "%")
             )
         );
         predicates.add(builder.equal(root.get("active"), true));
