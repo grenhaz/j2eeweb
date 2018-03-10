@@ -57,7 +57,7 @@
     <div class="container">
         <!-- BUSCADOR -->
         <div class="searcher">
-            <form method="GET" action="<c:url value="/web/search/${tag}/" />">
+            <form method="GET" action="<c:url value="/web/search/${tag}/" />" accept-charset="UTF-8">
                 <div class="input-group input-group-sm">
                     <input name="t" class="form-control" value="<c:out value="${search}" />" />
                     <div class="input-group-btn">
