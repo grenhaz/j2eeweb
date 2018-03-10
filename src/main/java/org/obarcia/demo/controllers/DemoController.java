@@ -51,16 +51,16 @@ public class DemoController
         createUser("Tester3", "avatar3.jpg", "yo4@test.com", "password", "ROLE_USER");
         // Artículos
         createArticle("new", "game.jpg", "Mañana es el cierre de servidores de Demon's Souls", "El clásico de PlayStation 3 cortará a partir de mañana sus posibilidades on-line definitivamente.", content, "[PC]", null, true, 3);
-        createArticle("new", "game1.jpg", "El rodaje de la serie televisiva de Halo comenzaría a finales de 2018", "El afamado director Steven Spielberg continuaría vinculado al proyecto.", content, "[PC][PS4]", null, true, 5);
+        createArticle("new", "game1.jpg", "El rodaje de la serie televisiva de Halo comenzaría a finales de 2018", "El afamado director Steven Spielberg continuaría vinculado al proyecto.", content, "[PC][PS4]", null, false, 5);
         createArticle("guide", "game2.jpg", "Guía de Mario Kart 8 Deluxe", "", content, "[SWITCH]", null, true, 1);
-        createArticle("video", "game3.jpg", "Turok Remastered", "Turok y Turok 2 tendrán remasterización en Xbox One el 2 de marzo", content, "[PS4]", null, true, 0);
-        createArticle("review", "game4.jpg", "Análisis de Into the Breach", "Estrategia implacable de los creadores de FTL", content, "[PC][PS4]", 8.5, true, 3);
-        createArticle("new", "game5.jpg", "¿Filtrado Plants vs. Zombies: Garden Warfare 3? Un cómic lo desvela", "El tebeo narrará los acontecimientos entre la segunda y la tercera parte del juego.", content, "[PC][PS4]", null, true, 3);
-        createArticle("video", "game6.jpg", "Devil May Cry HD Collection llega a la nueva generación. Tráiler", "Capcom estrena el 13 de marzo Devil May Cry HD Collection en PS4 y Xbox One. Supone traer de vuelta a los tiempos actuales", content, "[PS4]", null, true, 6);
-        createArticle("new", "game7.jpg", "GT Sport se actualiza y suma nuevos coches y dos nuevos circuitos", "La actualización incluye doce coches y tres eventos de la GT League.", content, "[PS4]", null, true, 12);
+        createArticle("video", "game3.jpg", "Turok Remastered", "Turok y Turok 2 tendrán remasterización en Xbox One el 2 de marzo", content, "[PS4]", null, false, 0);
+        createArticle("review", "game4.jpg", "Análisis de Into the Breach", "Estrategia implacable de los creadores de FTL", content, "[PC][PS4]", 8.5, false, 3);
+        createArticle("new", "game5.jpg", "¿Filtrado Plants vs. Zombies: Garden Warfare 3? Un cómic lo desvela", "El tebeo narrará los acontecimientos entre la segunda y la tercera parte del juego.", content, "[PC][PS4]", null, false, 3);
+        createArticle("video", "game6.jpg", "Devil May Cry HD Collection llega a la nueva generación. Tráiler", "Capcom estrena el 13 de marzo Devil May Cry HD Collection en PS4 y Xbox One. Supone traer de vuelta a los tiempos actuales", content, "[PS4]", null, false, 6);
+        createArticle("new", "game7.jpg", "GT Sport se actualiza y suma nuevos coches y dos nuevos circuitos", "La actualización incluye doce coches y tres eventos de la GT League.", content, "[PS4]", null, false, 12);
         createArticle("new", "game8.jpg", "Las ventas de PS4 en Japón mejoran todos los años desde su estreno", "Cerró su cuarto año en el mercado nipón con 2.083.974 unidades vendidas.", content, "[PS4]", null, true, 32);
-        createArticle("new", "game9.jpg", "Habrá cambios en la cúpula directiva de Sony Interactive Entertainment", "Se efectuarán a partir del próximo 1 de abril y están implicados distintos empresarios.", content, "[PS4]", null, true, 9);
-        createArticle("special", "game10.jpg", "Reportaje: Juegos olvidados", "", content, "[PC]", null, true, 4);
+        createArticle("new", "game9.jpg", "Habrá cambios en la cúpula directiva de Sony Interactive Entertainment", "Se efectuarán a partir del próximo 1 de abril y están implicados distintos empresarios.", content, "[PS4]", null, false, 9);
+        createArticle("special", "game10.jpg", "Reportaje: Juegos olvidados", "", content, "[PC]", null, false, 4);
         //createArticle(12, "new", "game.jpg", "qwe", "qwe", content, "[PC]", null, true, 3);
         
         return "redirect:/";
