@@ -325,53 +325,8 @@ public class ArticleDaoImpl implements ArticleDao
     @Override
     public List<ArticleSimple> getArticlesMoreComments(String tag, int count)
     {
-        // TODO: Obtener los artículos más vistos / comentados.
-        // Criteria
-        /*CriteriaBuilder builder = sessionFactory.getCriteriaBuilder();
-        
-        // Query
-        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
-        Root<Comment> root = criteria.from(Comment.class);
-        
-        // Select
-        criteria.select(root);
-        
-        // Where
-        List<Predicate> predicates = new LinkedList<>();
-        if (tag != null && !tag.equals("games")) {
-            predicates.add(builder.like(root.get("article").<String>get("tags"), "%[" + tag.toUpperCase() + "]%"));
-        }
-        predicates.add(builder.equal(root.get("article").get("active"), true));
-        if (predicates.size() > 0) {
-            Predicate[] predArray = new Predicate[predicates.size()];
-            predicates.toArray(predArray);
-            criteria.where(predArray);
-        }
-        
-        // Group By
-        criteria.groupBy(rootComment.get("article").get("id"));
-        
-        criteria.orderBy(builder.desc(builder.count(rootComment)));
-        */
-        
-        // Query
+        // XXX: Obtener los artículos más vistos / comentados.
         // BUG: https://hibernate.atlassian.net/browse/HHH-1615
-        /*Query<ArticleLite> q = sessionFactory.getCurrentSession().createQuery(
-                    "SELECT a.id, a.image, a.type, a.title, a.description, a.publish, a.tags, a.important, a.score, a.active " + 
-                    "FROM ArticleLite as a " +
-                    "INNER JOIN CommentLite c ON c.id_article = a.id " + 
-                    "GROUP BY a.id, a.image, a.type, a.title, a.description, a.publish, a.tags, a.important, a.score, a.active " + 
-                    "ORDER BY COUNT(c.id) DESC");
-        return q.setMaxResults(count).list();*/
-        /*return sessionFactory
-                .getCurrentSession()
-                .createQuery("SELECT a.id, a.image, a.type, a.title, a.description, a.publish, a.tags, a.important, a.score, a.active " + 
-                    "FROM ArticleLite as a " +
-                    "INNER JOIN CommentLite c ON c.id_article = a.id " + 
-                    "GROUP BY a.id, a.image, a.type, a.title, a.description, a.publish, a.tags, a.important, a.score, a.active " + 
-                    "ORDER BY COUNT(c.id)")
-                .setMaxResults(count)
-                .list();*/
         return null;
     }
     @Override

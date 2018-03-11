@@ -23,7 +23,7 @@ public class NicknameConstraintValidator implements ConstraintValidator<Nickname
     
     /**
      * Nombre del campo donde obtener el nickname.
-     * El erro se incluirá en este campo.
+     * El error se incluirá en este campo.
      */
     private String fieldName;
     /**

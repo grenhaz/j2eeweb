@@ -15,6 +15,7 @@ import org.obarcia.demo.constraints.ArrayNotEmptyConstraint;
  * 
  * @author obarcia
  */
+@ArrayNotEmptyConstraint(message = "{error.ArrayNotEmptyConstraint}", field = "tags")
 public class ArticleForm
 {
     /**
@@ -71,8 +72,6 @@ public class ArticleForm
     /**
      * Etiquetas.
      */
-    // TODO: Administración: Constraint array no vacio
-    //@ArrayNotEmptyConstraint(message = "{error.NotEmpty}")
     private final List<String> tags = new ArrayList<>();
     /**
      * Si es imporatante / destacado.
@@ -81,7 +80,6 @@ public class ArticleForm
     /**
      * Puntuación.
      */
-    // TODO: Adminsitración: Constraint numeric
     private Double score;
     /**
      * Si está activo o no.

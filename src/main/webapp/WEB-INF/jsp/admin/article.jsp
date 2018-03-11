@@ -69,7 +69,7 @@
                             <div class="col-xs-3 col-sm-3">
                                 <div class="form-group">
                                     <form:label path="score"><spring:message code="label.score" /></form:label>
-                                    <form:input class="form-control" path="score" />
+                                    <form:input class="form-control" path="score" type="number" step="0.1" />
                                     <form:errors path="score" cssClass="help-block help-error" />
                                 </div>
                             </div>

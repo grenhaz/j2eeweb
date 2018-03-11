@@ -23,7 +23,7 @@ public class EmailUniqueConstraintValidator implements ConstraintValidator<Email
     
     /**
      * Nombre del campo donde obtener el email.
-     * El erro se incluirá en este campo.
+     * El error se incluirá en este campo.
      */
     private String fieldName;
     /**
