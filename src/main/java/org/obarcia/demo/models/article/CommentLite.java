@@ -1,21 +1,12 @@
 package org.obarcia.demo.models.article;
 
-import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
 import org.hibernate.annotations.Immutable;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.obarcia.demo.components.Utilities;
 import org.obarcia.demo.models.user.UserLite;
 
 /**
@@ -26,33 +17,8 @@ import org.obarcia.demo.models.user.UserLite;
 @Entity
 @Immutable
 @Table(name = "comment")
-public class CommentLite implements Serializable
+public class CommentLite extends CommentBase
 {
-    /**
-     * Identificador.
-     */
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
-    private Integer id;
-    /**
-     * Contenido.
-     */
-    @NotEmpty
-    @Size(max = 512)
-    @Column(name = "content")
-    private String content;
-    /**
-     * Fecha de publicación.
-     */
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "publish")
-    private Date publish;
-    /**
-     * Si el comentario ha sido borrado
-     */
-    @Column(name = "erased")
-    private Boolean erased = Boolean.FALSE;
     /**
      * Artículo.
      */
@@ -65,53 +31,9 @@ public class CommentLite implements Serializable
     @JoinColumn(name = "id_user", nullable = false)
     private UserLite user;
     
-    /**
-     * Devuelve el contenido reducido.
-     * @return Contenido reducido.
-     */
-    public String getShortContent()
-    {
-        if (content.length() > 83) {
-            return content.substring(0, 80) + "...";
-        }
-        
-        return content;
-    }
-    /**
-     * Devuelve la fecha de publicación formateada.
-     * @return Fecha de publicación formateada.
-     */
-    public String getFormattedPublish()
-    {
-        return Utilities.getElapsedTime(publish);
-    }
     // ******************************************
     // GETTER & SETTER
     // ******************************************
-    public Integer getId()
-    {
-        return id;
-    }
-    public void setId(Integer value)
-    {
-        id = value;
-    }
-    public String getContent()
-    {
-        return content;
-    }
-    public void setContent(String value)
-    {
-        content = value;
-    }
-    public Date getPublish()
-    {
-        return publish;
-    }
-    public void setPublish(Date value)
-    {
-        publish = value;
-    }
     public Integer getIdArticle()
     {
         return id_article;
@@ -127,13 +49,5 @@ public class CommentLite implements Serializable
     public void setUser(UserLite value)
     {
         user = value;
-    }
-    public Boolean getErased()
-    {
-        return erased;
-    }
-    public void setErased(Boolean value)
-    {
-        erased = value;
     }
 }
